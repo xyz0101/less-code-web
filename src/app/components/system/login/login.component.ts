@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { LoginService } from 'src/app/service/login/login.service';
+
 
 @Component({
   selector: 'app-login',
@@ -16,9 +16,15 @@ export class LoginComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
+    console.log(this.validateForm)
+    this.loginService.login(this.validateForm.value).subscribe(item=>{
+      console.log("登陆成功！",item.data)
+      localStorage.setItem("token",item.data)
+    })
+
   }
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,private loginService:LoginService) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({

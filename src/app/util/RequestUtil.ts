@@ -26,7 +26,11 @@ export class RequestUtil{
 
 
 }
-    public postResquest<T extends Response|any >(url: string, body: any , param?: Map<string, string>|GetParams, header?: Map<string, string>): Observable<T|any>{
+    public postResquest<T extends Response|any >(
+        url: string,
+         body: any ,
+         param?: Map<string, string>|GetParams, 
+         header?: Map<string, any>): Observable<T|any>{
         console.log('posturl   ', url);
         const option = this.handleOption(param, header);
         return this.http.post<T>(url, body, option).pipe(mergeMap(this.dealData), catchError(this.handleError)
@@ -39,7 +43,7 @@ private handleOption(param?: Map<string, any>|GetParams, header?: Map<string, st
     let headers = new HttpHeaders();
     let params = new HttpParams();
 
-    if (param !== undefined){
+    if (param !== undefined&& param!=null){
         if (param instanceof GetParams){
             param = param.param;
         }

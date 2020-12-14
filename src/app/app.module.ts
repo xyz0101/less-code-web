@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,7 +42,7 @@ registerLocaleData(zh);
     NzFormModule ,
     NzInputModule ,
     NzButtonModule,
-    // NgZorroAntdModule,
+    NzCheckboxModule,
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule

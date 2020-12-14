@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { LoginApiPath } from 'src/app/api_path/LoginApiPath';
 import { RequestUtil } from 'src/app/util/RequestUtil';
+import { SecurityUtils } from 'src/app/util/SecurityUtils';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +24,14 @@ export class LoginService {
  /**
   * 登录
   */
-  login(): Observable<any>{
-      return null;
+  login(value): Observable<any>{
+    let res = this.getPublicKey().toPromise<Response>() ;
+    console.log(res)
+    let security = SecurityUtils.encrypt(res,value)
+    let map = new Map()
+    map.set("info",security)
+    return this.http.postResquest(LoginApiPath.LOGIN_PATH,null,null,map)
+      
   }
   /**
    * 登出
