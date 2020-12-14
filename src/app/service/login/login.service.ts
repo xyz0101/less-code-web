@@ -17,21 +17,29 @@ export class LoginService {
    */
   getPublicKey(): Observable<any>{
     console.log('getPublicKey');
-    return this.http.getResquest<any>('/lsc/system/user/getPublicKey').pipe( map(item => {
+    return this.http.getResquest<any>(LoginApiPath.GET_PUBLIC_KEY).pipe( map(item => {
       return item.data.encoded;
     }));
  }
  /**
   * 登录
   */
-  login(value): Observable<any>{
-    let res = this.getPublicKey().toPromise<Response>() ;
-    console.log(res)
-    let security = SecurityUtils.encrypt(res,value)
-    let map = new Map()
-    map.set("info",security)
-    return this.http.postResquest(LoginApiPath.LOGIN_PATH,null,null,map)
-      
+  login(value) {
+ 
+     this.getPublicKey().subscribe(item=>{
+        console.log("res",item)
+        let security = SecurityUtils.encrypt(item , value )
+        let map = new Map()
+        map.set("info",security)
+      return this.http.postResquest(LoginApiPath.LOGIN_PATH,null,null,map).subscribe(item=>{
+        this.notifly.success("提示信息！","登陆成功！")
+        localStorage.setItem("token",item.data)
+        this.http.route("/nav/user",{})
+       })
+    }) ;
+    
+
+     
   }
   /**
    * 登出

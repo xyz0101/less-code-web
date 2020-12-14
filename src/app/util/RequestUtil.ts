@@ -4,13 +4,15 @@ import { Injectable    } from '@angular/core';
 import { catchError , mergeMap } from 'rxjs/operators';
 import { GetParams } from './GetParams';
 import {   NzNotificationService } from 'ng-zorro-antd/notification';
+import { Router } from '@angular/router';
 @Injectable()
 export class RequestUtil{
 
 
     static notification: NzNotificationService;
     static defaultHeader = new Map();
-    constructor(private http: HttpClient, private notifly: NzNotificationService) {
+    constructor(private http: HttpClient, private notifly: NzNotificationService,
+        private router:Router) {
         RequestUtil.defaultHeader.set('uid', 'jenkin');
         RequestUtil.notification = this.notifly;
      }
@@ -54,7 +56,7 @@ private handleOption(param?: Map<string, any>|GetParams, header?: Map<string, st
     RequestUtil.defaultHeader.forEach((val, key) => {
         headers.append(key, val);
     });
-    if (header !== undefined){
+    if (header !== undefined&& header!=null){
         header.forEach((val, key) => {
             headers =  headers.set(key, val);
         });
@@ -100,7 +102,9 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
   }
 
 
-
+  public   route(path,param){
+    this.router.navigate([path],param );
+  }
 
 
 }
