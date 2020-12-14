@@ -32,9 +32,12 @@ export class LoginService {
         let map = new Map()
         map.set("info",security)
       return this.http.postResquest(LoginApiPath.LOGIN_PATH,null,null,map).subscribe(item=>{
-        this.notifly.success("提示信息！","登陆成功！")
-        localStorage.setItem("token",item.data)
-        this.http.route("/nav/user",{})
+        if(item.code==200){
+          this.notifly.success("提示信息！","登陆成功！")
+            localStorage.setItem("token",item.data)
+            this.http.route("/nav/user",{})
+        }
+      
        })
     }) ;
     
