@@ -8,6 +8,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NzInputModule } from 'ng-zorro-antd/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { zh_CN } from 'ng-zorro-antd/i18n';
@@ -17,6 +18,9 @@ import { RequestUtil } from './util/RequestUtil';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UsersComponent } from './components/system/user/users/users.component';
 import { LoginComponent } from './components/system/login/login.component';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 registerLocaleData(zh);
 
@@ -24,7 +28,8 @@ registerLocaleData(zh);
   declarations: [
     AppComponent,
     UsersComponent,
-    LoginComponent 
+    LoginComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
@@ -33,11 +38,15 @@ registerLocaleData(zh);
     NzLayoutModule,
     NzMenuModule,
     FormsModule,
+    NzFormModule ,
+    NzInputModule ,
+    NzButtonModule,
+    // NgZorroAntdModule,
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN },RequestUtil,NzNotificationService],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, NzNotificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

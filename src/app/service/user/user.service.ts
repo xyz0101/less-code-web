@@ -9,39 +9,39 @@ import { RequestUtil } from 'src/app/util/RequestUtil';
 })
 export class UserService {
 
-  constructor(private http:RequestUtil,private notifly:NzNotificationService) { }
-  
+  constructor(private http: RequestUtil, private notifly: NzNotificationService) { }
+
   /**
    * 分页获取用户信息
    */
-  listUserByPage():Observable<any>{
+  listUserByPage(): Observable<any>{
     return null;
   }
 
   /**
    * 根据ID获取用户信息
    */
-  getUserInfoById(id):Observable<any>{
+  getUserInfoById(id): Observable<any>{
     return null;
   }
   /**
    * 删除用户信息
    */
-  deleteUser():Observable<any>{
+  deleteUser(): Observable<any>{
     return null;
   }
   /**
    * 保存用户信息
    */
-  saveUser():Observable<any>{
+  saveUser(): Observable<any>{
     return null;
   }
 
 
 
- dealData<T>(data:any):Observable<T>{
-    return new Observable(obs=>{
-      obs.next( )
-    })
+ dealData<T>(data: any): Observable<T>{
+    return new Observable(obs => {
+      obs.next( );
+    });
  }
 }

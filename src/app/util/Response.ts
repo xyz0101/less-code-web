@@ -1,8 +1,8 @@
 export class Response{
 
 
-    responseCode:string;
-    msg:string;
-    data:any;
-    constructor(){};
+    responseCode: string;
+    msg: string;
+    data: any;
+    constructor(){}
 }

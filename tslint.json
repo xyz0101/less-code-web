@@ -1,9 +1,10 @@
 {
   "extends": "tslint:recommended",
   "rulesDirectory": [
-    "codelyzer"
+    "node_modules/nz-tslint-rules"
   ],
   "rules": {
+    "nz-secondary-entry-imports": true,
     "align": {
       "options": [
         "parameters",

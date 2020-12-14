@@ -9,10 +9,10 @@ import { SecurityUtils } from 'src/app/util/SecurityUtils';
 })
 export class UsersComponent implements OnInit {
 
-  
+
 
   ngOnInit(): void {
   }
-  constructor(private userService:UserService) { }
- 
+  constructor(private userService: UserService) { }
+
 }

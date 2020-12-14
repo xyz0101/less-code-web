@@ -9,40 +9,40 @@ import { RequestUtil } from 'src/app/util/RequestUtil';
 })
 export class LoginService {
 
-  constructor(private http:RequestUtil,private notifly:NzNotificationService) { }
+  constructor(private http: RequestUtil, private notifly: NzNotificationService) { }
   /**
    * 获取公钥
    */
-  getPublicKey ():Observable<any>{
-    console.log("getPublicKey")
-    return this.http.getResquest<any>("/lsc/system/user/getPublicKey").pipe( map(item=>{
-      return item.data.encoded
-    }));  
+  getPublicKey(): Observable<any>{
+    console.log('getPublicKey');
+    return this.http.getResquest<any>('/lsc/system/user/getPublicKey').pipe( map(item => {
+      return item.data.encoded;
+    }));
  }
  /**
   * 登录
   */
-  login():Observable<any>{
+  login(): Observable<any>{
       return null;
-  }  
+  }
   /**
    * 登出
    */
-  logout():Observable<any>{
+  logout(): Observable<any>{
     return null;
-  }  
+  }
   /**
    * 注册
    */
-  register():Observable<any>{
+  register(): Observable<any>{
     return null;
-  }  
+  }
   /**
    * 获取验证码
    */
-  getCheckCode():Observable<any>{
+  getCheckCode(): Observable<any>{
     return null;
-  } 
+  }
 
 
 }
