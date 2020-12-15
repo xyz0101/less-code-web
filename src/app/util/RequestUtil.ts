@@ -21,25 +21,87 @@ export class RequestUtil{
      }
 
 
-
+     /**
+      * 执行GET请求
+      * @param url 请求路径
+      * @param param 请求参数
+      * @param header 请求头
+      */
     public   getResquest<T extends MyResponse|any >(url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable<T|any>{
-            const option = this.handleOption(param, header);
-            console.log('getResquest', url, option);
+                const option = this.handleOption(param, header);
+                console.log('getResquest', url, option);
 
-            return this.http.get<T>(url, option).pipe(mergeMap(this.dealData), catchError(this.handleError)
+                return this.http.get<T>(url, option).pipe(mergeMap(this.dealData), catchError(this.handleError)
+                );
+
+
+    }
+     /**
+      * 执行POST请求
+      * @param url 请求路径
+      * @param param 请求参数
+      * @param header 请求头
+      */
+    public postResquest<T extends MyResponse|any >(
+            url: string,
+            body: any ,
+            param?: Map<string, string>|GetParams, 
+            header?: Map<string, string>): Observable<T|any>{
+            console.log('posturl   ', url);
+            const option = this.handleOption(param, header);
+            return this.http.post<T>(url, body, option).pipe(mergeMap(this.dealData), catchError(this.handleError)
             );
 
 
-}
-    public postResquest<T extends MyResponse|any >(
-        url: string,
-         body: any ,
-         param?: Map<string, string>|GetParams, 
-         header?: Map<string, string>): Observable<T|any>{
-        console.log('posturl   ', url);
+    }
+
+   
+ /**
+      * 执行文件下载，不去检查返回结果
+      * @param url 请求路径
+      * @param param 请求参数
+      * @param header 请求头
+      */
+     public   downLoadFile (url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable< any>{
         const option = this.handleOption(param, header);
-        return this.http.post<T>(url, body, option).pipe(mergeMap(this.dealData), catchError(this.handleError)
+        option.responseType= 'blob'
+        console.log('downLoadFile', url, option);
+        return this.http.get<any>(url, option ).pipe(catchError(this.handleError)
         );
+    
+    
+    }
+
+ /**
+      * 执行GET请求，不去检查返回结果
+      * @param url 请求路径
+      * @param param 请求参数
+      * @param header 请求头
+      */
+public   getResquestNoCheck (url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable< any>{
+    const option = this.handleOption(param, header);
+    console.log('getResquestNoCheck', url, option);
+
+    return this.http.get<any>(url, option).pipe(catchError(this.handleError)
+    );
+
+
+}
+ /**
+      * 执行POST请求，不去检查返回结果
+      * @param url 请求路径
+      * @param param 请求参数
+      * @param header 请求头
+      */
+public postResquestNoCheck<T extends MyResponse|any >(
+url: string,
+ body: any ,
+ param?: Map<string, string>|GetParams, 
+ header?: Map<string, string>): Observable<T|any>{
+console.log('posturl   ', url);
+const option = this.handleOption(param, header);
+return this.http.post<T>(url, body, option).pipe(  catchError(this.handleError)
+);
 
 
 }

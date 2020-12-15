@@ -7,6 +7,9 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FileApiPath } from 'src/app/api_path/FileApiPath';
+import { HttpHeaders } from '@angular/common/http';
+import { ObjectUtils } from 'src/app/util/ObjectUtils';
+import { FileService } from 'src/app/service/file/file.service';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -20,6 +23,7 @@ export class UsersComponent implements OnInit {
   pageSize = 10;
   pageIndex = 1;
   fileUploadPath = FileApiPath.UPLOAD_FILE_PATH
+  uploadedFileCode=null;
 
   /**
    * 初始化方法
@@ -29,7 +33,7 @@ export class UsersComponent implements OnInit {
     this.listUser(1,10,null,null,null)
   }
 
-  constructor(private userService: UserService,private fb: FormBuilder,private msg: NzMessageService) {
+  constructor(private userService: UserService,private fb: FormBuilder,private msg: NzMessageService,private fileService:FileService) {
 
    }
 listUser(
@@ -111,14 +115,25 @@ editUser(data){
     theme: 'twotone'
   };
   initForm(data){
+    if(ObjectUtils.isNotEmpty(data.userHead)){
+      this.fileService.downloadFile(data.userHead).subscribe(item=>{
+        this.getBase64(item,callback=>{
+          this.avatarUrl = callback;
+        })
+      })
+    }
+
     this.validateForm = this.fb.group({
+      id: [data.id],
+      versionNumber:[data.versionNumber],
+      deleteFlag:[data.deleteFlag],
       userEmail: [data.userEmail, [Validators.email, Validators.required]],
       password: [data.password, [Validators.required]],
       userName: [data.userName, [Validators.required]],
-      userCode: [data.userCode, [Validators.required]],
+      userCode: new FormControl({value:data.userCode,disabled:true}  , Validators.required   ),
       resetPassword: ['0', [Validators.required]],
-      userIntroduce: [null ],
-      userHead: [null ],
+      userIntroduce: [data.userIntroduce ],
+      userHead: [data.userHead ],
       userStatus: [JSON.stringify(data.userStatus), [Validators.required]]
     });
   }
@@ -126,10 +141,14 @@ editUser(data){
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
+      
     }
-  
+    if(ObjectUtils.isNotEmpty(this.uploadedFileCode)){
+      this.validateForm.value['userHead']=this.uploadedFileCode;
+    }
     this.close();
     console.log("表单提交数据",this.validateForm.value)
+    this.userService.saveUser(this.validateForm.value)
   }
 
   updateConfirmValidator(): void {
@@ -179,6 +198,16 @@ editUser(data){
     });
   };
 
+  setHeaders=(file: NzUploadFile)=>{
+    return new Observable(
+      (observer:Observer<{}>)=>{
+        observer.next({"token":localStorage.getItem("token")})
+        observer.complete()
+      }
+    )
+  }
+
+
   private getBase64(img: File, callback: (img: string) => void): void {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result!.toString()));
@@ -188,18 +217,21 @@ editUser(data){
   handleChange(info: { file: NzUploadFile }): void {
     switch (info.file.status) {
       case 'uploading':
-        this.loading = true;
+        this.headLoading = true;
         break;
       case 'done':
+        console.log("图片上传成功",info.file.response.data)
+       this.uploadedFileCode = info.file.response.data
         // Get this url from response in real world.
         this.getBase64(info.file!.originFileObj!, (img: string) => {
-          this.loading = false;
+          this.headLoading = false;
           this.avatarUrl = img;
+         
         });
         break;
       case 'error':
         this.msg.error('Network error');
-        this.loading = false;
+        this.headLoading = false;
         break;
     }
   }

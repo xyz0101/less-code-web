@@ -38,9 +38,15 @@ nzShowSizeChanger
         <nz-form-item aria-disabled="true">
             <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userCode">用户编号</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24"   >
-                <input nz-input formControlName="userCode" id="userCode" />
+                <input disabled nz-input formControlName="userCode" id="userCode" />
               </nz-form-control>
         </nz-form-item>
+        <nz-form-item aria-disabled="true">
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userEmail">用户邮箱号</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24"  nzErrorTip="请输入正确的邮箱" >
+              <input nz-input formControlName="userEmail" id="userEmail" />
+            </nz-form-control>
+      </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userName">昵称</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的用户昵称">
@@ -74,6 +80,7 @@ nzShowSizeChanger
                 class="avatar-uploader"
                 [nzAction]="fileUploadPath"
                 nzName="file"
+                [nzHeaders]="setHeaders"
                 nzListType="picture-card"
                 [nzShowUploadList]="false"
                 [nzBeforeUpload]="beforeUpload"

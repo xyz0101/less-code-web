@@ -35,8 +35,12 @@ export class UserService {
   /**
    * 保存用户信息
    */
-  saveUser(): Observable<MyResponse>{
-    return null;
+  saveUser(data) {
+    return this.http.postResquest(UserApiPath.SAVE_USER_PATH,data,null,null).subscribe(item=>{
+      if(item.code=='200'){
+        this.notifly.success("提示信息","保存成功")
+      }
+    })
   }
 
 

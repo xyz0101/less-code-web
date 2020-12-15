@@ -10,7 +10,7 @@ export class UserApiPath{
     /**
      * 删除用户
      */
-    public static ADD_USER_PATH = '/lsc/system/user/deleteUser';
+    public static DELETE__USER_PATH = '/lsc/system/user/deleteUser';
     /**
      * 根据编号获取用户
      */
