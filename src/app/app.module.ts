@@ -22,6 +22,15 @@ import { LoginComponent } from './components/system/login/login.component';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { AuthGuard } from './guard/AuthGuard';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzMessageService } from 'ng-zorro-antd/message';
+
+
 
 registerLocaleData(zh);
 
@@ -45,9 +54,14 @@ registerLocaleData(zh);
     NzCheckboxModule,
     HttpClientModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NzTableModule ,
+    NzDrawerModule ,
+    NzModalModule,
+    NzRadioModule,
+    NzUploadModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, NzNotificationService],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, NzNotificationService,AuthGuard,NzMessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

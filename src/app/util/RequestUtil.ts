@@ -5,21 +5,24 @@ import { catchError , mergeMap } from 'rxjs/operators';
 import { GetParams } from './GetParams';
 import {   NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
+import { MyResponse } from './MyResponse';
 @Injectable()
 export class RequestUtil{
 
 
     static notification: NzNotificationService;
+    static router:Router;
     static defaultHeader = new Map();
     constructor(private http: HttpClient, private notifly: NzNotificationService,
         private router:Router) {
         RequestUtil.defaultHeader.set('uid', 'jenkin');
         RequestUtil.notification = this.notifly;
+        RequestUtil.router = this.router;
      }
 
 
 
-    public   getResquest<T extends Response|any >(url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable<T|any>{
+    public   getResquest<T extends MyResponse|any >(url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable<T|any>{
             const option = this.handleOption(param, header);
             console.log('getResquest', url, option);
 
@@ -28,11 +31,11 @@ export class RequestUtil{
 
 
 }
-    public postResquest<T extends Response|any >(
+    public postResquest<T extends MyResponse|any >(
         url: string,
          body: any ,
          param?: Map<string, string>|GetParams, 
-         header?: Map<string, any>): Observable<T|any>{
+         header?: Map<string, string>): Observable<T|any>{
         console.log('posturl   ', url);
         const option = this.handleOption(param, header);
         return this.http.post<T>(url, body, option).pipe(mergeMap(this.dealData), catchError(this.handleError)
@@ -42,8 +45,10 @@ export class RequestUtil{
 }
 
 private handleOption(param?: Map<string, any>|GetParams, header?: Map<string, string>): any{
-    let headers = new HttpHeaders();
-    let params = new HttpParams();
+   //添加token
+    let token = localStorage.getItem("token")
+    let headers = new HttpHeaders({"token":token});
+    var params = new HttpParams();
 
     if (param !== undefined&& param!=null){
         if (param instanceof GetParams){
@@ -54,20 +59,19 @@ private handleOption(param?: Map<string, any>|GetParams, header?: Map<string, st
         });
     }
     RequestUtil.defaultHeader.forEach((val, key) => {
-        headers.append(key, val);
+        headers=headers.set(key, val);
     });
     if (header !== undefined&& header!=null){
         header.forEach((val, key) => {
             headers =  headers.set(key, val);
         });
     }
-
     const option = {headers, params};
     return option;
 }
 
 
-private dealData<T extends Response|any>(event: any  ): Observable< T> {
+private dealData<T extends MyResponse|any>(event: any  ): Observable< T> {
     console.log('请求拦截', event);
 
 
@@ -75,8 +79,14 @@ private dealData<T extends Response|any>(event: any  ): Observable< T> {
             // this.notification.create('success','操作成功',event.msg);
             return new Observable(observer => observer.next(event)); // 请求成功返回响应
         }else{
-            RequestUtil.notification.error( '操作失败', event.msg);
+            if(event.code=='401'){
+                RequestUtil.router.navigate(["/login"],{} );
+                
+            }else{
+                RequestUtil.notification.error( '操作失败', event.msg);
             return new Observable(observer => observer.next(event)); // 请求成功返回响应
+            }
+            
         }
 
 
@@ -102,7 +112,7 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
   }
 
 
-  public   route(path,param){
+  public route(path,param){
     this.router.navigate([path],param );
   }
 

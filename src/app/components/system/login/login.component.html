@@ -1,6 +1,6 @@
-<div>
-
-    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+<div class="login-back">
+    <div class = 'login'>
+      <form nz-form [formGroup]="validateForm"  class="login-form" (ngSubmit)="submitForm()">
         <nz-form-item>
           <nz-form-control nzErrorTip="请输入用户名或邮箱!">
             <nz-input-group nzPrefixIcon="user">
@@ -15,18 +15,23 @@
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
-        <div nz-row class="login-form-margin">
-          <div nz-col [nzSpan]="12">
+        <div nz-row  >
+          <div nz-col [nzSpan]="8">
             <label nz-checkbox formControlName="remember">
               <span>记住我</span>
             </label>
           </div>
-          <div nz-col [nzSpan]="12">
-            <a class="login-form-forgot">忘记密码？</a>
+          <div nz-col [nzSpan]="8">
+            <a  >忘记密码？</a>
+          </div>
+          <div nz-col [nzSpan]="8">
+            <a  >立即注册！</a>
           </div>
         </div>
-        <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">登录</button>
-        或者 <a> 立即注册! </a>
+        <button nz-button class="login-form-button"  [nzType]="'primary'">登录</button>
+        <!-- <span style="margin-left: 60%;">或者 <a> 立即注册! </a></span> -->
       </form>
+    </div>
+    
 
 </div>
