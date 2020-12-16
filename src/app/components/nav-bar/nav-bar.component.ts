@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginApiPath } from 'src/app/api_path/LoginApiPath';
+import { UserApiPath } from 'src/app/api_path/UserApiPath';
+import { RequestUtil } from 'src/app/util/RequestUtil';
 
 @Component({
   selector: 'app-nav-bar',
@@ -7,10 +10,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http:RequestUtil) { }
   isCollapsed = false;
 
   ngOnInit(): void {
+  }
+
+  logOut(){
+    this.http.getResquest(LoginApiPath.LOGOUT_PATH).subscribe(res=>{
+      if(res.code=='200'){
+        RequestUtil.notifySuccess("注销成功")
+        this.http.simpleRoute('/login')
+      }
+    })
   }
 
 }

@@ -10,7 +10,7 @@ export class LoginApiPath{
     /**
      * 注销
      */
-    public static LOGOUT_PATH = '';
+    public static LOGOUT_PATH = '/lsc/system/user/logOut';
     /**
      * 注册
      */

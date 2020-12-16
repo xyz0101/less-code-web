@@ -109,7 +109,14 @@ return this.http.post<T>(url, body, option).pipe(  catchError(this.handleError)
 private handleOption(param?: Map<string, any>|GetParams, header?: Map<string, string>): any{
    //添加token
     let token = localStorage.getItem("token")
-    let headers = new HttpHeaders({"token":token});
+   
+    let headers =null;
+    if(token!=undefined&&token!=null){
+        headers=new HttpHeaders({"token":token});
+    }else{
+        headers=new HttpHeaders();
+    }
+     
     var params = new HttpParams();
 
     if (param !== undefined&& param!=null){
@@ -178,6 +185,9 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
     this.router.navigate([path],param );
   }
 
+  public simpleRoute(path){
+    this.router.navigate([path] );
+  }
 
   public static notifySuccess (msg){
     RequestUtil.notification.success("提示信息",msg);
