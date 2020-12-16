@@ -29,6 +29,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 
 
@@ -59,7 +60,8 @@ registerLocaleData(zh);
     NzDrawerModule ,
     NzModalModule,
     NzRadioModule,
-    NzUploadModule
+    NzUploadModule,
+    NzSpaceModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, NzNotificationService,AuthGuard,NzMessageService],
   bootstrap: [AppComponent]

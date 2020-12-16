@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { UserApiPath } from 'src/app/api_path/UserApiPath';
 import { MyResponse } from 'src/app/util/MyResponse';
+import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 
 @Injectable({
@@ -29,8 +30,14 @@ export class UserService {
   /**
    * 删除用户信息
    */
-  deleteUser(): Observable<MyResponse>{
-    return null;
+  deleteUser(ids:Set<number>): Observable<MyResponse>{
+    let arr = [];
+    if(ObjectUtils.isNotEmpty(ids)){
+      ids.forEach(item=>{
+        arr.push(item)
+      })
+    }
+    return this.http.postResquest(UserApiPath.DELETE__USER_PATH,arr);
   }
   /**
    * 保存用户信息

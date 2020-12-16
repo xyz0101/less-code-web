@@ -47,7 +47,7 @@ export class RequestUtil{
             body: any ,
             param?: Map<string, string>|GetParams, 
             header?: Map<string, string>): Observable<T|any>{
-            console.log('posturl   ', url);
+            console.log('posturl   ', url,"参数：",body);
             const option = this.handleOption(param, header);
             return this.http.post<T>(url, body, option).pipe(mergeMap(this.dealData), catchError(this.handleError)
             );
@@ -177,6 +177,17 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
   public route(path,param){
     this.router.navigate([path],param );
   }
+
+
+  public static notifySuccess (msg){
+    RequestUtil.notification.success("提示信息",msg);
+  }
+
+  public static notifyError (msg){
+    RequestUtil.notification.success("错误信息",msg);
+  }
+
+
 
 
 }
