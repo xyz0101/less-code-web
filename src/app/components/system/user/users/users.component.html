@@ -51,6 +51,8 @@
   nzTitle="编辑用户信息" [nzFooter]="footerTpl" (nzOnClose)="close()">
   <ng-container *nzDrawerContent>
     <form *ngIf="isDrawerEdit" nz-form [formGroup]="validateForm">
+
+      
       <nz-form-item aria-disabled="true">
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userCode">用户编号</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -119,16 +121,20 @@
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userHead">头像</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请上传用户头像">
 
-          <nz-upload class="avatar-uploader" [nzAction]="fileUploadPath" nzName="file" [nzHeaders]="setHeaders"
-            nzListType="picture-card" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+          <nz-upload  
+          [nzCustomRequest] ="customUpload"   [nzShowButton]="fileList.length==0" [nzPreview]="handlePreview"
+          [nzAction]="fileUploadPath" nzName="file" [nzHeaders]="setHeaders"[(nzFileList)]="fileList"
+            nzListType="picture-card"   [nzBeforeUpload]="beforeUpload"
             (nzChange)="handleChange($event)">
-            <ng-container *ngIf="!avatarUrl">
               <i class="upload-icon" nz-icon [nzType]="headLoading ? 'loading' : 'plus'"></i>
-              <div class="ant-upload-text">Upload</div>
-            </ng-container>
-            <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%" />
+              <div class="ant-upload-text">点击上传头像</div>
+            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible = false">
+              <ng-template #modalContent>
+                <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+              </ng-template>
+            </nz-modal>
           </nz-upload>
-
+         
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
@@ -145,12 +151,14 @@
 
 
   </ng-container>
+    
   <ng-template #footerTpl>
     <div style="float: right">
       <button nz-button style="margin-right: 8px;" (click)="close()">取消</button>
       <button nz-button nzType="primary" (click)="submitForm()">提交</button>
     </div>
   </ng-template>
+  
 </nz-drawer>
 
 <!-- 编辑页面 对话框-->
