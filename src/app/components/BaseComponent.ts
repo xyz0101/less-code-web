@@ -2,7 +2,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { NzFormTooltipIcon } from "ng-zorro-antd/form";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { Observable } from "rxjs";
+import { FileApiPath } from '../api_path/FileApiPath';
 import { Qo } from "../entity/Qo";
+import { QueryFields } from '../entity/QueryFields';
 import { ObjectUtils } from "../util/ObjectUtils";
 import { RequestUtil } from "../util/RequestUtil";
 
@@ -13,6 +15,10 @@ export abstract class BaseComponent {
     pageSize = 10;
     pageIndex = 1;
     isAdd = false
+    fileDownLoadPathWithParam=FileApiPath.DOWNLOAD_FILE_PATH_WITH_PARAM
+
+
+
 
     public abstract saveData(data);
 
@@ -26,10 +32,50 @@ export abstract class BaseComponent {
 
     public abstract onDeleteData(ids): Observable<any>
 
+    public abstract afterLoadData();
+
+    public abstract getSearchFields():QueryFields;
 
     constructor(public fb: FormBuilder, public modelService: NzModalService) {
-
+        this.initSearch()
     }
+
+   /****************************
+     * *********搜索组件********
+     * **************************
+     */
+    queryFields:QueryFields
+    searchValidateForm!: FormGroup;
+    showSearch=false;
+    controlArray: Array<{ code: string; name: string }> = [];
+    resetForm(): void {
+        this.searchValidateForm.reset();
+        this.listData(1, 10, null, null, null)
+    }
+    
+    initSearch(){
+        this.queryFields = this.getSearchFields()
+        this.searchValidateForm = this.fb.group({});
+        if(this.queryFields!==undefined&&this.queryFields!==null){
+          this.showSearch==true
+          this.queryFields.param.forEach((value,key)=>{
+            this.controlArray.push({ code: key, name:value });
+            this.searchValidateForm.addControl(key, new FormControl());
+        })  
+        }
+    
+         
+      }
+    
+      searchData(){
+          console.log(this.searchValidateForm.value)
+          this.listData(1, 10, null, null, this.searchValidateForm.value)
+      }
+
+       /****************************
+     * *********数据操作部分********
+     * **************************
+     */
     addData() {
 
         this.isAdd = true
@@ -66,14 +112,18 @@ export abstract class BaseComponent {
         data: { key: string; value: string }
     ): void {
         this.loading = true;
-        let param = Qo.builder().setPage(pageIndex).setPageSize(pageSize).setSorts(sortField, sortValue).setData(data);
+        data = ObjectUtils.isNotEmpty(this.searchValidateForm)? this.searchValidateForm.value:null
+        let param = Qo.builder().setPage(pageIndex).setPageSize(pageSize).setSorts(sortField, sortValue).setData(this.searchValidateForm.value);
         this.getListData(param).subscribe(data => {
             this.loading = false;
             this.total = data.data.total;
             this.dataList = data.data.records;
+            this.afterLoadData();
+            
         });
+      
     }
-
+   
     editData(data) {
         // this.isFormEdit=true;
         this.isAdd = false

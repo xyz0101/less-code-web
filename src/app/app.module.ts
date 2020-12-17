@@ -31,6 +31,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 
 
 
@@ -63,7 +64,8 @@ registerLocaleData(zh);
     NzRadioModule,
     NzUploadModule,
     NzSpaceModule,
-    NzCardModule
+    NzCardModule,
+    NzAvatarModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, NzNotificationService,AuthGuard,NzMessageService],
   bootstrap: [AppComponent]

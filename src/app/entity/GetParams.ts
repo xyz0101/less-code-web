@@ -1,5 +1,6 @@
+
 export class GetParams{
-    param: Map<string, any>;
+    param: Map<string, string>;
     constructor(){
         this.param = new Map();
     }
@@ -8,7 +9,7 @@ export class GetParams{
         return new GetParams();
     }
 
-    setParam(key: string, val: any): GetParams{
+    setParam(key: string, val: string): GetParams{
         this.param.set(key, val);
         return this;
     }

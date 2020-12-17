@@ -2,10 +2,10 @@ import { HttpParams, HttpHeaders, HttpClient, HttpResponse, HttpErrorResponse, H
 import { Observable, throwError,  OperatorFunction } from 'rxjs';
 import { Injectable    } from '@angular/core';
 import { catchError , mergeMap } from 'rxjs/operators';
-import { GetParams } from './GetParams';
 import {   NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
-import { MyResponse } from './MyResponse';
+import { MyResponse } from '../entity/MyResponse';
+import { GetParams } from '../entity/GetParams';
 @Injectable()
 export class RequestUtil{
 

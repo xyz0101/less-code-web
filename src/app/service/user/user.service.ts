@@ -3,7 +3,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { UserApiPath } from 'src/app/api_path/UserApiPath';
-import { MyResponse } from 'src/app/util/MyResponse';
+import { MyResponse } from 'src/app/entity/MyResponse';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 

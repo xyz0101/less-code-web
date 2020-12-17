@@ -14,12 +14,22 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 import { BaseComponent } from 'src/app/components/BaseComponent';
 import { CompressUtils } from 'src/app/util/CompressUtils';
+import { QueryFields } from 'src/app/entity/QueryFields';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent extends BaseComponent implements OnInit {
+
+  constructor(public userService: UserService,public fb: FormBuilder,
+    public msg: NzMessageService,public fileService:FileService,
+    public modelService:NzModalService,private request:HttpClient) {
+        super(fb,modelService)
+   }
+  
+
+
   public saveData(data: any) {
     this.userService.saveUser(data)
   }
@@ -56,6 +66,19 @@ export class UsersComponent extends BaseComponent implements OnInit {
    return  this.userService.deleteUser(ids)
   }
 
+  public getSearchFields(){
+    this.showSearch=true
+    return QueryFields.buildFileds().addField("userCode","用户编码").addField("userName","用户名称")
+  }
+
+
+
+
+
+
+
+
+
   
   fileUploadPath = FileApiPath.UPLOAD_FILE_PATH
   uploadedFileCode=null;
@@ -68,12 +91,36 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.reload()
   }
  
-  constructor(public userService: UserService,public fb: FormBuilder,
-    public msg: NzMessageService,public fileService:FileService,
-    public modelService:NzModalService,private request:HttpClient) {
-        super(fb,modelService)
-   }
   
+
+
+   /**
+    * 头像加载
+    * 
+    */
+
+   userHeads = new Map();
+
+   
+
+ afterLoadData(){
+   console.log('加载头像')
+  this.dataList.forEach(item=>{
+     this.fileService.downloadFile(item.userHead).subscribe(file=>{
+      let res = new  window.File([file], item.userHead, {type: file.type});
+      // this.userHeads=this.userHeads.set(item.userHead,file)
+      this.getBase64(res, (img: string) => {
+         
+        this.userHeads=this.userHeads.set(item.userHead,img)
+      });
+      
+     })
+  })
+ }
+
+
+
+
 
 
 
@@ -91,12 +138,13 @@ export class UsersComponent extends BaseComponent implements OnInit {
   customUpload=  async (item ) => {
    
     
-   let data = await CompressUtils.compressImg(item.file) 
-      console.log(data)
+   let data = await CompressUtils.compressImg(item.file,item.file.type) 
+   console.log(data  )
+      console.log(item.file )
     // 构建一个 FormData 对象，用于存储文件或其他参数
     const formData = new FormData();
     // tslint:disable-next-line:no-any
-    formData.append('file', item.file as any);
+    formData.append('file', data as any);
     const req = new HttpRequest('POST', item.action!, formData, {
       headers:new HttpHeaders({"token":localStorage.getItem("token")}),
       reportProgress: true,
@@ -125,7 +173,9 @@ export class UsersComponent extends BaseComponent implements OnInit {
   };
 
   handlePreview =   (file: NzUploadFile) => {
-    this.previewImage = file.url || file.preview;
+    this.previewImage = this.previewImage||file.url || file.preview;
+     
+     
     this.previewVisible = true;
    
   };
@@ -180,7 +230,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
         this.getBase64(info.file!.originFileObj!, (img: string) => {
           this.headLoading = false;
           this.fileList=[info.file]
-          
+          this.previewImage=img
         });
         break;
       case 'error':

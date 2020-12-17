@@ -1,3 +1,40 @@
+
+<!-- 查询表单 -->
+<nz-space [nzSize]="12"nzDirection="vertical"  style="width: 100%;">
+ 
+<form *ngIf ="showSearch" nz-form [formGroup]="searchValidateForm" class="ant-advanced-search-form">
+  <nz-space-item > 
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="4" *ngFor="let control of controlArray" >
+      <nz-form-item>
+        <nz-form-label [nzFor]="'field' + control.code">{{control.name}}</nz-form-label>
+        <nz-form-control>
+          <input nz-input placeholder="{{control.name}}" [formControlName]="control.code" [attr.id]="control.code" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</nz-space-item>
+  <nz-space-item >
+  <div nz-row style="margin-left: 90%;">
+    <div nz-col [nzSpan]="24" class="search-area">
+      <nz-space [nzSize]="12">
+        <nz-space-item >
+      <button nz-button [nzType]="'primary'" (click)="searchData()" >查询</button>
+    </nz-space-item>
+    <nz-space-item >
+      <button nz-button (click)="resetForm()">重置</button>
+    </nz-space-item>
+      </nz-space>
+    </div>
+  </div>
+</nz-space-item>
+</form>
+<nz-space-item >
+<div> </div>
+</nz-space-item>
+</nz-space>
+
 <!-- 列表 -->
 <nz-space [nzSize]="12"nzDirection="vertical"  style="width: 100%;">
   <nz-space-item >
@@ -35,7 +72,7 @@
       <td>{{ data.userCode }} </td>
       <td>{{ data.userName }}</td>
       <td>{{ data.userEmail }}</td>
-      <td>{{ data.userHead }}</td>
+      <td> <img [src]="userHeads.get(data.userHead)" style="width: 50px;height: 50px;"/>  </td>
       <td>{{ data.userIntroduce }}</td>
       <td>{{ data.userStatus==0?'禁用':'启用' }}</td>
       <td><a (click)="editData(data)">编辑</a></td>
@@ -128,7 +165,7 @@
             (nzChange)="handleChange($event)">
               <i class="upload-icon" nz-icon [nzType]="headLoading ? 'loading' : 'plus'"></i>
               <div class="ant-upload-text">点击上传头像</div>
-            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible = false">
+            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible = false; previewImage=undefined">
               <ng-template #modalContent>
                 <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
               </ng-template>
