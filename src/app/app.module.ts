@@ -32,6 +32,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { CodeGenerateComponent } from './components/code-generate/code-generate.component';
 
 
 
@@ -42,7 +43,8 @@ registerLocaleData(zh);
     AppComponent,
     UsersComponent,
     LoginComponent,
-    NavBarComponent
+    NavBarComponent,
+    CodeGenerateComponent
   ],
   imports: [
     BrowserModule,
