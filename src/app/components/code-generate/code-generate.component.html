@@ -1,1 +1,129 @@
-<p>code-generate works!</p>
+<nz-space  *ngIf="!isFormEdit" [nzSize]="12"nzDirection="vertical"  style="width: 100%;">
+    <nz-space-item>
+<div>
+    <button nz-button (click)="addData('form')">新建表</button>
+</div>
+</nz-space-item>
+<nz-space-item>
+
+<nz-table  #nestedTable  [nzData]="dataList" [nzPageSize]="5"[nzShowPagination]="true" [nzLoading]="loading">
+    <thead >
+      <tr >
+        <th></th>
+        <th>表名称</th>
+        <th>所属数据库</th>
+        <th>字符集</th>
+        <th>字符集排序</th>
+        <th>存储引擎</th>
+        <th>备注</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-template ngFor let-data [ngForOf]="nestedTable.data">
+        <tr>
+          <td [(nzExpand)]="data.expand"></td>
+          <td>{{ data.tableName }}</td>
+          <td>{{ data.tableSchema }}</td>
+          <td>{{ data.encode }}</td>
+          <td>{{ data.tableCollation }}</td>
+          <td>{{ data.engine }}</td>
+          <td>{{ data.tableComments }}</td>
+          <td>
+            <a>操作</a>
+          </td>
+        </tr>
+        <tr [nzExpand]="data.expand">
+          <nz-table #innerTable [nzData]="data.columns" nzSize="small" [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th>列名称</th>
+                 <th>JAVA列名称</th>
+                <th>列类型</th>
+                <th>JAVA列类型</th>
+                <th>列长度</th>
+                <th>列数字长度</th>
+                <th>列默认值</th>
+                <th>列字符编码</th>
+                <th>列字符编码排序</th>
+                <th>是否主键</th>
+                <th>是否为自动递增</th>
+                <th>是否为空</th>
+                <th>备注</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of innerTable.data">
+                <td>{{ data.name }}</td>
+                 <td>{{ data.javaColName }}</td>
+                <td>{{ data.type }}</td>
+                <td>{{ data.javaType }}</td>
+                <td>{{data.length}}</td>
+                <td>{{data.decimalLength}}</td>
+                <td>{{data.defaultValue}}</td>
+                <td>{{data.encode}}</td>
+                <td>{{ data.sort }}</td>
+                <td>{{ data.idFlag }}</td>
+                <td>{{ data.autoIncFlag }}</td>
+                <td>{{ data.nullFlag }}</td>
+                <td>{{ data.comments }}</td>
+                <td>
+                  <span class="table-operation">
+                    <a>更多</a>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </tr>
+      </ng-template>
+    </tbody>
+  </nz-table>
+</nz-space-item>
+
+  </nz-space>
+
+  
+
+  <form *ngIf="isFormEdit" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableName">数据库表名称</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的数据库表名称">
+        <input nz-input formControlName="tableName" id="tableName" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableSchema">数据库</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" >
+          <input nz-input formControlName="tableSchema" id="tableSchema" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="encode">字符集编码</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的字符集编码">
+          <input nz-input formControlName="encode" id="encode" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableCollation">字符集排序</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的字符集排序">
+          <input nz-input formControlName="tableCollation" id="tableCollation" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="engine">数据库引擎</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的数据库引擎">
+          <input nz-input formControlName="engine" id="engine" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24"   nzFor="tableComments">备注信息</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入备注信息">
+          <nz-textarea-count [nzMaxCharacterCount]="150">
+            <textarea rows="4" formControlName="tableComments" nz-input></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+      
+  </form>

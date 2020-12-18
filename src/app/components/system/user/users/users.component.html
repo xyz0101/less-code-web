@@ -41,7 +41,7 @@
 <div class="table-operations">
   <nz-space [nzSize]="12">
     <nz-space-item>
-  <button nz-button (click)="addData()">新增用户</button>
+  <button nz-button (click)="addData('drawer')">新增用户</button>
   </nz-space-item>
   <nz-space-item>
   <button nz-button (click)="deleteData()">删除选中</button>
@@ -84,7 +84,7 @@
 </nz-space>
 <!-- 编辑页面 抽屉-->
 
-<nz-drawer [nzWidth]="drawerWidth" class="drawer-edit" [nzClosable]="false" [nzVisible]="visible" nzPlacement="right"
+<nz-drawer [nzWidth]="drawerWidth" class="drawer-edit" [nzClosable]="false" [nzVisible]="visibleDrawer" nzPlacement="right"
   nzTitle="编辑用户信息" [nzFooter]="footerTpl" (nzOnClose)="close()">
   <ng-container *nzDrawerContent>
     <form *ngIf="isDrawerEdit" nz-form [formGroup]="validateForm">
@@ -203,8 +203,8 @@
 <!-- <button nz-button nzType="primary" (click)="showModal()">
     <span>Show Modal</span>
   </button> -->
-<nz-modal [(nzVisible)]="isVisible" nzTitle="Modal Title" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
-  [nzOkLoading]="isOkLoading">
+<nz-modal [(nzVisible)]="isDialogVisible" nzTitle="Modal Title" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+  [nzOkLoading]="isDialogOkLoading">
   <p *nzModalContent>Modal Content</p>
 </nz-modal>
 

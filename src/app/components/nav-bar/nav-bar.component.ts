@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginApiPath } from 'src/app/api_path/LoginApiPath';
-import { UserApiPath } from 'src/app/api_path/UserApiPath';
+import { LoginApiPath } from 'src/app/api_path/system/LoginApiPath';
+import { UserApiPath } from 'src/app/api_path/system/UserApiPath';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 
 @Component({

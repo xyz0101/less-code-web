@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Qo } from 'src/app/entity/Qo';
-import { UserService } from 'src/app/service/user/user.service';
+import { UserService } from 'src/app/service/system/user/user.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { FileApiPath } from 'src/app/api_path/FileApiPath';
+import { FileApiPath } from 'src/app/api_path/system/FileApiPath';
 import { HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
-import { FileService } from 'src/app/service/file/file.service';
+import { FileService } from 'src/app/service/system/file/file.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 import { BaseComponent } from 'src/app/components/BaseComponent';
@@ -21,23 +21,13 @@ import { QueryFields } from 'src/app/entity/QueryFields';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent extends BaseComponent implements OnInit {
-
+ 
   constructor(public userService: UserService,public fb: FormBuilder,
     public msg: NzMessageService,public fileService:FileService,
     public modelService:NzModalService,private request:HttpClient) {
         super(fb,modelService)
    }
-  
-
-
-  public saveData(data: any) {
-    this.userService.saveUser(data)
-  }
-  public getListData(param: any): Observable<any> {
-    return this.userService.listUserByPage(param)
-  }
-  public beforeInitForm(data: any) {
-    
+   public initForm(data: any) {
     if(ObjectUtils.isNotEmpty(data.userHead)){
       this.headLoading=true
       this.fileService.downloadFile(data.userHead).subscribe(item=>{
@@ -53,7 +43,31 @@ export class UsersComponent extends BaseComponent implements OnInit {
         })
       })
     }
+    this.validateForm = this.fb.group({
+      id: [data.id],
+      versionNumber: [data.versionNumber],
+      deleteFlag: [data.deleteFlag],
+      userEmail: [data.userEmail, [Validators.email, Validators.required]],
+      password: [data.password, [Validators.required]],
+      userName: [data.userName, [Validators.required]],
+      checkPassword: [null, [Validators.required, this.confirmationValidator]],
+      userCode: new FormControl({ value: data.userCode, disabled: !this.isAdd }, Validators.required),
+      resetPassword: ['0', [Validators.required]],
+      userIntroduce: [data.userIntroduce],
+      userHead: [data.userHead],
+      userStatus: [JSON.stringify(data.userStatus), [Validators.required]]
+  });
   }
+
+
+
+  public saveData(data: any) {
+    this.userService.saveUser(data)
+  }
+  public getListData(param: any): Observable<any> {
+    return this.userService.listUserByPage(param)
+  }
+  
   public beforeSubmitForm() {
     if(ObjectUtils.isNotEmpty(this.uploadedFileCode)){
       this.validateForm.value['userHead']=this.uploadedFileCode;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { UserApiPath } from 'src/app/api_path/UserApiPath';
+import { UserApiPath } from 'src/app/api_path/system/UserApiPath';
 import { MyResponse } from 'src/app/entity/MyResponse';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';

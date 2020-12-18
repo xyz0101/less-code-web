@@ -2,7 +2,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { NzFormTooltipIcon } from "ng-zorro-antd/form";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { Observable } from "rxjs";
-import { FileApiPath } from '../api_path/FileApiPath';
+import { FileApiPath } from '../api_path/system/FileApiPath';
 import { Qo } from "../entity/Qo";
 import { QueryFields } from '../entity/QueryFields';
 import { ObjectUtils } from "../util/ObjectUtils";
@@ -15,7 +15,6 @@ export abstract class BaseComponent {
     pageSize = 10;
     pageIndex = 1;
     isAdd = false
-    fileDownLoadPathWithParam=FileApiPath.DOWNLOAD_FILE_PATH_WITH_PARAM
 
 
 
@@ -23,8 +22,6 @@ export abstract class BaseComponent {
     public abstract saveData(data);
 
     public abstract getListData(param): Observable<Response | any>;
-
-    public abstract beforeInitForm(data);
 
     public abstract beforeSubmitForm();
 
@@ -35,6 +32,8 @@ export abstract class BaseComponent {
     public abstract afterLoadData();
 
     public abstract getSearchFields():QueryFields;
+    
+    public abstract initForm(data);
 
     constructor(public fb: FormBuilder, public modelService: NzModalService) {
         this.initSearch()
@@ -74,14 +73,34 @@ export abstract class BaseComponent {
 
        /****************************
      * *********数据操作部分********
+     * ******可选表单类型：
+     * form 单页表单
+     * drawer 抽屉表单
+     * dialog 对话框表单
      * **************************
      */
-    addData() {
+    addData(type) {
 
         this.isAdd = true
         this.beforeAddButton()
         this.initForm({});
-        this.open()
+        switch(type){
+            case 'form':
+                this.isFormEdit=true
+                break;
+            case 'drawer':
+                this.open()
+                break;
+            case 'dialog':
+                this.showModal()
+                break;
+            default:
+                break;
+
+            
+        }
+
+       
     }
     deleteLoading = false;
     deleteData() {
@@ -109,17 +128,21 @@ export abstract class BaseComponent {
         pageSize: number,
         sortField: string | null,
         sortValue: string | null,
-        data: { key: string; value: string }
+        searchData: { key: string; value: string }
     ): void {
         this.loading = true;
-        data = ObjectUtils.isNotEmpty(this.searchValidateForm)? this.searchValidateForm.value:null
-        let param = Qo.builder().setPage(pageIndex).setPageSize(pageSize).setSorts(sortField, sortValue).setData(this.searchValidateForm.value);
+        searchData = ObjectUtils.isNotEmpty(this.searchValidateForm)? this.searchValidateForm.value:null
+        let param = Qo.builder().setPage(pageIndex).setPageSize(pageSize).setSorts(sortField, sortValue).setData(searchData);
         this.getListData(param).subscribe(data => {
             this.loading = false;
-            this.total = data.data.total;
-            this.dataList = data.data.records;
-            this.afterLoadData();
-            
+            if(data.data instanceof Array){
+                this.total = data.data.length;
+                this.dataList = data.data;
+            }else{
+                this.total = data.data.total;
+                this.dataList = data.data.records;
+            }
+             this.afterLoadData();
         });
       
     }
@@ -183,40 +206,40 @@ export abstract class BaseComponent {
      ****************************************************
      */
     isDrawerEdit = false;
-    visible = false;
+    visibleDrawer = false;
     drawerWidth = "35%"
     open(): void {
         this.isDrawerEdit = true;
-        this.visible = true;
+        this.visibleDrawer = true;
     }
 
     close(): void {
         this.isFormEdit = false;
         this.isDrawerEdit = false;
-        this.visible = false;
+        this.visibleDrawer = false;
     }
     /****************************************************
       **************对话框部分****************************
       ***************************************************
      */
 
-    isVisible = false;
-    isOkLoading = false;
+    isDialogVisible = false;
+    isDialogOkLoading = false;
 
     showModal(): void {
-        this.isVisible = true;
+        this.isDialogOkLoading = true;
     }
 
     handleOk(): void {
-        this.isOkLoading = true;
+        this.isDialogOkLoading = true;
         setTimeout(() => {
-            this.isVisible = false;
-            this.isOkLoading = false;
+            this.isDialogVisible = false;
+            this.isDialogOkLoading = false;
         }, 3000);
     }
 
     handleCancel(): void {
-        this.isVisible = false;
+        this.isDialogVisible = false;
     }
 
 
@@ -231,24 +254,7 @@ export abstract class BaseComponent {
         type: 'info-circle',
         theme: 'twotone'
     };
-    initForm(data) {
-
-        this.beforeInitForm(data)
-        this.validateForm = this.fb.group({
-            id: [data.id],
-            versionNumber: [data.versionNumber],
-            deleteFlag: [data.deleteFlag],
-            userEmail: [data.userEmail, [Validators.email, Validators.required]],
-            password: [data.password, [Validators.required]],
-            userName: [data.userName, [Validators.required]],
-            checkPassword: [null, [Validators.required, this.confirmationValidator]],
-            userCode: new FormControl({ value: data.userCode, disabled: !this.isAdd }, Validators.required),
-            resetPassword: ['0', [Validators.required]],
-            userIntroduce: [data.userIntroduce],
-            userHead: [data.userHead],
-            userStatus: [JSON.stringify(data.userStatus), [Validators.required]]
-        });
-    }
+  
     submitForm(): void {
         for (const i in this.validateForm.controls) {
             this.validateForm.controls[i].markAsDirty();

@@ -1,7 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FileApiPath } from 'src/app/api_path/FileApiPath';
+import { FileApiPath } from 'src/app/api_path/system/FileApiPath';
 import { GetParams } from 'src/app/entity/GetParams';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 
