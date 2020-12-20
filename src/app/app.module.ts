@@ -33,6 +33,9 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { CodeGenerateComponent } from './components/code-generate/code-generate.component';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 
 
@@ -67,7 +70,10 @@ registerLocaleData(zh);
     NzUploadModule,
     NzSpaceModule,
     NzCardModule,
-    NzAvatarModule
+    NzAvatarModule,
+    NzInputNumberModule,
+    NzSelectModule,
+    NzToolTipModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, NzNotificationService,AuthGuard,NzMessageService],
   bootstrap: [AppComponent]

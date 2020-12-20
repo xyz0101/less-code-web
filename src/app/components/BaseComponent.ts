@@ -7,37 +7,232 @@ import { Qo } from "../entity/Qo";
 import { QueryFields } from '../entity/QueryFields';
 import { ObjectUtils } from "../util/ObjectUtils";
 import { RequestUtil } from "../util/RequestUtil";
+import { ButtonCodes } from './ButonCodes';
 
-export abstract class BaseComponent {
+export abstract class BaseComponent extends ButtonCodes{
     total = 1;
     dataList = [];
     loading = true;
     pageSize = 10;
     pageIndex = 1;
     isAdd = false
+    editTable=[]
+    /**
+     * 编辑类型，dialog ，form，drawer
+     */
+    editType;
 
 
-
-
-    public abstract saveData(data);
-
+  
+    /**
+     * 获取当前列表的查询结果
+     * @param param 参数
+     */
     public abstract getListData(param): Observable<Response | any>;
+  
 
-    public abstract beforeSubmitForm();
-
-    public abstract beforeAddButton();
-
+    /**
+     * 当进行数据删除的时候的回调
+     * 可以调接口
+     * @param ids 
+     */
     public abstract onDeleteData(ids): Observable<any>
-
+    /**
+     * 列表数据加载完成的回调
+     * 可以修改数据什么的
+     */
     public abstract afterLoadData();
-
+    /**
+     * 构建当前查询组件的列
+     */
     public abstract getSearchFields():QueryFields;
-    
-    public abstract initForm(data);
+
+
+
+    /**
+     * drawer类型创建空表单执行之前的操作
+     */
+    beforeDrawerAddButton() {
+        throw new Error('Method not implemented.');
+    }
+    /**
+     * dialog 类型创建空表单执行之前的操作
+     */
+    beforeDialogAddButton(){
+        throw new Error('Method not implemented.');
+    }
+    /**
+     * form 类型创建空表单执行之前的操作
+     */
+    beforeFormAddButton() {
+        throw new Error('Method not implemented.');
+    }
+    /**
+     * drawer类型创建表单的操作
+     * @param data 
+     */
+    initDrawerEditForm(data: any) {
+        throw new Error('Method not implemented.');
+    }
+    /**
+     *  dialog类型创建表单的操作
+     */
+    initDialogEditForm(data: any) {
+        throw new Error('Method not implemented.');
+    }
+    /**
+     *  form类型创建表单的操作
+     * @param data 
+     */
+    initFormEditForm(data: any) {
+        throw new Error('Method not implemented.');
+    }
+    /**
+     * form 类型 表单提交前操作
+     */
+    beforeFormSubmit() {
+        throw new Error('Method not implemented.');
+    }
+     /**
+     * dialog 类型 表单提交前操作
+     */
+    beforeDialogSubmit() {
+        throw new Error('Method not implemented.');
+    }
+     /**
+     * drawer 类型 表单提交前操作
+     */
+    beforeDrawerSubmit() {
+        throw new Error('Method not implemented.');
+    }
+
+    saveDrawerData(data: any) :Observable<any> {
+        throw new Error('Method not implemented.');
+    }
+    saveDialogData(data: any)  :Observable<any>{
+        throw new Error('Method not implemented.');
+    }
+    saveFormData(data: any)  :Observable<any>{
+        throw new Error('Method not implemented.');
+    }
+
+
+
+  /**
+     * 保存数据的操作，调接口
+     * @param data 
+     */
+    public  saveData(data) :Observable<any>{
+        if(this.editType=='form'){
+            return this.saveFormData(data)
+        }else  if(this.editType=='dialog'){
+            return this.saveDialogData(data)
+        }else if(this.editType=='drawer'){
+            return this.saveDrawerData(data)
+        }
+    }
+   
+
+
+  /**
+     * 提交表单之前的操作
+     */
+    public   beforeSubmitForm(){
+        if(this.editType=='form'){
+            this. beforeFormSubmit()
+        }else  if(this.editType=='dialog'){
+          this.beforeDialogSubmit()
+        }else if(this.editType=='drawer'){
+            this.beforeDrawerSubmit()
+        }
+    }
+ 
+
+        /**
+     * 添加按钮之前的操作
+     */
+    public  beforeAddButton(){
+        if(this.editType=='form'){
+            this. beforeFormAddButton()
+        }else  if(this.editType=='dialog'){
+          this.beforeDialogAddButton()
+        }else if(this.editType=='drawer'){
+            this.beforeDrawerAddButton()
+        }
+    }
+   
+    /**
+     * 初始化表单数据
+     * @param data 
+     */
+    public  initForm(data){
+        if(this.editType=='form'){
+            this.initFormEditForm(data)
+        }else  if(this.editType=='dialog'){
+          this.initDialogEditForm(data)
+        }else if(this.editType=='drawer'){
+            this.initDrawerEditForm(data)
+        }
+    }
+   
+
+
 
     constructor(public fb: FormBuilder, public modelService: NzModalService) {
+        super()
         this.initSearch()
+        
     }
+
+       /****************************
+     * *********表格操作********
+     * **************************
+     */
+    /**
+     * 表格新增一行
+     */
+    addTableRow(){
+        let id = new Date().getTime()
+        this.editTable = [
+            ...this.editTable,
+            {id:id }
+        ]
+        
+        
+    }
+    /**
+     * 
+     * @param id 删除行
+     */
+    deleteTableRow(id){
+        this.editTable = this.editTable.filter(d => d.id !== id);
+    }
+
+
+    deleteSingleData(id){
+        this.setOfCheckedId = new Set();
+        this.setOfCheckedId.add(id);
+        console.log("需要删除的ID", this.setOfCheckedId)
+        this.modelService.confirm({
+            nzTitle: '是否删除所选数据？', nzOkType: 'danger', nzOkText: '是', nzCancelText: '否', nzOkLoading: this.deleteLoading, nzOnOk: () => {
+                let arr = [];
+                if (ObjectUtils.isNotEmpty(this.setOfCheckedId)) {
+                    this.setOfCheckedId.forEach(item => {
+                        arr.push(item)
+                    })
+                }
+                this.onDeleteData(arr).subscribe(item => {
+                    if (item.code == '200') {
+                        RequestUtil.notifySuccess("删除成功！")
+                        this.reload()
+                    }
+                })
+            },
+        })
+    }
+
+
+
 
    /****************************
      * *********搜索组件********
@@ -71,6 +266,19 @@ export abstract class BaseComponent {
           this.listData(1, 10, null, null, this.searchValidateForm.value)
       }
 
+
+      /**
+       * 创建空表单，添加数据
+       * @param type 
+       */
+      createData(type){
+        this.editType = type;
+        this.isAdd = true
+        this.beforeAddButton()
+        this.initForm({});
+        this.openEditView(type);
+      }
+
        /****************************
      * *********数据操作部分********
      * ******可选表单类型：
@@ -79,11 +287,8 @@ export abstract class BaseComponent {
      * dialog 对话框表单
      * **************************
      */
-    addData(type) {
-
-        this.isAdd = true
-        this.beforeAddButton()
-        this.initForm({});
+    
+    openEditView(type: any) {
         switch(type){
             case 'form':
                 this.isFormEdit=true
@@ -99,9 +304,29 @@ export abstract class BaseComponent {
 
             
         }
-
-       
     }
+
+  closeEditView(type: any) {
+        switch(type){
+            case 'form':
+                this.isFormEdit=false
+                break;
+            case 'drawer':
+                this.close()
+                break;
+            case 'dialog':
+                this.handleCancel()
+                
+                break;
+            default:
+                break;
+
+            
+        }
+    }
+
+
+    
     deleteLoading = false;
     deleteData() {
         console.log("需要删除的ID", this.setOfCheckedId)
@@ -146,13 +371,15 @@ export abstract class BaseComponent {
         });
       
     }
-   
-    editData(data) {
-        // this.isFormEdit=true;
+    /**
+     * 编辑数据，表单数据引用现有数据
+     */
+    editData(data,type) {
+        this.editType = type;
         this.isAdd = false
         console.log(data)
         this.initForm(data)
-        this.open()
+        this.openEditView(type)
     }
 
 
@@ -164,7 +391,11 @@ export abstract class BaseComponent {
 
     checked = false;
     indeterminate = false;
-
+    /**
+     * 当前选择了的id
+     * 用于删除或者其他
+     * 单个删除的时候这里面只有一个元素
+     */
     setOfCheckedId = new Set<number>();
 
     updateCheckedSet(id: number, checked: boolean): void {
@@ -217,6 +448,7 @@ export abstract class BaseComponent {
         this.isFormEdit = false;
         this.isDrawerEdit = false;
         this.visibleDrawer = false;
+       
     }
     /****************************************************
       **************对话框部分****************************
@@ -227,19 +459,17 @@ export abstract class BaseComponent {
     isDialogOkLoading = false;
 
     showModal(): void {
-        this.isDialogOkLoading = true;
+        this.isDialogVisible = true;
     }
 
     handleOk(): void {
         this.isDialogOkLoading = true;
-        setTimeout(() => {
-            this.isDialogVisible = false;
-            this.isDialogOkLoading = false;
-        }, 3000);
+        this.submitForm()
     }
 
     handleCancel(): void {
         this.isDialogVisible = false;
+        this.isDialogOkLoading=false
     }
 
 
@@ -262,10 +492,17 @@ export abstract class BaseComponent {
 
         }
         this.beforeSubmitForm();
-        this.close();
+       
         console.log("表单提交数据", this.validateForm.value)
-        this.saveData(this.validateForm.value)
-        this.reload()
+        this.saveData(this.validateForm.value).subscribe(item=>{
+            if(item.code=='200'){
+                RequestUtil.notifySuccess( "提交成功")
+                this.closeEditView(this.editType);
+                this.reload()
+              }
+              
+        })
+        
     }
     reload() {
         this.listData(1, 10, null, null, null)
@@ -287,6 +524,31 @@ export abstract class BaseComponent {
     getCaptcha(e: MouseEvent): void {
         e.preventDefault();
     }
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

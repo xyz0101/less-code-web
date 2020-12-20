@@ -41,7 +41,7 @@
 <div class="table-operations">
   <nz-space [nzSize]="12">
     <nz-space-item>
-  <button nz-button (click)="addData('drawer')">新增用户</button>
+  <button nz-button (click)="createData('drawer')">新增用户</button>
   </nz-space-item>
   <nz-space-item>
   <button nz-button (click)="deleteData()">删除选中</button>
@@ -75,7 +75,7 @@
       <td> <img [src]="userHeads.get(data.userHead)" style="width: 50px;height: 50px;"/>  </td>
       <td>{{ data.userIntroduce }}</td>
       <td>{{ data.userStatus==0?'禁用':'启用' }}</td>
-      <td><a (click)="editData(data)">编辑</a></td>
+      <td><a (click)="editData(data,'drawer')">编辑</a></td>
     </tr>
   </tbody>
 </nz-table>

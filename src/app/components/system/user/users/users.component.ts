@@ -27,7 +27,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     public modelService:NzModalService,private request:HttpClient) {
         super(fb,modelService)
    }
-   public initForm(data: any) {
+   public initDrawerEditForm(data: any) {
     if(ObjectUtils.isNotEmpty(data.userHead)){
       this.headLoading=true
       this.fileService.downloadFile(data.userHead).subscribe(item=>{
@@ -61,19 +61,19 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
 
 
-  public saveData(data: any) {
-    this.userService.saveUser(data)
+  public saveDrawerData(data: any) :Observable<any>{
+   return  this.userService.saveUser(data)
   }
   public getListData(param: any): Observable<any> {
     return this.userService.listUserByPage(param)
   }
   
-  public beforeSubmitForm() {
+  public beforeDrawerSubmit() {
     if(ObjectUtils.isNotEmpty(this.uploadedFileCode)){
       this.validateForm.value['userHead']=this.uploadedFileCode;
     }
   }
-  public beforeAddButton() {
+  public beforeDrawerAddButton() {
     this.fileList=[]
   }
   public onDeleteData(ids: any): Observable<any> {

@@ -6,6 +6,7 @@ import {   NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 import { MyResponse } from '../entity/MyResponse';
 import { GetParams } from '../entity/GetParams';
+import { ObjectUtils } from './ObjectUtils';
 @Injectable()
 export class RequestUtil{
 
@@ -71,7 +72,24 @@ export class RequestUtil{
     
     
     }
-
+ /**
+      * 执行文件下载，不去检查返回结果
+      * @param url 请求路径
+      * @param param 请求参数
+      * @param header 请求头
+      */
+     public   downLoadFilePost (url: string,
+        body: any ,
+         param?: Map<string, any>|GetParams,
+         header?: Map<string, string>): Observable< any>{
+        const option = this.handleOption(param, header);
+        option.responseType= 'blob'
+        console.log('downLoadFilePost', url, option);
+        return this.http.post<any>(url, body,option ).pipe(catchError(this.handleError)
+        );
+    
+    
+    }
  /**
       * 执行GET请求，不去检查返回结果
       * @param url 请求路径
@@ -175,6 +193,7 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
     // }
     if (res.status != 200){
             RequestUtil.notification.error( '系统错误: ' + res.status, '系统异常，请联系管理员');
+            throw new Error('系统异常，请联系管理员')
     }
 
     return throwError(res);
@@ -197,7 +216,21 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
     RequestUtil.notification.success("错误信息",msg);
   }
 
-
+ /**
+  * 请求成功之后保存成文件
+  * @param data
+  * @param name
+  */
+ public static downloadFileInLocal(data: Blob, name: string,type:string) {
+    var a = document.createElement('a');
+    var blob = new Blob([data], { 'type': ObjectUtils.isNotEmpty(type)?
+    type:'application/octet-stream' });
+    a.href = URL.createObjectURL(blob);
+    if(ObjectUtils.isNotEmpty(name)){
+        a.download = name ;
+    }
+    a.click();
+  }
 
 
 }

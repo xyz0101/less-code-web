@@ -1,129 +1,345 @@
-<nz-space  *ngIf="!isFormEdit" [nzSize]="12"nzDirection="vertical"  style="width: 100%;">
-    <nz-space-item>
-<div>
-    <button nz-button (click)="addData('form')">新建表</button>
-</div>
-</nz-space-item>
-<nz-space-item>
+<nz-space *ngIf="!isFormEdit" [nzSize]="12" nzDirection="vertical" style="width: 100%;">
+  <nz-space-item>
+    <div>
+      <button *ngIf="hasPermission(this.buttonCodes.codegenerator.addTable)" nz-button (click)="createData('form')">新建表</button>
+    </div>
+  </nz-space-item>
+  <nz-space-item>
 
-<nz-table  #nestedTable  [nzData]="dataList" [nzPageSize]="5"[nzShowPagination]="true" [nzLoading]="loading">
-    <thead >
-      <tr >
-        <th></th>
-        <th>表名称</th>
-        <th>所属数据库</th>
-        <th>字符集</th>
-        <th>字符集排序</th>
-        <th>存储引擎</th>
-        <th>备注</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-template ngFor let-data [ngForOf]="nestedTable.data">
+    <nz-table #nestedTable [nzData]="dataList" [nzPageSize]="10" [nzShowPagination]="true" [nzLoading]="loading"
+      [nzBordered]="true">
+      <thead>
         <tr>
-          <td [(nzExpand)]="data.expand"></td>
-          <td>{{ data.tableName }}</td>
-          <td>{{ data.tableSchema }}</td>
-          <td>{{ data.encode }}</td>
-          <td>{{ data.tableCollation }}</td>
-          <td>{{ data.engine }}</td>
-          <td>{{ data.tableComments }}</td>
-          <td>
-            <a>操作</a>
-          </td>
+          <th></th>
+          <th>表名称</th>
+          <th>所属数据库</th>
+          <th>字符集</th>
+          <th>字符集排序</th>
+          <th>存储引擎</th>
+          <th>备注</th>
+          <th>操作</th>
         </tr>
-        <tr [nzExpand]="data.expand">
-          <nz-table #innerTable [nzData]="data.columns" nzSize="small" [nzShowPagination]="false">
-            <thead>
-              <tr>
-                <th>列名称</th>
-                 <th>JAVA列名称</th>
-                <th>列类型</th>
-                <th>JAVA列类型</th>
-                <th>列长度</th>
-                <th>列数字长度</th>
-                <th>列默认值</th>
-                <th>列字符编码</th>
-                <th>列字符编码排序</th>
-                <th>是否主键</th>
-                <th>是否为自动递增</th>
-                <th>是否为空</th>
-                <th>备注</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of innerTable.data">
-                <td>{{ data.name }}</td>
-                 <td>{{ data.javaColName }}</td>
-                <td>{{ data.type }}</td>
-                <td>{{ data.javaType }}</td>
-                <td>{{data.length}}</td>
-                <td>{{data.decimalLength}}</td>
-                <td>{{data.defaultValue}}</td>
-                <td>{{data.encode}}</td>
-                <td>{{ data.sort }}</td>
-                <td>{{ data.idFlag }}</td>
-                <td>{{ data.autoIncFlag }}</td>
-                <td>{{ data.nullFlag }}</td>
-                <td>{{ data.comments }}</td>
-                <td>
-                  <span class="table-operation">
-                    <a>更多</a>
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </nz-table>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-data [ngForOf]="nestedTable.data">
+          <tr>
+            <td [(nzExpand)]="data.expand"></td>
+            <td>{{ data.tableName }}</td>
+            <td>{{ data.tableSchema }}</td>
+            <td>{{ data.encode }}</td>
+            <td>{{ data.tableCollation }}</td>
+            <td>{{ data.engine }}</td>
+            <td>{{ data.tableComments }}</td>
+            <td>
+              <nz-space [nzSize]="12">
+                <nz-space-item *ngIf='data.unCreateFlag'>
+                  <a (click)='editData(data,"form")'>编辑</a>
+                </nz-space-item>
+                <nz-space-item *ngIf='data.unCreateFlag'>
+                  <a (click)='deleteSingleData(data.id)'>删除</a>
+                </nz-space-item>
+                <nz-space-item *ngIf='data.unCreateFlag'>
+                  <a (click)='createTable(data)'>创建表</a>
+                </nz-space-item>
+                <nz-space-item *ngIf='!data.unCreateFlag'>
+                  <a (click)='editData(data,"dialog")'>生成代码</a>
+                </nz-space-item>
+              </nz-space>
+
+            </td>
+          </tr>
+          <tr [nzExpand]="data.expand">
+            <nz-table #innerTable [nzData]="data.columns" nzSize="small" [nzShowPagination]="false" [nzBordered]="true">
+              <thead>
+                <tr>
+                  <th>列名称</th>
+                  <th>JAVA列名称</th>
+                  <th>列类型</th>
+                  <th>JAVA列类型</th>
+                  <th>列长度</th>
+                  <th>列数字长度</th>
+                  <th>列默认值</th>
+                  <th>列字符编码</th>
+                  <th>列字符编码排序</th>
+                  <th>是否主键</th>
+                  <th>是否为自动递增</th>
+                  <th>是否为空</th>
+                  <th>备注</th>
+
+                </tr>
+              </thead>
+      <tbody>
+        <tr *ngFor="let data of innerTable.data">
+          <td>{{ data.name }}</td>
+          <td>{{ data.javaColName }}</td>
+          <td>{{ data.type }}</td>
+          <td>{{ data.javaType }}</td>
+          <td>{{data.length}}</td>
+          <td>{{data.decimalLength}}</td>
+          <td>{{data.defaultValue}}</td>
+          <td>{{data.encode}}</td>
+          <td>{{ data.sort }}</td>
+          <td>{{ data.idFlag }}</td>
+          <td>{{ data.autoIncFlag }}</td>
+          <td>{{ data.nullFlag }}</td>
+          <td>{{ data.comments }}</td>
+
         </tr>
-      </ng-template>
+      </tbody>
+    </nz-table>
+    </tr>
+    </ng-template>
     </tbody>
-  </nz-table>
-</nz-space-item>
+    </nz-table>
+  </nz-space-item>
 
-  </nz-space>
+</nz-space>
 
-  
-
-  <form *ngIf="isFormEdit" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+<div *ngIf="isFormEdit" style="width: 80%;margin-left: 10%;">
+  <form nz-form [formGroup]="validateForm">
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableName">数据库表名称</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的数据库表名称">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableName">表名称</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="表名称不能为中文，只能有数字字母下划线，不能以下划线开头或结尾">
         <input nz-input formControlName="tableName" id="tableName" />
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableSchema">数据库</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" >
-          <input nz-input formControlName="tableSchema" id="tableSchema" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="encode">字符集编码</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的字符集编码">
-          <input nz-input formControlName="encode" id="encode" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableCollation">字符集排序</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的字符集排序">
-          <input nz-input formControlName="tableCollation" id="tableCollation" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="engine">数据库引擎</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的数据库引擎">
-          <input nz-input formControlName="engine" id="engine" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24"   nzFor="tableComments">备注信息</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入备注信息">
-          <nz-textarea-count [nzMaxCharacterCount]="150">
-            <textarea rows="4" formControlName="tableComments" nz-input></textarea>
-          </nz-textarea-count>
-        </nz-form-control>
-      </nz-form-item>
-      
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableSchema">数据库</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input formControlName="tableSchema" id="tableSchema" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="encode">字符集编码</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的字符集编码">
+        <nz-select formControlName="encode" id="encode">
+          <nz-option *ngFor="let o of  encodeList" [nzValue]="o" [nzLabel]="o"></nz-option>
+        </nz-select>
+        <!-- <input nz-input formControlName="encode" id="encode" /> -->
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableCollation">字符集排序</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的字符集排序">
+        <nz-select formControlName="tableCollation" id="tableCollation" >
+          <nz-option *ngFor="let o of collationInfoMap[validateForm.value.encode]" [nzValue]="o" [nzLabel]="o">
+          </nz-option>
+        </nz-select>
+        <!-- <input nz-input formControlName="tableCollation" id="tableCollation" /> -->
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="engine">数据库引擎</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的数据库引擎">
+        <input nz-input formControlName="engine" id="engine" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="tableComments">备注信息</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入备注信息">
+        <nz-textarea-count [nzMaxCharacterCount]="150">
+          <textarea rows="4" formControlName="tableComments" nz-input></textarea>
+        </nz-textarea-count>
+      </nz-form-control>
+    </nz-form-item>
+
+
   </form>
+
+
+  
+  <button style="margin-left: 10%;" nz-button (click)="addTableRow()" nzType="primary">新增</button>
+  <nz-space [nzSize]="24" nzDirection="vertical" style="width: 100%;">
+    <nz-space-item>
+      <nz-table style="width: 80%;margin-left: 10%;" #currentEditTable [nzData]="editTable" nzSize="small"
+        [nzShowPagination]="false" [nzBordered]="true">
+        <thead>
+          <tr>
+            <th>列名称</th>
+            <th>JAVA列名称</th>
+            <th>列类型</th>
+            <th>JAVA列类型</th>
+            <th>列长度</th>
+            <th>列数字长度</th>
+            <th>列默认值</th>
+            <th>列字符编码</th>
+            <th>列字符编码排序</th>
+            <th>是否主键</th>
+            <th>是否为自动递增</th>
+            <th>是否为空</th>
+            <th style="width: 15%;">备注</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody style="text-align: center;">
+          <tr *ngFor="let row of  currentEditTable.data">
+            <!-- 列名称 -->
+            <td>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <ng-template #suffixTemplateInfo >
+              <i nz-icon nz-tooltip  
+                nzTooltipTitle="名称不能为中文，只能有数字字母下划线，不能以下划线开头或结尾"
+                nzType="info-circle"></i></ng-template>
+              
+              <input type="text"    nz-input [(ngModel)]="row.name" placeholder="请输入列名"
+                (change)='onInputTableName( currentEditTable.data,row)' />
+              </nz-input-group>
+             
+            </td>
+           
+            <!-- JAVA列名称 -->
+            <td>{{ row.javaColName }}</td>
+            <!-- 列类型 -->
+            <td>
+              <nz-select [(ngModel)]="row.type" (ngModelChange)='onSelectType( currentEditTable.data,row)'>
+                <nz-option *ngFor="let o of typeInfos" [nzValue]="o" [nzLabel]="o"></nz-option>
+              </nz-select>
+            </td>
+            <!-- JAVA列类型 -->
+            <td>{{ row.javaType }}</td>
+            <!-- 列长度 -->
+            <td *ngIf="row.mysqlType.defaultLength==null||row.mysqlType.defaultLength==undefined">{{row.length}}</td>
+            <td *ngIf="row.mysqlType.defaultLength>0">
+              <nz-input-number [(ngModel)]="row.length" [nzMin]="1" [nzMax]="row.mysqlType.defaultLength" [nzStep]="1">
+              </nz-input-number>
+            </td>
+            <!-- 列数字长度 -->
+            <td *ngIf="row.mysqlType.needDecimalLength>0">
+              <nz-input-number [(ngModel)]="row.decimalLength" [nzMin]="1" [nzMax]="row.mysqlType.needDecimalLength"
+                [nzStep]="1"></nz-input-number>
+            </td>
+            <td *ngIf="row.mysqlType.needDecimalLength==null||row.mysqlType.needDecimalLength==undefined">
+              {{row.decimalLength}}
+            </td>
+            <!-- 列默认值 -->
+            <td>
+              <input type="text" nz-input [(ngModel)]="row.defaultValue" />
+            </td>
+            <!-- 列字符编码 -->
+            <!-- 列字符编码排序 -->
+            <td *ngIf='row.mysqlType.needEnCode'>
+              <nz-select [(ngModel)]="row.encode" (ngModelChange)='onSelectSort( currentEditTable.data,row)'>
+                <nz-option *ngFor="let o of  encodeList" [nzValue]="o" [nzLabel]="o"></nz-option>
+              </nz-select>
+            </td>
+
+            <td *ngIf='row.mysqlType.needEnCode'>
+              <nz-select [(ngModel)]="row.sort">
+                <nz-option *ngFor="let o of collationInfoMap[row.encode]" [nzValue]="o" [nzLabel]="o">
+                </nz-option>
+              </nz-select>
+            </td>
+
+            <td *ngIf='!row.mysqlType.needEnCode'>{{row.encode}}</td>
+            <td *ngIf='!row.mysqlType.needEnCode'>{{ row.sort }}</td>
+
+            <!-- 是否主键 -->
+            <td>
+              <label nz-checkbox [(ngModel)]="row.idFlag"
+                (ngModelChange)='onChangeIdFlag( currentEditTable.data,row)'></label>
+            </td>
+
+            <td *ngIf='!(row.idFlag&&row.mysqlType.needIncrement)'>{{ row.autoIncFlag?'是':'否' }}</td>
+
+            <!-- 是否为自动递增 -->
+            <td *ngIf='row.idFlag&&row.mysqlType.needIncrement'> <label nz-checkbox
+                [(ngModel)]="row.autoIncFlag"></label>
+            </td>
+            <!-- 是否为空 -->
+            <td *ngIf='!row.idFlag'> <label nz-checkbox [(ngModel)]="row.nullFlag"></label> </td>
+            <td *ngIf='row.idFlag'> {{row.nullFlag?'是':'否' }} </td>
+            <!-- 备注 -->
+            <td>
+
+              <textarea rows="1" [(ngModel)]="row.comments" nz-input></textarea>
+
+            </td>
+            <td style="width: 50px;">
+              <span class="operation">
+                <a (click)='deleteTableRow(row.id)'> 删除</a>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-space-item>
+
+    <nz-space-item>
+
+      <nz-space class="item-center">
+        <nz-space-item style="margin-left: 48%;">
+          <button nz-button (click)="submitForm()" nzType="primary">确定</button>
+        </nz-space-item>
+        <nz-space-item>
+          <button nz-button (click)='close()' nzType="default">取消</button>
+
+        </nz-space-item>
+      </nz-space>
+    </nz-space-item>
+  </nz-space>
+
+</div>
+ 
+<!-- 编辑页面 对话框-->
+
+<!-- <button nz-button nzType="primary" (click)="showModal()">
+    <span>Show Modal</span>
+  </button> -->
+  <div *ngIf="isDialogVisible">
+    <nz-modal   style="width: 120%;"  [(nzVisible)]="isDialogVisible" nzTitle="代码生成配置项" 
+    (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+    [nzOkLoading]="isDialogOkLoading">
+    <form  nz-form [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="projectModule">项目模块名称</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="项目模块名称不能为空">
+          <input nz-input formControlName="projectModule" id="projectModule" (ngModelChange)="changePackageName()" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="basePackageName">基础包路径</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="基础包路径不能为空">
+          <input nz-input formControlName="basePackageName" id="basePackageName" (ngModelChange)="changePackageName()" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="packageName">包名称</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <input nz-input formControlName="packageName"  id="packageName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="entityPackageName">实体类的基础包名称</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <input nz-input formControlName="entityPackageName" id="entityPackageName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="author">作者</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <input nz-input formControlName="author" id="author" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="className">类名称</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <input nz-input formControlName="className" id="className" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="classNameLower">类名称，首字母小写</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <input nz-input formControlName="classNameLower" id="classNameLower" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="moduleName">模块名称</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <input nz-input formControlName="moduleName" id="moduleName" />
+        </nz-form-control>
+      </nz-form-item>
+     
+      </form>
+  </nz-modal>
+  </div>
+  

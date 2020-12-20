@@ -27,4 +27,14 @@ export class CodeGenerateApiPath{
      * 下划线转驼峰
      */
     public static UNDERLINE_TO_CAMEL_PATH ="/lsc/code-generate/generate/underlineToCamel";
+    /**
+     * 获取类型信息
+     */
+    public static GET_COLLATION_INFO_PATH ="/lsc/code-generate/generate/getCollation";
+ 
+    /**
+    * 获取类型信息
+    */
+    public static DELETA_TABLE_INFO_PATH ="/lsc/code-generate/generate/deleteTables";
+    
 }

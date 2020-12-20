@@ -1,3 +1,25 @@
 th{
     font-weight: bold;
 }
+.item-center{
+    display: flex;
+    align-items: center;
+    
+    margin:0 auto;
+ }
+
+ td input{
+     width: 100px;
+ } 
+ td nz-select{
+     width: 130px;
+ }
+
+ td label:nz-checkbox{
+    width: 15px;
+} 
+
+.operation{
+    width: 60px;
+}
+
