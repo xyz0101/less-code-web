@@ -1,0 +1,14 @@
+<button nz-button nzType="default" (click)="showMenuChoose()"><i nz-icon nzType="search"></i>选择菜单</button>
+
+<nz-modal  [(nzVisible)]="isMenuChooseVisible" nzTitle="选择菜单" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <nz-spin [nzSpinning]='loading'>
+        <nz-input-group [nzSuffix]="suffixIcon">
+        <input type="text" nz-input placeholder="请输入关键字" [(ngModel)]="searchValue" />
+      </nz-input-group>
+    <nz-tree   [nzSearchValue]="searchValue" [nzData]="menus" nzShowLine (nzClick)="onChooseMenu($event)"> </nz-tree> 
+    </nz-spin>
+   
+</nz-modal>
+<ng-template #suffixIcon>
+    <i nz-icon nzType="search"></i>
+  </ng-template>

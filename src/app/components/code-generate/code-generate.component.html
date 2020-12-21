@@ -285,8 +285,8 @@
 <!-- <button nz-button nzType="primary" (click)="showModal()">
     <span>Show Modal</span>
   </button> -->
-  <div *ngIf="isDialogVisible">
-    <nz-modal   style="width: 120%;"  [(nzVisible)]="isDialogVisible" nzTitle="代码生成配置项" 
+  <div   *ngIf="isDialogVisible">
+    <nz-modal  nzWidth="620px"   [(nzVisible)]="isDialogVisible" nzTitle="代码生成配置项" 
     (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
     [nzOkLoading]="isDialogOkLoading">
     <form  nz-form [formGroup]="validateForm">

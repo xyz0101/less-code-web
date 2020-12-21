@@ -36,6 +36,12 @@ import { CodeGenerateComponent } from './components/code-generate/code-generate.
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { RoleComponent } from './components/system/role/role.component';
+import { MenuComponent } from './components/system/menu/menu.component';
+import { ChooseMenuComponent } from './common/choose-menu/choose-menu.component';
+import { ChooseIconComponent } from './common/choose-icon/choose-icon.component';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 
 
@@ -47,7 +53,11 @@ registerLocaleData(zh);
     UsersComponent,
     LoginComponent,
     NavBarComponent,
-    CodeGenerateComponent
+    CodeGenerateComponent,
+    MenuComponent,
+    RoleComponent,
+    ChooseMenuComponent,
+    ChooseIconComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +83,9 @@ registerLocaleData(zh);
     NzAvatarModule,
     NzInputNumberModule,
     NzSelectModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzTreeModule,
+    NzSpinModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, NzNotificationService,AuthGuard,NzMessageService],
   bootstrap: [AppComponent]
