@@ -24,11 +24,23 @@ export class ChooseMenuComponent implements OnInit {
   chooseData=null;
   loading = false;
   isMenuChooseVisible = false;
+  menuMap = new Map()
+  defaultSelectedKeys = []
+  defaultExpandedKeys=[]
+
+  /**
+   * 默认定位到的ID
+   * TODO 
+   * 需要暴露
+   */
+  defaultSelectId 
 
   /**
    * 映射关系，k，v 左边为控件的字段，右边为接口返回的字段
+   * 暂时不暴露，如果要通用可以暴露
    */
   fieldMapping={
+    'parent':'parent',
    'title':'name' , 
    'key':'id' , 
    'expanded':'expanded' , 
@@ -42,11 +54,27 @@ export class ChooseMenuComponent implements OnInit {
   loadData() {
     this.loading =true;
     this.http.getResquest(MenuApiPath.MENU_TREE_PATH).subscribe(item=>{
-
-
       this.menus = this.mappingData(item.data);
       this.loading =false;
+      this.locationData()
     })
+  }
+  locationData() {
+    if(!ObjectUtils.isNotEmpty(this.defaultSelectId)){
+      return 
+    }
+    let data = this.menuMap.get(this.defaultSelectId)
+    let selected = [];
+    selected.push(data.key);
+    this.defaultSelectedKeys = selected
+    this.explanData(data.parent)
+     
+  }
+  explanData(key: any) {
+     if(ObjectUtils.isNotEmpty(key)&&key!=-1){
+      this.defaultExpandedKeys=[...this.defaultExpandedKeys,key]
+       this.explanData(this.menuMap.get(key).parent)
+     }
   }
   mappingData(data: any): any[] {
     let arr = [];
@@ -63,6 +91,7 @@ export class ChooseMenuComponent implements OnInit {
       let d = data[this.fieldMapping[item]]
       val[item]= d;
      })
+     this.menuMap.set(val['key'],val);
      arr.push(val)
      val['children']=[];
      val['isLeaf']=true

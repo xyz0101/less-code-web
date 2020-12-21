@@ -42,8 +42,18 @@ import { ChooseMenuComponent } from './common/choose-menu/choose-menu.component'
 import { ChooseIconComponent } from './common/choose-icon/choose-icon.component';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import * as AllIcons from '@ant-design/icons-angular/icons';
+import { IconDefinition } from '@ant-design/icons-angular';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 
+
+
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const iconsArr: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 
 registerLocaleData(zh);
 
@@ -60,6 +70,7 @@ registerLocaleData(zh);
     ChooseIconComponent
   ],
   imports: [
+    NzIconModule.forRoot(iconsArr),
     BrowserModule,
     AppRoutingModule,
     IconsProviderModule,
@@ -85,9 +96,12 @@ registerLocaleData(zh);
     NzSelectModule,
     NzToolTipModule,
     NzTreeModule,
-    NzSpinModule
+    NzSpinModule,
+    NzIconModule,
+    NzTabsModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, NzNotificationService,AuthGuard,NzMessageService],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, 
+    NzNotificationService,AuthGuard,NzMessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

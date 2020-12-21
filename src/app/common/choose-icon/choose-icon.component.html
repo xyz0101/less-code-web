@@ -1,1 +1,22 @@
-<p>choose-icon works!</p>
+<button nz-button nzType="default" (click)="showIconChoose()"><i nz-icon nzType="search"></i>选择图标</button>
+
+<nz-modal nzWidth="700px" nzHeight='400px' [(nzVisible)]="isMenuChooseVisible" nzTitle="选择图标"
+    (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <nz-tabset>
+
+        <nz-tab *ngFor="let icon of icons" [nzTitle]="icon.name">
+            <nz-card style="max-height: 600px;overflow-y: scroll; ">
+                <div (click)="onChooseIcon(iconData)" [style]="getChooseStyle(iconData)"
+                    *ngFor="let iconData of icon.data" nz-card-grid [ngStyle]="gridStyle">
+                    <i nz-icon [nzType]="iconData"></i>
+                </div>
+
+            </nz-card>
+        </nz-tab>
+
+    </nz-tabset>
+
+</nz-modal>
+<ng-template #suffixIcon>
+    <i nz-icon nzType="search"></i>
+</ng-template>
