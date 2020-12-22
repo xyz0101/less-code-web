@@ -122,7 +122,7 @@ export abstract class BaseComponent extends ButtonCodes{
      * 保存数据的操作，调接口
      * @param data 
      */
-    public  saveData(data) :Observable<any>{
+    public saveData(data) :Observable<any>{
         if(this.editType=='form'){
             return this.saveFormData(data)
         }else  if(this.editType=='dialog'){

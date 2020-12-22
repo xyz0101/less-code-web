@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MenuApiPath } from 'src/app/api_path/system/MenuApiPath';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';
@@ -25,14 +25,17 @@ export class ChooseMenuComponent implements OnInit {
   loading = false;
   isMenuChooseVisible = false;
   menuMap = new Map()
-  defaultSelectedKeys = []
-  defaultExpandedKeys=[]
 
-  /**
-   * 默认定位到的ID
-   * TODO 
-   * 需要暴露
+
+ 
+  currentSelectedKeys = []
+
+  currentExpandedKeys=[]
+
+ /**
+   * 默认选中的ID
    */
+  @Input()
   defaultSelectId 
 
   /**
@@ -66,13 +69,13 @@ export class ChooseMenuComponent implements OnInit {
     let data = this.menuMap.get(this.defaultSelectId)
     let selected = [];
     selected.push(data.key);
-    this.defaultSelectedKeys = selected
+    this.currentSelectedKeys = selected
     this.explanData(data.parent)
      
   }
   explanData(key: any) {
      if(ObjectUtils.isNotEmpty(key)&&key!=-1){
-      this.defaultExpandedKeys=[...this.defaultExpandedKeys,key]
+      this.currentExpandedKeys=[...this.currentExpandedKeys,key]
        this.explanData(this.menuMap.get(key).parent)
      }
   }
@@ -112,8 +115,8 @@ export class ChooseMenuComponent implements OnInit {
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!');
-    
+    console.log('Button ok clicked!',this.chooseData.key);
+    this.defaultSelectId=this.chooseData.key
     this.onConfirm.emit(this.chooseData);
     this.isMenuChooseVisible = false;
   }
@@ -122,6 +125,7 @@ export class ChooseMenuComponent implements OnInit {
     console.log('Button cancel clicked!');
     this.onCancel.emit()
     this.isMenuChooseVisible = false;
+    this.currentSelectedKeys= [this.defaultSelectId]
   }
 
   showMenuChoose(){
@@ -130,7 +134,7 @@ export class ChooseMenuComponent implements OnInit {
       
   }
   onChooseMenu(data){
-    console.log(data)
+    console.log('choose menu',data )
     this.chooseData=data;
   }
 }

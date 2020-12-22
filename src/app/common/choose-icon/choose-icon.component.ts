@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzIconService } from 'ng-zorro-antd/icon';
+import { ObjectUtils } from 'src/app/util/ObjectUtils';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class ChooseIconComponent implements OnInit {
   };
 
 
-  
+
 
   icons = [
 
@@ -65,7 +66,7 @@ export class ChooseIconComponent implements OnInit {
     {
 
       name: '网站通用图标',
-      data: ['lock', 'unlock', 'bars', 'book', 'calendar', 'cloud', 'cloud-download', 'code', 'copy', 'credit-card', 'delete', 'desktop', 'download', 'ellipsis', 'file', 'file-text', 'file-unknown', 'file-pdf', 'file-word', 'file-excel', 'file-jpg', 'file-ppt', 'file-markdown', 'file-add', 'folder', 'folder-open', 'folder-add', 'hdd', 'frown', 'meh', 'smile', 'inbox', 'laptop', 'appstore', 'link', 'mail', 'mobile', 'notification', 'paper-clip', 'picture', 'poweroff', 'reload', 'search', 'setting', 'share-alt', 'shopping-cart', 'tablet', 'tag', 'tags', 'to-top', 'upload', 'user', 'video-camera', 'home', 'loading', 'loading-3-quarters', 'cloud-upload', 'star', 'heart', 'environment', 'eye', 'camera', 'save', 'team', 'solution', 'phone', 'filter', 'exception', 'export', 'customer-service', 'qrcode', 'scan', 'like', 'dislike', 'message', 'pay-circle', 'calculator', 'pushpin', 'bulb', 'select', 'switcher', 'rocket', 'bell', 'disconnect', 'database', 'compass', 'barcode', 'hourglass', 'key', 'flag', 'layout', 'printer', 'sound', 'usb', 'skin', 'tool', 'sync', 'wifi', 'car', 'schedule', 'user-add', 'user-delete', 'usergroup-add', 'usergroup-delete', 'man', 'woman', 'shop', 'gift', 'idcard', 'medicine-box', 'red-envelope', 'coffee', 'copyright', 'trademark', 'safety', 'wallet', 'bank', 'trophy', 'contacts', 'global', 'shake', 'api', 'fork', 'dashboard', 'table', 'profile', 'alert', 'audit', 'branches', 'build', 'border', 'crown', 'experiment', 'fire', 'money-collect', 'property-safety', 'read', 'reconciliation', 'rest', 'security-scan', 'insurance',   'safety-certificate', 'project', 'thunderbolt', 'block', 'cluster', 'deployment-unit', 'dollar', 'euro', 'pound', 'file-done', 'file-exclamation', 'file-protect', 'file-search', 'file-sync', 'gateway', 'gold', 'robot', 'shopping']
+      data: ['lock', 'unlock', 'bars', 'book', 'calendar', 'cloud', 'cloud-download', 'code', 'copy', 'credit-card', 'delete', 'desktop', 'download', 'ellipsis', 'file', 'file-text', 'file-unknown', 'file-pdf', 'file-word', 'file-excel', 'file-jpg', 'file-ppt', 'file-markdown', 'file-add', 'folder', 'folder-open', 'folder-add', 'hdd', 'frown', 'meh', 'smile', 'inbox', 'laptop', 'appstore', 'link', 'mail', 'mobile', 'notification', 'paper-clip', 'picture', 'poweroff', 'reload', 'search', 'setting', 'share-alt', 'shopping-cart', 'tablet', 'tag', 'tags', 'to-top', 'upload', 'user', 'video-camera', 'home', 'loading', 'loading-3-quarters', 'cloud-upload', 'star', 'heart', 'environment', 'eye', 'camera', 'save', 'team', 'solution', 'phone', 'filter', 'exception', 'export', 'customer-service', 'qrcode', 'scan', 'like', 'dislike', 'message', 'pay-circle', 'calculator', 'pushpin', 'bulb', 'select', 'switcher', 'rocket', 'bell', 'disconnect', 'database', 'compass', 'barcode', 'hourglass', 'key', 'flag', 'layout', 'printer', 'sound', 'usb', 'skin', 'tool', 'sync', 'wifi', 'car', 'schedule', 'user-add', 'user-delete', 'usergroup-add', 'usergroup-delete', 'man', 'woman', 'shop', 'gift', 'idcard', 'medicine-box', 'red-envelope', 'coffee', 'copyright', 'trademark', 'safety', 'wallet', 'bank', 'trophy', 'contacts', 'global', 'shake', 'api', 'fork', 'dashboard', 'table', 'profile', 'alert', 'audit', 'branches', 'build', 'border', 'crown', 'experiment', 'fire', 'money-collect', 'property-safety', 'read', 'reconciliation', 'rest', 'security-scan', 'insurance', 'safety-certificate', 'project', 'thunderbolt', 'block', 'cluster', 'deployment-unit', 'dollar', 'euro', 'pound', 'file-done', 'file-exclamation', 'file-protect', 'file-search', 'file-sync', 'gateway', 'gold', 'robot', 'shopping']
 
 
     },
@@ -89,6 +90,8 @@ export class ChooseIconComponent implements OnInit {
   }
 
 
+  @Input()
+  defaultSelectIcon = 'apple'
 
 
   @Output("onConfirm")
@@ -100,46 +103,50 @@ export class ChooseIconComponent implements OnInit {
 
   chooseData = null;
   loading = false;
-  isMenuChooseVisible = false;
-
-
+  isChooseVisible = false;
 
   showModal(): void {
-    this.isMenuChooseVisible = true;
+    this.isChooseVisible = true;
 
   }
 
   handleOk(): void {
     console.log('Button ok clicked!');
-
+    this.defaultSelectIcon=this.chooseData
     this.onConfirm.emit(this.chooseData);
-    this.isMenuChooseVisible = false;
+    this.isChooseVisible = false;
   }
 
   handleCancel(): void {
     console.log('Button cancel clicked!');
     this.onCancel.emit()
-    this.isMenuChooseVisible = false;
+    this.chooseData = null
+    this.isChooseVisible = false;
   }
 
   showIconChoose() {
 
-    
-    this.isMenuChooseVisible = true
+
+    this.isChooseVisible = true
 
   }
 
-getChooseStyle(data){
-  
-  if(this.chooseData==data){
+  getChooseStyle(data) {
+
+    if (this.chooseData == data) {
       return "background-color: #1890ff;"
-  }else{
-    return '';
+    } else {
+      if (!ObjectUtils.isNotEmpty(this.chooseData) && this.defaultSelectIcon == data) {
+        return "background-color: #1890ff;"
+      } else {
+        return '';
+      }
+    }
   }
-}
-onChooseIcon(data){
-  console.log('选择icon ',data)
-  this.chooseData = data;
-}
+  onChooseIcon(data) {
+
+    console.log('选择icon ', data)
+    this.chooseData = data;
+  }
 
 }

@@ -5,7 +5,7 @@
         <nz-input-group [nzSuffix]="suffixIcon">
         <input type="text" nz-input placeholder="请输入关键字" [(ngModel)]="searchValue" />
       </nz-input-group>
-    <nz-tree  [nzSelectedKeys]="defaultSelectedKeys"  [nzExpandedKeys]="defaultExpandedKeys"  [nzSearchValue]="searchValue" [nzData]="menus" nzShowLine (nzClick)="onChooseMenu($event)"> </nz-tree> 
+    <nz-tree  [nzSelectedKeys]="currentSelectedKeys"  [nzExpandedKeys]="currentExpandedKeys"  [nzSearchValue]="searchValue" [nzData]="menus" nzShowLine (nzClick)="onChooseMenu($event.node.origin)"> </nz-tree> 
     </nz-spin>
    
 </nz-modal>

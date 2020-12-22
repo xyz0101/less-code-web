@@ -11,7 +11,7 @@ import { RequestUtil } from 'src/app/util/RequestUtil';
   providedIn: 'root'
 })
 export class CodeGenerateService {
-  deleteByIds(ids: any):Observable<MyResponse> {
+  deleteByIds(ids: any):Observable<MyResponse<any>> {
     return this.http.postResquest(CodeGenerateApiPath.DELETA_TABLE_INFO_PATH,ids)
   }
   generateCode(data: any) :Observable<any>{
@@ -25,7 +25,7 @@ export class CodeGenerateService {
     }))
 
   }
-  createTable(data: any): Observable<MyResponse>{
+  createTable(data: any): Observable<MyResponse<any>>{
    return this.http.postResquest(CodeGenerateApiPath.CREATE_TABLE_PATH,data);
   }
   getCamelName(name: any) {
@@ -37,7 +37,6 @@ export class CodeGenerateService {
     return this.http.getResquest(CodeGenerateApiPath.GET_COLLATION_INFO_PATH)
   }
   getTypeInfoMap() {
-    let param = GetParams.buildParams().setParam("code",name);
     return this.http.getResquest(CodeGenerateApiPath.GET_TYPE_INFO_PATH)
   }
 

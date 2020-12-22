@@ -17,20 +17,20 @@ export class UserService {
   /**
    * 分页获取用户信息
    */
-  listUserByPage( param): Observable<MyResponse>{
+  listUserByPage( param): Observable<MyResponse<any>>{
     return this.http.postResquest(UserApiPath.LIST_USER_PATH, param);
   }
 
   /**
    * 根据ID获取用户信息
    */
-  getUserInfoById(id): Observable<MyResponse>{
+  getUserInfoById(id): Observable<MyResponse<any>>{
     return null;
   }
   /**
    * 删除用户信息
    */
-  deleteUser(ids:Set<number>): Observable<MyResponse>{
+  deleteUser(ids:Set<number>): Observable<MyResponse<any>>{
     let arr = [];
     if(ObjectUtils.isNotEmpty(ids)){
       ids.forEach(item=>{

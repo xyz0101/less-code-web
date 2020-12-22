@@ -28,7 +28,7 @@ export class RequestUtil{
       * @param param 请求参数
       * @param header 请求头
       */
-    public   getResquest<T extends MyResponse|any >(url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable<T|any>{
+    public   getResquest<T extends MyResponse<any>|any >(url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable<T|any>{
                 const option = this.handleOption(param, header);
                 console.log('getResquest', url, option);
 
@@ -43,7 +43,7 @@ export class RequestUtil{
       * @param param 请求参数
       * @param header 请求头
       */
-    public postResquest<T extends MyResponse|any >(
+    public postResquest<T extends MyResponse<any>|any >(
             url: string,
             body: any ,
             param?: Map<string, string>|GetParams, 
@@ -111,7 +111,7 @@ public   getResquestNoCheck (url: string, param?: Map<string, any>|GetParams, he
       * @param param 请求参数
       * @param header 请求头
       */
-public postResquestNoCheck<T extends MyResponse|any >(
+public postResquestNoCheck<T extends MyResponse<any>|any >(
 url: string,
  body: any ,
  param?: Map<string, string>|GetParams, 
@@ -158,7 +158,7 @@ private handleOption(param?: Map<string, any>|GetParams, header?: Map<string, st
 }
 
 
-private dealData<T extends MyResponse|any>(event: any  ): Observable< T> {
+private dealData<T extends MyResponse<any>|any>(event: any  ): Observable< T> {
     console.log('请求拦截', event);
 
 

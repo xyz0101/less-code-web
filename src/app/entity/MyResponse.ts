@@ -1,14 +1,15 @@
-export class MyResponse {
+export class MyResponse<T> {
 
 
     code: string;
     msg: string;
-    data: any;
+    data: T;
     constructor() { }
-    public static ok():MyResponse{
-        let res = new MyResponse();
+    public  static  ok<T>(data?):MyResponse<T>{
+        let res = new MyResponse<T>();
         res.code='200'
+        res.data = data
         return res;
     }
-
+     
 }
