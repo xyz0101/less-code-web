@@ -21,13 +21,15 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
     2:'按钮'
   }
 
-  menuTypeChooseList = []
+  menuTypeChooseList : {key:number;value:string}[]
+
+  menuMap = new Map();
 
   public getListData(param: any): Observable<any> {
     return this.menuService.getMenuList() 
   }
   public onDeleteData(ids: any): Observable<any> {
-    throw new Error('Method not implemented.');
+    return  this.menuService.deleteMenu(ids)
   }
   public afterLoadData() {
     this.dataList.forEach(item => {
@@ -35,28 +37,52 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
     });
    
   }
+  
   public getSearchFields(): QueryFields {
     return null;
   }
 
+  beforeDrawerSubmit(){
+    
+    this.validataFormAndTrowError()
+  }
+  saveDrawerData(data:any):Observable<any>{
+    console.log('保存表单',data)
+    return this.menuService.saveMenu(data)
+    
+  }
+
   initDrawerEditForm(data){
+    this.initMenuType()
+    console.log('初始化表单：',data)
+    let node =  data.parent
     this.validateForm = this.fb.group({
+      key: new FormControl({ value: data.key, disabled: false }, this.isAdd?null:Validators.required),
       menuCode: new FormControl({ value: data.menuCode, disabled: false }, Validators.required),
       menuName: new FormControl({ value: data.menuName, disabled: false }, Validators.required),
-      level: new FormControl({ value: data.level, disabled: false }, Validators.required),
+      level: new FormControl({ value: data.level, disabled: false } ),
       menuOrder: new FormControl({ value: data.menuOrder, disabled: false }, Validators.required),
-      menuIcon: new FormControl({ value: data.menuIcon, disabled: false }, Validators.required),
+      menuIcon: new FormControl({ value: data.menuIcon, disabled: false }),
       menuType: new FormControl({ value: data.menuType, disabled: false }, Validators.required),
+      menuUrl: new FormControl({ value: data.menuUrl, disabled: false }, Validators.required),
       parentId: new FormControl({ value: data.parentId, disabled: false }, Validators.required),
-      parent: new FormControl({ value: data.parent, disabled: false }, Validators.required),
+      parent: new FormControl({ value: data.parent, disabled: false } ),
+      parentName: new FormControl({ value: node?node.menuName:'', disabled: false },  ),
     }
     )
   }
+  initMenuType() {
+    let arr = []
+    Object.keys(this.MENU_TYPE).forEach(item=>{
+      arr.push({'key':Number(item),'value':this.MENU_TYPE[item]}) 
+    })
+    this.menuTypeChooseList = arr
+  }
+
+
 
 beforeDrawerAddButton(){
-  Object.keys(this.MENU_TYPE).forEach(item=>{
-    this.menuTypeChooseList.push({'key':item,'value':this.MENU_TYPE[item]})
-  })
+ 
 }
   constructor(public fb: FormBuilder, public modelService: NzModalService,
           private menuService:MenuService) {
@@ -93,9 +119,10 @@ beforeDrawerAddButton(){
     const array: TreeNode[] = [];
     const hashMap = {};
     stack.push({ ...root, level: 0, expand: false });
-
+ 
     while (stack.length !== 0) {
       const node = stack.pop()!;
+      this.menuMap.set(root.key,root)
       this.visitNode(node, hashMap, array);
       if (node.children) {
         for (let i = node.children.length - 1; i >= 0; i--) {
@@ -114,5 +141,20 @@ beforeDrawerAddButton(){
     }
   }
 
+
+  confirmChooseIcon(data){
+    this.validateForm.get("menuIcon").setValue(data)
+    console.log('当前选择了icon：',data)
+  }
+
+  confirmChooseMenu(data){
+    this.validateForm.get("parentName").setValue(data.title)
+    this.validateForm.get("parentId").setValue(data.key)
+    console.log('当前选择了Menu：',data)
+  }
+  
+  defaultSelectIcon(){
+    return this.validateForm.get("menuIcon").value
+  }
 
 }

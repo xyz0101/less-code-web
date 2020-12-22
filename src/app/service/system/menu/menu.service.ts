@@ -12,12 +12,12 @@ export class TreeNode {
   parent;
   parentId;
   children?: TreeNode[];
-  name;
-  code;
+  menuName;
+  menuCode;
   menuUrl;
   menuIcon;
   menuOrder;
-  menuType;
+  menuType:number;
   isLeaf;
 }
 
@@ -39,6 +39,20 @@ export class MenuService {
    'menuOrder':'menuOrder',
    'menuType':'menuType',
   }
+
+
+  deleteMenu(ids):Observable<any>{
+    return this.http.postResquest(MenuApiPath.DELETE_MENU_PATH,ids)
+  }
+
+
+  saveMenu(data):Observable<any>{
+    let param = {}
+    this.revertMapObject(param,data,this.fieldMapping)
+    console.log("当前保存操作的参数",param)
+    return this.http.postResquest(MenuApiPath.SAVE_MENU_PATH,param)
+  }
+
 
 
   getMenuList():Observable<MyResponse<TreeNode[]>>{
@@ -76,12 +90,17 @@ export class MenuService {
       d.isLeaf = true;
     }
   }
+  /**
+   * source 为接收值的对象
+   */
   mapObject( source  , target,   fieldMapping ) {
      Object.keys(fieldMapping).forEach(item=>{
        source[item] = target[fieldMapping[item]]
      })
   }
-
+  /**
+   * source 为接收值的对象
+   */
   revertMapObject( source  , target,   fieldMapping ) {
     Object.keys(fieldMapping).forEach(item=>{
       source[fieldMapping[item]] = target[item]

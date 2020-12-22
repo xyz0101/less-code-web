@@ -143,10 +143,7 @@ export class CodeGenerateComponent extends BaseComponent implements OnInit {
   }
    
   public beforeFormSubmit() {
-    console.log(this.validateForm.status)
-    if(this.validateForm.status=='INVALID'){
-      throw new Error('表单验证不通过');
-    }
+    this.validataFormAndTrowError()
   }
   public beforeFormAddButton() {
      this.editTable=[]

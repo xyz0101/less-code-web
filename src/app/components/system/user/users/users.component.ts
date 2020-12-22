@@ -82,7 +82,10 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
   public getSearchFields(){
     this.showSearch=true
-    return QueryFields.buildFileds().addField("userCode","用户编码").addField("userName","用户名称")
+    return QueryFields.buildFileds()
+                  .addField("userCode","用户编码")
+                  .addField("userName","用户名称")
+                  .addField("userEmail","用户邮箱")
   }
 
 

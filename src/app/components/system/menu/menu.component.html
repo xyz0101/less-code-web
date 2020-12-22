@@ -1,38 +1,70 @@
-<nz-table #expandTable [nzData]="dataList" nzTableLayout="fixed">
-    <thead>
-        <tr>
-            <th>菜单编码</th>
-            <th>菜单名称</th>
-            <th>菜单层级</th>
-            <th>菜单顺序</th>
-            <th>菜单icon</th>
-            <th>上级菜单</th>
-            <th>菜单Url</th>
-            <th>菜单类型</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        <ng-container *ngFor="let data of expandTable.data">
-            <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
-                <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                    <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!item.isLeaf" [(nzExpand)]="item.expand"
-                        (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
-                        {{ item.menuCode }}
-                    </td>
-                    <td>{{ item.menuName }}</td>
-                    <td>{{ item.level }}</td>
-                    <td>{{ item.menuOrder }}</td>
-                    <td> <i nz-icon [nzType]="item.menuIcon"></i> </td>
-                    <td>{{ item.parent==undefined?'':item.parent.menuName }}</td>
-                    <td>{{ item.menuUrl }}</td>
-                    <td>{{ MENU_TYPE[item.menuType] }}</td>
-                    <td><a (click)="editData(data,'drawer')">编辑</a></td>
-                </tr>
+
+
+<nz-space  [nzSize]="12"nzDirection="vertical"  style="width: 100%;">
+    <nz-space-item>
+        <div class="table-operations">
+            <nz-space [nzSize]="12">
+              <nz-space-item>
+            <button nz-button (click)="createData('drawer')">新增子菜单</button>
+            </nz-space-item>
+            <nz-space-item>
+                <button nz-button (click)="reload()">重新加载</button>
+                </nz-space-item>
+            </nz-space>
+            
+          </div>
+</nz-space-item>
+<nz-space-item>
+    <nz-table #expandTable [nzData]="dataList" nzTableLayout="fixed" [nzLoading]='loading' >
+        <thead>
+            <tr>
+                <th>菜单编码</th>
+                <th>菜单名称</th>
+                <th>菜单层级</th>
+                <th>菜单顺序</th>
+                <th>菜单icon</th>
+                <th>上级菜单</th>
+                <th>菜单Url</th>
+                <th>菜单类型</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let data of expandTable.data">
+                <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+                    <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                        <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!item.isLeaf" [(nzExpand)]="item.expand"
+                            (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+                            {{ item.menuCode }}
+                        </td>
+                        <td>{{ item.menuName }}</td>
+                        <td>{{ item.level }}</td>
+                        <td>{{ item.menuOrder }}</td>
+                        <td> <i nz-icon [nzType]="item.menuIcon"></i> </td>
+                        <td>{{ item.parent==undefined?'':item.parent.menuName }}</td>
+                        <td>{{ item.menuUrl }}</td>
+                        <td>{{ MENU_TYPE[item.menuType] }}</td>
+                        <td>
+                            <nz-space [nzSize]='12'>
+                                <nz-space-item>
+                                    <a (click)="editData(item,'drawer')">编辑</a>       
+                                </nz-space-item>
+                                           
+                                <nz-space-item>
+                                    <a (click)="deleteSingleData(item.key,'drawer')">删除</a>          
+                                </nz-space-item>
+                             </nz-space>
+                        </td>
+                    </tr>
+                </ng-container>
             </ng-container>
-        </ng-container>
-    </tbody>
-</nz-table>
+        </tbody>
+    </nz-table>
+</nz-space-item>
+
+
+</nz-space>
+
 
 
 
@@ -42,22 +74,22 @@
     nzPlacement="right" nzTitle="编辑菜单信息" [nzFooter]="footerTpl" (nzOnClose)="close()">
     <ng-container *nzDrawerContent>
         <form *ngIf="isDrawerEdit" nz-form [formGroup]="validateForm">
-            <nz-form-item aria-disabled="true">
+            <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="menuCode">菜单编码</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input disabled nz-input formControlName="menuCode" id="menuCode" />
+                <nz-form-control [nzSm]="14" [nzXs]="24"  nzErrorTip="请输入正确的菜单名称">
+                    <input nz-input formControlName="menuCode" id="menuCode" />
                 </nz-form-control>
             </nz-form-item>
-            <nz-form-item aria-disabled="true">
+            <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="menuName">菜单名称</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的菜单名称">
                     <input nz-input formControlName="menuName" id="menuName" />
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="level">菜单层级</nz-form-label>
+                <nz-form-label [nzSm]="6" [nzXs]="24"  nzFor="level">菜单层级</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的菜单层级">
-                    <input nz-input formControlName="level" id="level" />
+                    <input readonly='true' nz-input formControlName="level" id="level" />
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
@@ -67,15 +99,36 @@
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="menuIcon">菜单icon</nz-form-label>
+                <nz-form-label [nzSm]="6" [nzXs]="24"   nzFor="menuIcon">菜单icon</nz-form-label>
+
                 <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的菜单icon">
-                    <app-choose-icon [defaultSelectIcon]='validateForm.get("menuIcon").value' ></app-choose-icon>
+
+                    <div nz-row>
+                        <div nz-col style="text-align: center;" [nzSpan]="15"  >
+                            <i nz-icon [nzType]='validateForm.get("menuIcon").value'> </i>
+                        </div>
+                        <div nz-col [nzSpan]="9"  >
+                            <app-choose-icon [defaultSelectIcon]='defaultSelectIcon()'
+                            (onConfirm)="confirmChooseIcon($event)"></app-choose-icon>
+                        </div>
+                      </div>
+                    
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="parent.menuName">上级菜单</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的上级菜单">
-                    <input nz-input formControlName="parent.menuName" id="parent.menuName" />
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="parentId">上级菜单</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的上级菜单">
+                    <div nz-row>
+                        <div nz-col [nzSpan]="15"  >
+                            <input readonly style="width:95%" nz-input formControlName="parentName" id="parentName" />
+                        </div>
+                        <div nz-col [nzSpan]="9"  >
+                            <app-choose-menu [defaultSelectId]='validateForm.get("parentId").value'
+                            (onConfirm)="confirmChooseMenu($event)"></app-choose-menu>
+                        </div>
+                      </div>
+                    
+                   
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
@@ -88,7 +141,8 @@
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="menuType">菜单类型</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的菜单类型">
                     <nz-select formControlName="menuType" id="menuType">
-                        <nz-option *ngFor="let type of  menuTypeChooseList" [nzValue]="type.key" [nzLabel]="type.value"></nz-option>
+                        <nz-option *ngFor="let type of  menuTypeChooseList" [nzValue]="type.key" [nzLabel]="type.value">
+                        </nz-option>
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>

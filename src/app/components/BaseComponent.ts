@@ -117,6 +117,18 @@ export abstract class BaseComponent extends ButtonCodes{
     }
 
 
+    /**
+     * 验证表单，如果不通过会抛异常
+     */
+    validataFormAndTrowError(){
+        console.log('验证表单',this.validateForm.value)
+        console.log(this.validateForm.status)
+        if(this.validateForm.status=='INVALID'){
+        throw new Error('表单验证不通过');
+        }
+    }
+    
+
 
   /**
      * 保存数据的操作，调接口
@@ -328,6 +340,9 @@ export abstract class BaseComponent extends ButtonCodes{
 
     
     deleteLoading = false;
+    /**
+     * 批量删除数据
+     */
     deleteData() {
         console.log("需要删除的ID", this.setOfCheckedId)
         this.modelService.confirm({
@@ -338,6 +353,24 @@ export abstract class BaseComponent extends ButtonCodes{
                         arr.push(item)
                     })
                 }
+                this.onDeleteData(arr).subscribe(item => {
+                    if (item.code == '200') {
+                        RequestUtil.notifySuccess("删除成功！")
+                        this.reload()
+                    }
+                })
+            },
+        })
+    }
+    /**
+     * 删除单条数据
+     */
+    deleteThis(id) {
+        console.log("需要删除的ID",id)
+        this.modelService.confirm({
+            nzTitle: '是否删除当前数据？', nzOkType: 'danger', nzOkText: '是', nzCancelText: '否', nzOkLoading: this.deleteLoading, nzOnOk: () => {
+                let arr = [];
+                arr.push(id)
                 this.onDeleteData(arr).subscribe(item => {
                     if (item.code == '200') {
                         RequestUtil.notifySuccess("删除成功！")
