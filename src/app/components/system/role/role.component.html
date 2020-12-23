@@ -58,6 +58,8 @@
     <tr>
       <th [(nzChecked)]='checked' [nzIndeterminate]='indeterminate' (nzCheckedChange)='onAllChecked($event)'></th>
      <th nzColumnKey='roleCode' [nzSortFn]='true'>角色编号</th>
+     <th nzColumnKey='roleName' [nzSortFn]='true'>角色名称</th>
+
       <!--TODO-->
       <th>操作</th>
     </tr>
@@ -66,6 +68,8 @@
     <tr *ngFor='let data of dataList'>
     <td [nzChecked]='setOfCheckedId.has(data.id)' (nzCheckedChange)='onItemChecked(data.id, $event)'></td>
     <td>{{data.roleCode}}</td>
+    <td>{{data.roleName}}</td>
+
     <!-- TODO -->
       <td><a (click)='editData(data,"drawer")'>编辑</a></td>
     </tr>
@@ -80,14 +84,34 @@
   <ng-container *nzDrawerContent>
     <form *ngIf='isDrawerEdit' nz-form [formGroup]='validateForm'>
 
-     <!--  
-  <nz-form-item aria-disabled='true'>
-    <nz-form-label [nzSm]='6' [nzXs]='24' nzRequired nzFor='userCode'>用户编号</nz-form-label>
-    <nz-form-control [nzSm]='14' [nzXs]='24'>
-      <input disabled nz-input formControlName='userCode' id='userCode' />
-    </nz-form-control>
-  </nz-form-item> -->
        
+  <nz-form-item aria-disabled='true'>
+    <nz-form-label [nzSm]='6' [nzXs]='24' nzRequired nzFor='roleCode'>角色编号</nz-form-label>
+    <nz-form-control [nzSm]='14' [nzXs]='24'>
+      <input disabled nz-input formControlName='roleCode' id='roleCode' />
+    </nz-form-control>
+  </nz-form-item>  
+  <nz-form-item aria-disabled='true'>
+    <nz-form-label [nzSm]='6' [nzXs]='24' nzRequired nzFor='roleName'>角色名称</nz-form-label>
+    <nz-form-control [nzSm]='14' [nzXs]='24'>
+      <input disabled nz-input formControlName='roleName' id='roleName' />
+    </nz-form-control>
+  </nz-form-item>  
+
+    <nz-form-item aria-disabled='true'>
+    <nz-form-label [nzSm]='6' [nzXs]='24'   nzFor='roleName'>授权菜单</nz-form-label>
+    <nz-form-control [nzSm]='14' [nzXs]='24'>
+      <div nz-row>
+        <div nz-col [nzSpan]="15"  >
+            <input readonly style="width:95%" nz-input formControlName="menuNames" id="menuNames" />
+        </div>
+        <div nz-col [nzSpan]="9"  >
+            <app-choose-menu  [isMultiple]='true' [defaultSelectIds]='validateForm.get("menuKeys").value'
+            (onConfirm)="confirmChooseMenu($event)" [showButton]="false" ></app-choose-menu>
+        </div>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
     </form>
   </ng-container>
   <ng-template #footerTpl>

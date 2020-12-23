@@ -27,6 +27,8 @@ export class ChooseMenuComponent implements OnInit {
   isMenuChooseVisible = false;
   menuMap = new Map()
 
+  @Input()
+  isMultiple
    @Input()
   showButton
  
@@ -39,6 +41,12 @@ export class ChooseMenuComponent implements OnInit {
    */
   @Input()
   defaultSelectId 
+
+   /**
+   * 默认选中的ID
+   */
+  @Input()
+  defaultSelectIds: any[]
 
   /**
    * 映射关系，k，v 左边为控件的字段，右边为接口返回的字段
@@ -62,20 +70,29 @@ export class ChooseMenuComponent implements OnInit {
     this.http.getResquest(MenuApiPath.MENU_TREE_PATH).subscribe(item=>{
       this.menus = this.mappingData(item.data);
       this.loading =false;
-      this.locationData()
+      if(this.defaultSelectIds&&this.isMultiple){ 
+        console.log('定位多选',this.defaultSelectIds)
+        this.defaultSelectIds.forEach(item=>{
+          this.locationData(item)
+       })
+      }
+      if(this.defaultSelectId){
+        console.log('定位单选',this.defaultSelectId)
+        this.locationData(this.defaultSelectId)
+      }
     })
   }
-  locationData() {
-    if(!ObjectUtils.isNotEmpty(this.defaultSelectId)){
+  locationData(id) {
+    if(!ObjectUtils.isNotEmpty(id)){
       return 
     }
-    let data = this.menuMap.get(this.defaultSelectId)
+    
+    let data = this.menuMap.get(id)
     if(!data){
       return
     }
-    let selected = [];
-    selected.push(data.key);
-    this.currentSelectedKeys = selected
+   
+    this.currentSelectedKeys = [...this.currentSelectedKeys, id]
     this.explanData(data.parent)
      
   }
@@ -124,8 +141,14 @@ export class ChooseMenuComponent implements OnInit {
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!',this.chooseData.key);
-    this.defaultSelectId=this.chooseData.key
+    console.log('Button ok clicked!',this.currentSelectedKeys );
+    if(!this.isMultiple){
+      this.defaultSelectId=this.chooseData.key
+    }else{
+      this.defaultSelectIds=[...this.currentSelectedKeys]
+    }
+   
+  
     this.onConfirm.emit(this.chooseData);
     this.isMenuChooseVisible = false;
   }
@@ -134,7 +157,11 @@ export class ChooseMenuComponent implements OnInit {
     console.log('Button cancel clicked!');
     this.onCancel.emit()
     this.isMenuChooseVisible = false;
-    this.currentSelectedKeys= [this.defaultSelectId]
+    if(!this.isMultiple){
+      this.currentSelectedKeys= [this.defaultSelectId]
+    }else{
+      this.currentSelectedKeys= this.defaultSelectIds
+    }
   }
 
   showMenuChoose(){
@@ -144,6 +171,17 @@ export class ChooseMenuComponent implements OnInit {
   }
   onChooseMenu(data){
     console.log('choose menu',data )
-    this.chooseData=data;
+    if(this.isMultiple){
+      this.chooseData =  []
+  
+      data.keys.forEach(item=>{
+        this.chooseData.push(this.menuMap.get(item))
+      })
+     
+       
+    }else{
+          this.chooseData=data;
+
+    }
   }
 }

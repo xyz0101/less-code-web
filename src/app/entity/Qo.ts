@@ -20,7 +20,10 @@ export class Qo{
     }
     public setSorts(sortField,sortValue):Qo{
         if(ObjectUtils.isNotEmpty(sortValue)&&ObjectUtils.isNotEmpty(sortField)){
-            this.sorts.push(new Sort(sortField,sortValue))
+            if( !this.sorts){
+                this.sorts = []
+            }
+            this.sorts.push(new Sort(sortField,sortValue.replace('end','')))
         }
         return this;
     }

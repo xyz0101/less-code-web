@@ -12,17 +12,30 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	
-"super-construct": {
+	"super-construct": {
  
-	"prefix": "super-construct",
-	"body": [
-		"constructor(public fb: FormBuilder,",
-		"            public msg: NzMessageService ,",
-		"            public modelService: NzModalService) {",
-		"   super(fb, modelService)",
-	 "  }",
-	],
-	"description": "Log output to console"
-},
+		"prefix": "super-construct",
+		"body": [
+			"constructor(public fb: FormBuilder,",
+			"            public msg: NzMessageService ,",
+			"            public modelService: NzModalService) {",
+			"   super(fb, modelService)",
+		 "  }",
+		],
+		"description": "Log output to console"
+	},
+	"fb": {
+ 
+		"prefix": "fb",
+		"body": [
+			"this.validateForm = this.fb.group({",
+			"      id: new FormControl({ value: data.id, disabled: false } ),",
+			"//TODO ",
+			"    }",
+			"    )",
+		],
+		"description": "Log output to console"
+	},
+
+	 
 }

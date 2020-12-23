@@ -9,11 +9,17 @@
         </nz-input-group>
       </nz-space-item>
       <nz-space-item>
-        <nz-tree [nzSelectedKeys]="currentSelectedKeys"
-         [nzExpandedKeys]="currentExpandedKeys" 
+        <nz-tree  *ngIf="!isMultiple"  [nzSelectedKeys]="currentSelectedKeys"
+         [nzExpandedKeys]="currentExpandedKeys"   
         nzShowIcon [nzExpandedIcon]="multiExpandedIconTpl"
           [nzSearchValue]="searchValue" [nzData]="menus" nzShowLine (nzClick)="onChooseMenu($event.node.origin)">
         </nz-tree>
+
+        <nz-tree *ngIf="isMultiple" [nzSelectedKeys]="currentSelectedKeys"
+        [nzExpandedKeys]="currentExpandedKeys"   nzMultiple
+       nzShowIcon [nzExpandedIcon]="multiExpandedIconTpl"
+         [nzSearchValue]="searchValue" [nzData]="menus" nzShowLine (nzClick)="onChooseMenu($event )">
+       </nz-tree>
       </nz-space-item>
     </nz-space>
 
