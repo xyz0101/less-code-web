@@ -15,6 +15,10 @@ export class MenuApiPath{
      */
     public static SAVE_MENU_PATH = "/lsc/system/menu/save"
 
-    
+       /**
+     * 获取当前菜单下面最大的ID
+     * 
+     */
+    public static GET_MANU_MAX_ORDER_PATH = "/lsc/system/menu/getMaxOrder"
     
 }

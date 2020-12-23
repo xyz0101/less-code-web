@@ -15,6 +15,19 @@ import { BaseComponent } from '../../BaseComponent';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent  extends BaseComponent  implements OnInit {
+  fieldMapping={
+    'key':'id',
+    'parentId':'parent',
+    'menuName':'name',
+    'menuCode':'code',
+    'level':'menuLevel',
+    'menuUrl': 'menuUrl',
+    'menuIcon':'menuIcon',
+    'menuOrder':'menuOrder',
+    'menuType':'menuType',
+   }
+ 
+   maxOrder =0;
 
   MENU_TYPE={
     1:'菜单',
@@ -26,7 +39,7 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
   menuMap = new Map();
 
   public getListData(param: any): Observable<any> {
-    return this.menuService.getMenuList() 
+    return this.menuService.getMenuList(this.fieldMapping) 
   }
   public onDeleteData(ids: any): Observable<any> {
     return  this.menuService.deleteMenu(ids)
@@ -48,11 +61,12 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
   }
   saveDrawerData(data:any):Observable<any>{
     console.log('保存表单',data)
-    return this.menuService.saveMenu(data)
+    return this.menuService.saveMenu(data,this.fieldMapping)
     
   }
 
   initDrawerEditForm(data){
+    this.initMaxOrder(data.parentId)
     this.initMenuType()
     console.log('初始化表单：',data)
     let node =  data.parent
@@ -70,6 +84,14 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
       parentName: new FormControl({ value: node?node.menuName:'', disabled: false },  ),
     }
     )
+  }
+  /**
+   * 初始化最大序号
+   */
+  initMaxOrder(parentId: any) {
+    this.menuService.getMaxOrder(parentId).subscribe(order=>{
+        this.maxOrder = this.isAdd?order:order-1;
+    })
   }
   initMenuType() {
     let arr = []
@@ -150,11 +172,15 @@ beforeDrawerAddButton(){
   confirmChooseMenu(data){
     this.validateForm.get("parentName").setValue(data.title)
     this.validateForm.get("parentId").setValue(data.key)
+    this.initMaxOrder(data.key)
     console.log('当前选择了Menu：',data)
   }
   
   defaultSelectIcon(){
     return this.validateForm.get("menuIcon").value
   }
+
+  
+
 
 }

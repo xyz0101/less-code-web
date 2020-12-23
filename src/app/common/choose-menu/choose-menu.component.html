@@ -1,14 +1,32 @@
 <button nz-button nzType="default" (click)="showMenuChoose()"><i nz-icon nzType="search"></i>选择菜单</button>
 
-<nz-modal  [(nzVisible)]="isMenuChooseVisible" nzTitle="选择菜单" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-    <nz-spin [nzSpinning]='loading'>
+<nz-modal [(nzVisible)]="isMenuChooseVisible" nzTitle="选择菜单" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <nz-spin [nzSpinning]='loading'>
+    <nz-space [nzSize]='6' nzDirection='vertical' style='width: 100%'>
+      <nz-space-item>
         <nz-input-group [nzSuffix]="suffixIcon">
-        <input type="text" nz-input placeholder="请输入关键字" [(ngModel)]="searchValue" />
-      </nz-input-group>
-    <nz-tree  [nzSelectedKeys]="currentSelectedKeys"  [nzExpandedKeys]="currentExpandedKeys"  [nzSearchValue]="searchValue" [nzData]="menus" nzShowLine (nzClick)="onChooseMenu($event.node.origin)"> </nz-tree> 
-    </nz-spin>
-   
+          <input type="text" nz-input placeholder="请输入关键字" [(ngModel)]="searchValue" />
+        </nz-input-group>
+      </nz-space-item>
+      <nz-space-item>
+        <nz-tree [nzSelectedKeys]="currentSelectedKeys"
+         [nzExpandedKeys]="currentExpandedKeys" 
+        nzShowIcon [nzExpandedIcon]="multiExpandedIconTpl"
+          [nzSearchValue]="searchValue" [nzData]="menus" nzShowLine (nzClick)="onChooseMenu($event.node.origin)">
+        </nz-tree>
+      </nz-space-item>
+    </nz-space>
+
+  </nz-spin>
+
 </nz-modal>
+
+
+<ng-template #multiExpandedIconTpl let-node let-origin="origin">
+  <i *ngIf="origin.menuType!=2&&!origin.isLeaf" nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'" class="ant-tree-switcher-line-icon"></i>
+  <i *ngIf="origin.menuType!=2&&origin.isLeaf" nz-icon nzType="file" class="ant-tree-switcher-line-icon"></i>
+  <i *ngIf="origin.menuType==2" nz-icon nzType="paper-clip" class="ant-tree-switcher-line-icon"></i>
+</ng-template>
 <ng-template #suffixIcon>
-    <i nz-icon nzType="search"></i>
-  </ng-template>
+  <i nz-icon nzType="search"></i>
+</ng-template>

@@ -1,6 +1,7 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { NzFormTooltipIcon } from "ng-zorro-antd/form";
 import { NzModalService } from "ng-zorro-antd/modal";
+import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { Observable } from "rxjs";
 import { FileApiPath } from '../api_path/system/FileApiPath';
 import { Qo } from "../entity/Qo";
@@ -12,7 +13,7 @@ import { ButtonCodes } from './ButonCodes';
 export abstract class BaseComponent extends ButtonCodes{
     total = 1;
     dataList = [];
-    loading = true;
+    loading = false;
     pageSize = 10;
     pageIndex = 1;
     isAdd = false
@@ -381,6 +382,15 @@ export abstract class BaseComponent extends ButtonCodes{
         })
     }
 
+    onTableLoad(params: NzTableQueryParams){
+        console.log(params);
+        const { pageSize, pageIndex, sort, filter } = params;
+        const currentSort = sort.find(item => item.value !== null);
+        const sortField = (currentSort && currentSort.key) || null;
+        const sortOrder = (currentSort && currentSort.value) || null;
+        this.listData(pageIndex, pageSize, sortField, sortOrder,null );
+    }
+
     listData(
         pageIndex: number,
         pageSize: number,
@@ -392,6 +402,7 @@ export abstract class BaseComponent extends ButtonCodes{
         searchData = ObjectUtils.isNotEmpty(this.searchValidateForm)? this.searchValidateForm.value:null
         let param = Qo.builder().setPage(pageIndex).setPageSize(pageSize).setSorts(sortField, sortValue).setData(searchData);
         this.getListData(param).subscribe(data => {
+            
             this.loading = false;
             if(data.data instanceof Array){
                 this.total = data.data.length;
@@ -400,6 +411,7 @@ export abstract class BaseComponent extends ButtonCodes{
                 this.total = data.data.total;
                 this.dataList = data.data.records;
             }
+           
              this.afterLoadData();
         });
       
@@ -538,7 +550,7 @@ export abstract class BaseComponent extends ButtonCodes{
         
     }
     reload() {
-        this.listData(1, 10, null, null, null)
+        this.listData(1, this.pageSize, null, null, null)
     }
     updateConfirmValidator(): void {
         /** wait for refresh value */

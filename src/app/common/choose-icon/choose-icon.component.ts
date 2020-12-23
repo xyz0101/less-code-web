@@ -119,11 +119,11 @@ export class ChooseIconComponent implements OnInit {
 
   handleCancel(): void {
     console.log('Button cancel clicked!');
-    this.onCancel.emit()
+    this.onCancel.emit();
     this.chooseData = null
     this.isChooseVisible = false;
   }
-
+  
   showIconChoose() {
 
 

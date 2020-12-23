@@ -1,0 +1,163 @@
+{
+	// Place your global snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	"space": {
+		"scope": "html",
+		"prefix": "space",
+		"body": [
+			"<nz-space [nzSize]='12'>",
+				"<nz-space-item>",
+                "                 ",
+				"</nz-space-item>",
+				"<nz-space-item>",
+				"                 ",
+				"</nz-space-item>",
+		   " </nz-space>"
+		],
+		"description": "Log output to console"
+	},
+	"space-h": {
+		"scope": "html",
+		"prefix": "space-h",
+		"body": [
+			"<nz-space [nzSize]='12' nzDirection='vertical'  style='width: 100%'>",
+				"<nz-space-item>",
+                "                 ",
+				"</nz-space-item>",
+				"<nz-space-item>",
+				"                 ",
+				"</nz-space-item>",
+		   " </nz-space>"
+		],
+		"description": "Log output to console"
+	},
+	"search-form": {
+		"scope": "html",
+		"prefix": "search-form",
+		"body": [
+			
+"<!-- 查询表单 -->",
+"<nz-space [nzSize]='12'nzDirection='vertical'  style='width: 100%;'>",
+"<form *ngIf ='showSearch' nz-form [formGroup]='searchValidateForm' class='ant-advanced-search-form'>",
+"  <nz-space-item > ",
+"  <div nz-row [nzGutter]='24'>",
+"    <div nz-col [nzSpan]='4' *ngFor='let control of controlArray' >",
+"      <nz-form-item>",
+"        <nz-form-label >{{control.name}}</nz-form-label>",
+"        <nz-form-control>",
+"          <input nz-input placeholder='{{control.name}}' [formControlName]='control.code' [attr.id]='control.code' />",
+"        </nz-form-control>",
+"      </nz-form-item>",
+"    </div>",
+"  </div>",
+"</nz-space-item>",
+"  <nz-space-item >",
+"  <div nz-row style='margin-left: 90%;'>",
+"    <div nz-col [nzSpan]='24' class='search-area'>",
+"      <nz-space [nzSize]='12'>",
+"        <nz-space-item >",
+"      <button nz-button [nzType]='\"primary\"' (click)='searchData()' >查询</button>",
+"    </nz-space-item>",
+"    <nz-space-item >",
+"      <button nz-button (click)='resetForm()'>重置</button>",
+"    </nz-space-item>",
+"      </nz-space>",
+"    </div>",
+"  </div>",
+"</nz-space-item>",
+"</form>",
+"<nz-space-item >",
+"<div> </div>",
+"</nz-space-item>",
+"</nz-space>",
+		],
+		"description": "Log output to console"
+	},
+"table": {
+		"scope": "html",
+		"prefix": "table",
+		"body": [
+			
+"<!-- 列表 -->",
+"<nz-space [nzSize]='12'nzDirection='vertical'  style='width: 100%;'>",
+"  <nz-space-item >",
+"<div class='table-operations'>",
+"  <nz-space [nzSize]='12'>",
+"    <nz-space-item>",
+"  <button nz-button (click)='createData(\"drawer\")'>新增$1</button>",
+"  </nz-space-item>",
+"  <nz-space-item>",
+"  <button nz-button (click)='deleteData()'>删除选中</button>",
+"  </nz-space-item>",
+"  </nz-space>",
+"</div>",
+"</nz-space-item>",
+"  <nz-space-item>",
+"    <div >",
+"<nz-table *ngIf='!isFormEdit' nzShowSizeChanger [nzData]='dataList' [nzFrontPagination]='false' [nzLoading]='loading'",
+"  [nzTotal]='total' [nzPageSize]='pageSize' [nzPageIndex]='pageIndex' (nzQueryParams)=’onTableLoad($$event)'  [nzBordered]='true' >",
+"  <thead>",
+"    <tr>",
+"      <th [(nzChecked)]='checked' [nzIndeterminate]='indeterminate' (nzCheckedChange)='onAllChecked($$event)'></th>",
+"     <!-- <th nzColumnKey='userCode' [nzSortFn]='true'>编号</th> -->",
+"      <!--TODO-->",
+"      <th>操作</th>",
+"    </tr>",
+"  </thead>",
+"  <tbody>",
+"    <tr *ngFor='let data of dataList'>",
+"    <td [nzChecked]='setOfCheckedId.has(data.id)' (nzCheckedChange)='onItemChecked(data.id, $$event)'></td>",
+"    <!-- <td></td> -->",
+"    <!-- TODO -->",
+"      <td><a (click)='editData(data,\"drawer\")'>编辑</a></td>",
+"    </tr>",
+"  </tbody>",
+"</nz-table>",
+"</div>",
+"</nz-space-item>",
+"</nz-space>"
+
+
+		],
+		"description": "Log output to console"
+	},
+
+"edit-drawer": {
+		"scope": "html",
+		"prefix": "edit-drawer",
+		"body": [
+
+"<nz-drawer [nzWidth]='drawerWidth' class='drawer-edit' [nzClosable]='false' [nzVisible]='visibleDrawer' nzPlacement='right'",
+"  nzTitle='编辑$1' [nzFooter]='footerTpl' (nzOnClose)='close()'>",
+"  <ng-container *nzDrawerContent>",
+"    <form *ngIf='isDrawerEdit' nz-form [formGroup]='validateForm'>",
+"",
+"     <!--  ",
+"  <nz-form-item aria-disabled='true'>",
+"    <nz-form-label [nzSm]='6' [nzXs]='24' nzRequired nzFor='userCode'>用户编号</nz-form-label>",
+"    <nz-form-control [nzSm]='14' [nzXs]='24'>",
+"      <input disabled nz-input formControlName='userCode' id='userCode' />",
+"    </nz-form-control>",
+"  </nz-form-item> -->",
+"      <!-- TODO -->   ",
+"    </form>",
+"  </ng-container>",
+"  <ng-template #footerTpl>",
+"    <div style='float: right'>",
+"      <button nz-button style='margin-right: 8px;' (click)='close()'>取消</button>",
+"      <button nz-button nzType='primary' (click)='submitForm()'>提交</button>",
+"    </div>",
+"  </ng-template>",
+"  ",
+"</nz-drawer>"
+		],
+		"description": "Log output to console"
+	},
+
+	
+}

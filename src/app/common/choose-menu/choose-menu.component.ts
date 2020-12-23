@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MenuApiPath } from 'src/app/api_path/system/MenuApiPath';
+import { MenuUtils } from 'src/app/util/MenuUtils';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 
@@ -26,7 +27,8 @@ export class ChooseMenuComponent implements OnInit {
   isMenuChooseVisible = false;
   menuMap = new Map()
 
-
+   @Input()
+  showButton
  
   currentSelectedKeys = []
 
@@ -48,6 +50,7 @@ export class ChooseMenuComponent implements OnInit {
    'key':'id' , 
    'expanded':'expanded' , 
    'children':'subList' , 
+   'menuType':'menuType' , 
   }
 
 
@@ -67,6 +70,9 @@ export class ChooseMenuComponent implements OnInit {
       return 
     }
     let data = this.menuMap.get(this.defaultSelectId)
+    if(!data){
+      return
+    }
     let selected = [];
     selected.push(data.key);
     this.currentSelectedKeys = selected
@@ -79,8 +85,9 @@ export class ChooseMenuComponent implements OnInit {
        this.explanData(this.menuMap.get(key).parent)
      }
   }
-  mappingData(data: any): any[] {
+  mappingData(data: any[]): any[] {
     let arr = [];
+    data=MenuUtils.removeNotShowItem(data,this.showButton)
      data.forEach(element => {
        this.mapping(element,arr);
        
@@ -88,7 +95,7 @@ export class ChooseMenuComponent implements OnInit {
      return arr
   }
   mapping(data: any, arr: any[]) {
-    
+     
      let val = {}
      Object.keys(this.fieldMapping).forEach(item=>{
       let d = data[this.fieldMapping[item]]
@@ -96,12 +103,13 @@ export class ChooseMenuComponent implements OnInit {
      })
      this.menuMap.set(val['key'],val);
      arr.push(val)
-     val['children']=[];
+     val['children']=null;
      val['isLeaf']=true
      let children=data[this.fieldMapping['children']];
+     children=MenuUtils.removeNotShowItem(children,this.showButton)
      if(ObjectUtils.isNotEmpty(children)&&children.length>0){
       val['isLeaf']=false
-
+      val['children']=[];
       data[this.fieldMapping['children']].forEach(item => {
         this.mapping(item,val['children']);
       });
@@ -109,6 +117,7 @@ export class ChooseMenuComponent implements OnInit {
 
 
   }
+  
   showModal(): void {
     this.isMenuChooseVisible = true;
   

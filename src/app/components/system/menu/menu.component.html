@@ -15,7 +15,7 @@
           </div>
 </nz-space-item>
 <nz-space-item>
-    <nz-table #expandTable [nzData]="dataList" nzTableLayout="fixed" [nzLoading]='loading' >
+    <nz-table #expandTable [nzData]="dataList" nzTableLayout="fixed"  [nzBordered]='true'  [nzLoading]='loading' >
         <thead>
             <tr>
                 <th>菜单编码</th>
@@ -93,9 +93,11 @@
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="menuOrder">菜单顺序</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的菜单顺序">
-                    <input nz-input formControlName="menuOrder" id="menuOrder" />
+                <nz-form-label *ngIf='maxOrder<=0' [nzSm]="6" [nzXs]="24"  nzRequired nzFor="menuOrder"   nzTooltipTitle="请选择上级菜单"  >菜单顺序</nz-form-label>
+                <nz-form-label  *ngIf='maxOrder>0' [nzSm]="6" [nzXs]="24"  nzRequired nzFor="menuOrder"   [nzTooltipTitle]="'最小序号：1 最大序号 '+maxOrder"  >菜单顺序</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24"  nzErrorTip="请输入正确的菜单顺序">
+                    <nz-input-number  [nzDisabled]="maxOrder<=0" style="width: 100%;"  [nzMin]="1" [nzMax]="maxOrder" [nzStep]="1" formControlName="menuOrder" id="menuOrder" ></nz-input-number>
+
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
@@ -124,7 +126,7 @@
                         </div>
                         <div nz-col [nzSpan]="9"  >
                             <app-choose-menu [defaultSelectId]='validateForm.get("parentId").value'
-                            (onConfirm)="confirmChooseMenu($event)"></app-choose-menu>
+                            (onConfirm)="confirmChooseMenu($event)" [showButton]="false" ></app-choose-menu>
                         </div>
                       </div>
                     

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginApiPath } from 'src/app/api_path/system/LoginApiPath';
-import { UserApiPath } from 'src/app/api_path/system/UserApiPath';
+import { MenuService, TreeNode } from 'src/app/service/system/menu/menu.service';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 
 @Component({
@@ -10,10 +10,31 @@ import { RequestUtil } from 'src/app/util/RequestUtil';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor(private http:RequestUtil) { }
-  isCollapsed = false;
+  fieldMapping={
+    'key':'id',
+    'parentId':'parent',
+    'title':'name',
+    'menuCode':'code',
+    'level':'menuLevel',
+    'routeUrl': 'menuUrl',
+    'icon':'menuIcon',
+    'menuOrder':'menuOrder',
+    'menuType':'menuType',
+   }
+ 
 
+  mode = false;
+  dark = false;
+  
+  constructor(private http:RequestUtil,private menuService:MenuService) { }
+  isCollapsed = false;
+  menuTree :TreeNode[]
   ngOnInit(): void {
+    this.menuService.getMenuListNoButton(this.fieldMapping).subscribe(item=>{
+      if(item.code=='200'){
+        this.menuTree=item.data
+      }
+    })
   }
 
   logOut(){

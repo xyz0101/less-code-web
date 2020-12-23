@@ -53,16 +53,16 @@
   <nz-space-item>
     <div >
 <nz-table *ngIf="!isFormEdit" nzShowSizeChanger [nzData]="dataList" [nzFrontPagination]="false" [nzLoading]="loading"
-  [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" >
+  [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" (nzQueryParams)="onTableLoad($event)"  [nzBordered]='true' >
   <thead>
     <tr>
       <th [(nzChecked)]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
       <th nzColumnKey="userCode" [nzSortFn]="true">用户编号</th>
       <th nzColumnKey="userName">用户名称</th>
       <th nzColumnKey="userEmail">用户邮箱</th>
-      <th nzColumnKey="userEmail">用户头像</th>
-      <th nzColumnKey="userEmail">用户简介</th>
-      <th nzColumnKey="userEmail">用户状态</th>
+      <th nzColumnKey="userHead">用户头像</th>
+      <th nzColumnKey="userIntroduce">用户简介</th>
+      <th nzColumnKey="userStatus">用户状态</th>
       <th>操作</th>
     </tr>
   </thead>
