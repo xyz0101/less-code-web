@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QueryFields } from 'src/app/entity/QueryFields';
 import { MenuService, TreeNode } from 'src/app/service/system/menu/menu.service';
+import { PermissionService } from 'src/app/service/system/permission/permission.service';
+import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { BaseComponent } from '../../BaseComponent';
 
 
@@ -26,7 +28,10 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
     'menuOrder':'menuOrder',
     'menuType':'menuType',
    }
- 
+   /**
+    * 权限列表
+    */
+   permissionList=[]
    maxOrder =0;
 
   MENU_TYPE={
@@ -68,6 +73,7 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
   initDrawerEditForm(data){
     this.initMaxOrder(data.parentId)
     this.initMenuType()
+    this.initPermissionList()
     console.log('初始化表单：',data)
     let node =  data.parent
     this.validateForm = this.fb.group({
@@ -75,6 +81,7 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
       menuCode: new FormControl({ value: data.menuCode, disabled: false }, Validators.required),
       menuName: new FormControl({ value: data.menuName, disabled: false }, Validators.required),
       level: new FormControl({ value: data.level, disabled: false } ),
+    
       menuOrder: new FormControl({ value: data.menuOrder, disabled: false }, Validators.required),
       menuIcon: new FormControl({ value: data.menuIcon, disabled: false }),
       menuType: new FormControl({ value: data.menuType, disabled: false }, Validators.required),
@@ -82,8 +89,25 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
       parentId: new FormControl({ value: data.parentId, disabled: false }, Validators.required),
       parent: new FormControl({ value: data.parent, disabled: false } ),
       parentName: new FormControl({ value: node?node.menuName:'', disabled: false },  ),
+      permissions: new FormControl({ value: data.permissions, disabled: false },  ),
+      
     }
     )
+  }
+  initPermissionList() {
+    let fieldMapping = {
+      'permissionName':'name',
+      'permissionCode':'code',
+    }
+     this.permissionService.listPermission().subscribe(item=>{
+       let arr = []
+       item.data.forEach(item=>{
+         let data = {}
+          ObjectUtils.mapObject(data,item,fieldMapping)
+          arr.push(data);
+       })
+       this.permissionList = arr;
+     })
   }
   /**
    * 初始化最大序号
@@ -106,7 +130,9 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
 beforeDrawerAddButton(){
  
 }
+
   constructor(public fb: FormBuilder, public modelService: NzModalService,
+    private permissionService:PermissionService,
           private menuService:MenuService) {
     super(fb,modelService);
   }

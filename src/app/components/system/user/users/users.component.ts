@@ -15,6 +15,7 @@ import { RequestUtil } from 'src/app/util/RequestUtil';
 import { BaseComponent } from 'src/app/components/BaseComponent';
 import { CompressUtils } from 'src/app/util/CompressUtils';
 import { QueryFields } from 'src/app/entity/QueryFields';
+import { RoleService } from 'src/app/service/system/role/role.service';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -23,11 +24,43 @@ import { QueryFields } from 'src/app/entity/QueryFields';
 export class UsersComponent extends BaseComponent implements OnInit {
  
   constructor(public userService: UserService,public fb: FormBuilder,
+    private roleService:RoleService,
     public msg: NzMessageService,public fileService:FileService,
     public modelService:NzModalService,private request:HttpClient) {
         super(fb,modelService)
    }
+
+   roleList = []
+
+
    public initDrawerEditForm(data: any) {
+    this.initUserHead(data)
+    this.initRoleList();
+    this.validateForm = this.fb.group({
+      id: [data.id],
+      versionNumber: [data.versionNumber],
+      deleteFlag: [data.deleteFlag],
+      userEmail: [data.userEmail, [Validators.email, Validators.required]],
+      password: [data.password, [Validators.required]],
+      userName: [data.userName, [Validators.required]],
+      checkPassword: [null, [Validators.required, this.confirmationValidator]],
+      userCode: new FormControl({ value: data.userCode, disabled: !this.isAdd }, Validators.required),
+      roleIds: new FormControl({ value: data.roleIds,   },  ),
+      roleNames: new FormControl({ value: data.roleNames,   },  ),
+      
+
+      resetPassword: ['0', [Validators.required]],
+      userIntroduce: [data.userIntroduce],
+      userHead: [data.userHead],
+      userStatus: [JSON.stringify(data.userStatus), [Validators.required]]
+  });
+  }
+  initRoleList() {
+   this.roleService.listAllRoles().subscribe(item=>{
+      this.roleList = item.data
+   })
+  }
+  initUserHead(data: any) {
     if(ObjectUtils.isNotEmpty(data.userHead)){
       this.headLoading=true
       this.fileService.downloadFile(data.userHead).subscribe(item=>{
@@ -43,20 +76,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
         })
       })
     }
-    this.validateForm = this.fb.group({
-      id: [data.id],
-      versionNumber: [data.versionNumber],
-      deleteFlag: [data.deleteFlag],
-      userEmail: [data.userEmail, [Validators.email, Validators.required]],
-      password: [data.password, [Validators.required]],
-      userName: [data.userName, [Validators.required]],
-      checkPassword: [null, [Validators.required, this.confirmationValidator]],
-      userCode: new FormControl({ value: data.userCode, disabled: !this.isAdd }, Validators.required),
-      resetPassword: ['0', [Validators.required]],
-      userIntroduce: [data.userIntroduce],
-      userHead: [data.userHead],
-      userStatus: [JSON.stringify(data.userStatus), [Validators.required]]
-  });
   }
 
 

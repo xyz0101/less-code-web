@@ -28,7 +28,14 @@ export class RoleService {
   deleteRole(ids):Observable<any>{
     return this.http.postResquest(RoleApiPath.DELETE_ROLE_API_PATH,ids)
   }
+ 
 
+   /**
+   * 获取所有的角色
+   */
+  listAllRoles():Observable<any>{
+    return this.http.getResquest(RoleApiPath.LIST_ALL_ROLE_API_PATH)
+  }
 
 
 }

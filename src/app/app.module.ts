@@ -46,6 +46,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { ChoosePermissionComponent } from './common/choose-permission/choose-permission.component';
+import { ChooseRoleComponent } from './common/choose-role/choose-role.component';
 
 
 
@@ -67,7 +69,9 @@ registerLocaleData(zh);
     MenuComponent,
     RoleComponent,
     ChooseMenuComponent,
-    ChooseIconComponent
+    ChooseIconComponent,
+    ChoosePermissionComponent,
+    ChooseRoleComponent
   ],
   imports: [
     NzIconModule.forRoot(iconsArr),

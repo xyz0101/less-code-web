@@ -148,7 +148,18 @@
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>
-
+            <nz-form-item *ngIf='validateForm.get("menuType").value==2'>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="permissions">授权标识</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的授权标识">
+                   
+                    <nz-select nzAllowClear  formControlName="permissions" id="permissions"
+                     nzPlaceHolder="请选择授权标识" nzMode="multiple" >
+                        <nz-option *ngFor="let permission of  permissionList" [nzValue]="permission.permissionCode" 
+                         [nzLabel]="permission.permissionName"></nz-option>/
+                      </nz-select>
+                   
+                </nz-form-control>
+            </nz-form-item>
         </form>
 
 

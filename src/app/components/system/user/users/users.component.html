@@ -174,6 +174,20 @@
          
         </nz-form-control>
       </nz-form-item>
+
+      <nz-form-item >
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="roleIds">角色授权</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择角色">
+           
+            <nz-select nzAllowClear  formControlName="roleIds" id="roleIds"
+             nzPlaceHolder="请选择角色" nzMode="multiple" >
+                <nz-option *ngFor="let role of  roleList" [nzValue]="role.id" 
+                 [nzLabel]="role.roleName"></nz-option>/
+              </nz-select>
+           
+        </nz-form-control>
+    </nz-form-item>
+
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userIntroduce">用户简介</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入用户简介">
