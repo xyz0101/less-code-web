@@ -173,12 +173,13 @@ export abstract class BaseComponent extends ButtonCodes{
             this.beforeDrawerAddButton()
         }
     }
-   
+    drawerFormLoading = false
     /**
      * 初始化表单数据
      * @param data 
      */
     public  initForm(data){
+        this.drawerFormLoading = true;
         if(this.editType=='form'){
             this.initFormEditForm(data)
         }else  if(this.editType=='dialog'){
@@ -186,6 +187,7 @@ export abstract class BaseComponent extends ButtonCodes{
         }else if(this.editType=='drawer'){
             this.initDrawerEditForm(data)
         }
+        this.drawerFormLoading = false;
     }
    
 
@@ -420,6 +422,7 @@ export abstract class BaseComponent extends ButtonCodes{
      * 编辑数据，表单数据引用现有数据
      */
     editData(data,type) {
+        
         this.editType = type;
         this.isAdd = false
         console.log(data)

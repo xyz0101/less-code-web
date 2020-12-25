@@ -3,6 +3,12 @@ export class MenuApiPath{
      * 菜单树形数据地址
      */
     public static MENU_TREE_PATH = "/lsc/system/menu/listMenuTree"
+
+    /**
+     * 菜单树形数据地址
+     */
+    public static MENU_TREEBY_USER_PATH = "/lsc/system/menu/listMenuByUser"
+    
     
     /**
      * 删除菜单的地址
@@ -20,5 +26,7 @@ export class MenuApiPath{
      * 
      */
     public static GET_MANU_MAX_ORDER_PATH = "/lsc/system/menu/getMaxOrder"
+
+
     
 }

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Qo } from 'src/app/entity/Qo';
 import { UserService } from 'src/app/service/system/user/user.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -11,7 +9,6 @@ import { HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpRequest, HttpRes
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { FileService } from 'src/app/service/system/file/file.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { RequestUtil } from 'src/app/util/RequestUtil';
 import { BaseComponent } from 'src/app/components/BaseComponent';
 import { CompressUtils } from 'src/app/util/CompressUtils';
 import { QueryFields } from 'src/app/entity/QueryFields';
@@ -22,57 +19,72 @@ import { RoleService } from 'src/app/service/system/role/role.service';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent extends BaseComponent implements OnInit {
- 
-  constructor(public userService: UserService,public fb: FormBuilder,
-    private roleService:RoleService,
-    public msg: NzMessageService,public fileService:FileService,
-    public modelService:NzModalService,private request:HttpClient) {
-        super(fb,modelService)
-   }
 
-   roleList = []
-
-
-   public initDrawerEditForm(data: any) {
-    this.initUserHead(data)
-    this.initRoleList();
-    this.validateForm = this.fb.group({
-      id: [data.id],
-      versionNumber: [data.versionNumber],
-      deleteFlag: [data.deleteFlag],
-      userEmail: [data.userEmail, [Validators.email, Validators.required]],
-      password: [data.password, [Validators.required]],
-      userName: [data.userName, [Validators.required]],
-      checkPassword: [null, [Validators.required, this.confirmationValidator]],
-      userCode: new FormControl({ value: data.userCode, disabled: !this.isAdd }, Validators.required),
-      roleIds: new FormControl({ value: data.roleIds,   },  ),
-      roleNames: new FormControl({ value: data.roleNames,   },  ),
-      
-
-      resetPassword: ['0', [Validators.required]],
-      userIntroduce: [data.userIntroduce],
-      userHead: [data.userHead],
-      userStatus: [JSON.stringify(data.userStatus), [Validators.required]]
-  });
+  constructor(public userService: UserService, public fb: FormBuilder,
+    private roleService: RoleService,
+    public msg: NzMessageService, public fileService: FileService,
+    public modelService: NzModalService, private request: HttpClient) {
+    super(fb, modelService)
   }
+
+  roleList = []
+
+
+  public initDrawerEditForm(data ) {
+    this.initUserHead(data)
+    this.initRoleList()
+    let roleIds = []
+    if (data.roles) {
+      data.roles.forEach(item => roleIds.push(item.id))
+    }
+    console.log('初始化角色：', data)
+    this.validateForm = this.fb.group({
+      id: new FormControl({ value: data.id, disabled: false} ),
+      versionNumber: new FormControl({ value: data.versionNumber, disabled: false }),
+      deleteFlag: new FormControl({ value: data.deleteFlag, disabled: false }),
+      userEmail: new FormControl({ value: data.userEmail, disabled: false }, [Validators.required, Validators.email]),
+      password: new FormControl({ value: data.password, disabled: false },Validators.required),
+      userName: new FormControl({ value: data.userName, disabled: false },  Validators.required ),
+      checkPassword: [null, [Validators.required, this.confirmationValidator]],
+
+      userCode: new FormControl({ value: data.userCode, disabled: !this.isAdd }, Validators.required),
+      roleNames: new FormControl({ value: data.roleNames, disabled: false },),
+      roles: new FormControl({ value: data.roles, disabled: false },),
+      resetPassword: new FormControl({ value: '0', disabled: false }, [Validators.required]),
+      userIntroduce: new FormControl({ value: data.userIntroduce, disabled: false }),
+      userHead: new FormControl({ value: data.userHead, disabled: false }),
+      userStatus: new FormControl({ value: JSON.stringify(data.userStatus), disabled: false }, [Validators.required]),
+      selectedRoles: new FormControl({ value: roleIds, disabled: false },),
+
+    }
+    )
+
+
+    console.log('初始化角色：', this.validateForm.value)
+  }
+
+
+
   initRoleList() {
-   this.roleService.listAllRoles().subscribe(item=>{
+
+    this.roleService.listAllRoles().subscribe(item => {
+
       this.roleList = item.data
-   })
+    })
+
   }
   initUserHead(data: any) {
-    if(ObjectUtils.isNotEmpty(data.userHead)){
-      this.headLoading=true
-      this.fileService.downloadFile(data.userHead).subscribe(item=>{
-        this.getBase64(item,callback=>{
-          
-          this.fileList=[{
-            name:'img.png',
-            status:"done",
-            url:callback,
-            uid:"-1"
+    if (ObjectUtils.isNotEmpty(data.userHead)) {
+      this.headLoading = true
+      this.fileService.downloadFile(data.userHead).subscribe(item => {
+        this.getBase64(item, callback => {
+          this.fileList = [{
+            name: 'img.png',
+            status: "done",
+            url: callback,
+            uid: "-1"
           }]
-        this.headLoading=false
+          this.headLoading = false
         })
       })
     }
@@ -80,31 +92,39 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
 
 
-  public saveDrawerData(data: any) :Observable<any>{
-   return  this.userService.saveUser(data)
+  public saveDrawerData(data: any): Observable<any> {
+    return this.userService.saveUser(data)
   }
   public getListData(param: any): Observable<any> {
     return this.userService.listUserByPage(param)
   }
-  
+
   public beforeDrawerSubmit() {
-    if(ObjectUtils.isNotEmpty(this.uploadedFileCode)){
-      this.validateForm.value['userHead']=this.uploadedFileCode;
+    if (ObjectUtils.isNotEmpty(this.uploadedFileCode)) {
+      
+      this.validateForm.value['userHead'] = this.uploadedFileCode;
+     
     }
+    let roleIds = this.validateForm.get('selectedRoles').value
+    let arr = []
+    roleIds.forEach(element => {
+      arr.push({id:element})
+    });
+    this.validateForm.value['roles']=arr
   }
   public beforeDrawerAddButton() {
-    this.fileList=[]
+    this.fileList = []
   }
   public onDeleteData(ids: any): Observable<any> {
-   return  this.userService.deleteUser(ids)
+    return this.userService.deleteUser(ids)
   }
 
-  public getSearchFields(){
-    this.showSearch=true
+  public getSearchFields() {
+    this.showSearch = true
     return QueryFields.buildFileds()
-                  .addField("userCode","用户编码")
-                  .addField("userName","用户名称")
-                  .addField("userEmail","用户邮箱")
+      .addField("userCode", "用户编码")
+      .addField("userName", "用户名称")
+      .addField("userEmail", "用户邮箱")
   }
 
 
@@ -115,74 +135,74 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
 
 
-  
+
   fileUploadPath = FileApiPath.UPLOAD_FILE_PATH
-  uploadedFileCode=null;
-  isAdd=false;
+  uploadedFileCode = null;
+  isAdd = false;
   /**
    * 初始化方法
    */
   ngOnInit(): void {
-    
+
     this.reload()
   }
- 
-  
-
-
-   /**
-    * 头像加载
-    * 
-    */
-
-   userHeads = new Map();
-
-   
-
- afterLoadData(){
-   console.log('加载头像')
-  this.dataList.forEach(item=>{
-     this.fileService.downloadFile(item.userHead).subscribe(file=>{
-      let res = new  window.File([file], item.userHead, {type: file.type});
-      // this.userHeads=this.userHeads.set(item.userHead,file)
-      this.getBase64(res, (img: string) => {
-         
-        this.userHeads=this.userHeads.set(item.userHead,img)
-      });
-      
-     })
-  })
- }
 
 
 
 
+  /**
+   * 头像加载
+   * 
+   */
+
+  userHeads = new Map();
 
 
 
- 
+  afterLoadData() {
+    console.log('加载头像')
+    this.dataList.forEach(item => {
+      this.fileService.downloadFile(item.userHead).subscribe(file => {
+        let res = new window.File([file], item.userHead, { type: file.type });
+        // this.userHeads=this.userHeads.set(item.userHead,file)
+        this.getBase64(res, (img: string) => {
 
-   /****************************************************
-   **************头像上传部分****************************
-   ***************************************************
-  */
- previewVisible = false;
+          this.userHeads = this.userHeads.set(item.userHead, img)
+        });
+
+      })
+    })
+  }
+
+
+
+
+
+
+
+
+
+  /****************************************************
+  **************头像上传部分****************************
+  ***************************************************
+ */
+  previewVisible = false;
   headLoading = false;
   previewImage
-  fileList=[]
+  fileList = []
 
-  customUpload=  async (item ) => {
-   
-    
-   let data = await CompressUtils.compressImg(item.file,item.file.type) 
-   console.log(data  )
-      console.log(item.file )
+  customUpload = async (item) => {
+
+
+    let data = await CompressUtils.compressImg(item.file, item.file.type)
+    console.log(data)
+    console.log(item.file)
     // 构建一个 FormData 对象，用于存储文件或其他参数
     const formData = new FormData();
     // tslint:disable-next-line:no-any
     formData.append('file', data as any);
     const req = new HttpRequest('POST', item.action!, formData, {
-      headers:new HttpHeaders({"token":localStorage.getItem("token")}),
+      headers: new HttpHeaders({ "token": localStorage.getItem("token") }),
       reportProgress: true,
       withCredentials: true
     });
@@ -208,12 +228,12 @@ export class UsersComponent extends BaseComponent implements OnInit {
     );
   };
 
-  handlePreview =   (file: NzUploadFile) => {
-    this.previewImage = this.previewImage||file.url || file.preview;
-     
-     
+  handlePreview = (file: NzUploadFile) => {
+    this.previewImage = this.previewImage || file.url || file.preview;
+
+
     this.previewVisible = true;
-   
+
   };
 
   beforeUpload = (file: NzUploadFile, _fileList: NzUploadFile[]) => {
@@ -235,10 +255,10 @@ export class UsersComponent extends BaseComponent implements OnInit {
     });
   };
 
-  setHeaders=(file: NzUploadFile)=>{
+  setHeaders = (file: NzUploadFile) => {
     return new Observable(
-      (observer:Observer<{}>)=>{
-        observer.next({"token":localStorage.getItem("token")})
+      (observer: Observer<{}>) => {
+        observer.next({ "token": localStorage.getItem("token") })
         observer.complete()
       }
     )
@@ -259,14 +279,14 @@ export class UsersComponent extends BaseComponent implements OnInit {
         break;
       case 'done':
         // this.fileList.push(info.file)
-        console.log("图片上传成功",info.file.response.data)
-       this.uploadedFileCode = info.file.response.data
-       info.file.staus='done'
+        console.log("图片上传成功", info.file.response.data)
+        this.uploadedFileCode = info.file.response.data
+        info.file.staus = 'done'
         // Get this url from response in real world.
         this.getBase64(info.file!.originFileObj!, (img: string) => {
           this.headLoading = false;
-          this.fileList=[info.file]
-          this.previewImage=img
+          this.fileList = [info.file]
+          this.previewImage = img
         });
         break;
       case 'error':
@@ -287,7 +307,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
 
   defaultIcon = 'apple'
-  defaultSelectId =3
+  defaultSelectId = 3
 
 
 

@@ -27,6 +27,7 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
     'menuIcon':'menuIcon',
     'menuOrder':'menuOrder',
     'menuType':'menuType',
+     'permissions':'permissions',
    }
    /**
     * 权限列表
@@ -63,6 +64,16 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
   beforeDrawerSubmit(){
     
     this.validataFormAndTrowError()
+    let permissions =this.validateForm.get('selectedPermission').value
+
+    if(permissions){
+      let val = '';
+      permissions.forEach(element => {
+       val = val+','+element
+      });
+      this.validateForm.get( "permissions" ).setValue(val.substring(1,val.length))
+
+    }
   }
   saveDrawerData(data:any):Observable<any>{
     console.log('保存表单',data)
@@ -74,6 +85,14 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
     this.initMaxOrder(data.parentId)
     this.initMenuType()
     this.initPermissionList()
+    let selectedPermission = [];
+    if(data.permissions){ 
+      data.permissions.split(",").forEach(element => {
+        selectedPermission.push(Number(element))
+      });
+   }
+
+
     console.log('初始化表单：',data)
     let node =  data.parent
     this.validateForm = this.fb.group({
@@ -89,15 +108,18 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
       parentId: new FormControl({ value: data.parentId, disabled: false }, Validators.required),
       parent: new FormControl({ value: data.parent, disabled: false } ),
       parentName: new FormControl({ value: node?node.menuName:'', disabled: false },  ),
+      selectedPermission: new FormControl({ value: selectedPermission, disabled: false },  ),
       permissions: new FormControl({ value: data.permissions, disabled: false },  ),
       
     }
     )
+    console.log('初始化表单：',this.validateForm.value)
   }
   initPermissionList() {
     let fieldMapping = {
       'permissionName':'name',
       'permissionCode':'code',
+      'permissionId':'id',
     }
      this.permissionService.listPermission().subscribe(item=>{
        let arr = []
