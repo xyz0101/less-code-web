@@ -35,6 +35,7 @@ export class LoginService {
         if(item.code==200){
           this.notifly.success("提示信息！","登陆成功！")
             localStorage.setItem("token",item.data)
+            localStorage.setItem("token",item.data)
             this.http.route("/nav/system/user",{})
         }
       
