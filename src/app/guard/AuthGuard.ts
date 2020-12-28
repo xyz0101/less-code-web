@@ -6,6 +6,7 @@ import {
  RouterStateSnapshot,
 } from '@angular/router';
 import { CommonConst } from '../common/constant/CommonConst';
+import { LocalStorageConst } from '../common/constant/LocalStorageConst';
 import { ObjectUtils } from '../util/ObjectUtils';
 
 
@@ -26,7 +27,7 @@ export class AuthGuard implements CanActivate    {
       this.router.navigate(["/login"],{})
   }
   let hasAccessPermission = false
-  let urlStr = localStorage.getItem(CommonConst.USER_URLS_KEY)
+  let urlStr = localStorage.getItem(LocalStorageConst.USER_URLS_KEY)
   console.log("所有地址：",urlStr)
   let urls = urlStr.split(",")
   urls.push("/")

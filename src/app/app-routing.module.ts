@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CodeGenerateComponent } from './components/code-generate/code-generate.component';
+import { FilesComponent } from './components/files/files.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LoginComponent } from './components/system/login/login.component';
 import { MenuComponent } from './components/system/menu/menu.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
           { path: 'user', component: UsersComponent },
           { path: 'menu', component: MenuComponent },
           { path: 'role', component: RoleComponent },
+           { path: 'aibizhi', component: FilesComponent },
         ],
 
       },

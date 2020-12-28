@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginApiPath } from 'src/app/api_path/system/LoginApiPath';
 import { CommonConst } from 'src/app/common/constant/CommonConst';
+import { LocalStorageConst } from 'src/app/common/constant/LocalStorageConst';
 import { MenuService, TreeNode } from 'src/app/service/system/menu/menu.service';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';
@@ -48,7 +49,7 @@ export class NavBarComponent implements OnInit {
     urls.forEach(item=>{urlStr=urlStr+','+item});
     urlStr =urls.length>0?urlStr.substring(1,urlStr.length):urlStr
     console.log('缓存用户的url:',urlStr)
-    localStorage.setItem(CommonConst.USER_URLS_KEY,urlStr );
+    localStorage.setItem(LocalStorageConst.USER_URLS_KEY,urlStr );
   }
   loadPermission(item: any , urls:any[]) {
      if(ObjectUtils.isNotEmpty(item.routeUrl)){
