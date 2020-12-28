@@ -17,7 +17,6 @@ import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { RequestUtil } from './util/RequestUtil';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UsersComponent } from './components/system/user/users/users.component';
 import { LoginComponent } from './components/system/login/login.component';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -46,10 +45,13 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { ChoosePermissionComponent } from './common/choose-permission/choose-permission.component';
-import { ChooseRoleComponent } from './common/choose-role/choose-role.component';
+
 import { FilesComponent } from './components/files/files.component';
 
+import { UsersComponent } from './components/system/users/users.component';
+import { NoauthComponent } from './components/system/noauth/noauth.component';
+import { NzResultModule } from 'ng-zorro-antd/result';
+import { DocViewComponent } from './components/doc-view/doc-view.component';
 
 
 
@@ -71,9 +73,11 @@ registerLocaleData(zh);
     RoleComponent,
     ChooseMenuComponent,
     ChooseIconComponent,
-    ChoosePermissionComponent,
-    ChooseRoleComponent,
-    FilesComponent
+
+    FilesComponent,
+    NoauthComponent,
+    DocViewComponent,
+
   ],
   imports: [
     NzIconModule.forRoot(iconsArr),
@@ -104,7 +108,8 @@ registerLocaleData(zh);
     NzTreeModule,
     NzSpinModule,
     NzIconModule,
-    NzTabsModule
+    NzTabsModule,
+    NzResultModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, 
     NzNotificationService,AuthGuard,NzMessageService],

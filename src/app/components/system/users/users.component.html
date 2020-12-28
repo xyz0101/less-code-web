@@ -1,0 +1,215 @@
+<!-- 查询表单 -->
+<nz-space [nzSize]="12" nzDirection="vertical" style="width: 100%;">
+
+    <form *ngIf="showSearch" nz-form [formGroup]="searchValidateForm" class="ant-advanced-search-form">
+      <nz-space-item>
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="4" *ngFor="let control of controlArray">
+            <nz-form-item>
+              <nz-form-label [nzFor]="'field' + control.code">{{control.name}}</nz-form-label>
+              <nz-form-control>
+                <input nz-input placeholder="{{control.name}}" [formControlName]="control.code"
+                  [attr.id]="control.code" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </nz-space-item>
+      <nz-space-item>
+        <div nz-row style="margin-left: 90%;">
+          <div nz-col [nzSpan]="24" class="search-area">
+            <nz-space [nzSize]="12">
+              <nz-space-item>
+                <button nz-button [nzType]="'primary'" (click)="searchData()">查询</button>
+              </nz-space-item>
+              <nz-space-item>
+                <button nz-button (click)="resetForm()">重置</button>
+              </nz-space-item>
+            </nz-space>
+          </div>
+        </div>
+      </nz-space-item>
+    </form>
+    <nz-space-item>
+      <div> </div>
+    </nz-space-item>
+  </nz-space>
+  
+  <!-- 列表 -->
+  <nz-space [nzSize]="12" nzDirection="vertical" style="width: 100%;">
+    <nz-space-item>
+      <div class="table-operations">
+        <nz-space [nzSize]="12">
+          <nz-space-item>
+            <button nz-button (click)="createData('drawer')">新增用户</button>
+          </nz-space-item>
+          <nz-space-item>
+            <button nz-button (click)="deleteData()">删除选中</button>
+          </nz-space-item>
+        </nz-space>
+  
+      </div>
+    </nz-space-item>
+    <nz-space-item>
+      <div>
+        <nz-table *ngIf="!isFormEdit" nzShowSizeChanger [nzData]="dataList" [nzFrontPagination]="false"
+          [nzLoading]="loading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+          (nzQueryParams)="onTableLoad($event)" [nzBordered]='true'>
+          <thead>
+            <tr>
+              <th [(nzChecked)]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+              <th nzColumnKey="userCode" [nzSortFn]="true">用户编号</th>
+              <th nzColumnKey="userName">用户名称</th>
+              <th nzColumnKey="userEmail">用户邮箱</th>
+              <th nzColumnKey="userHead">用户头像</th>
+              <th nzColumnKey="userIntroduce">用户简介</th>
+              <th nzColumnKey="userStatus">用户状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of dataList">
+              <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+              <td>{{ data.userCode }} </td>
+              <td>{{ data.userName }}</td>
+              <td>{{ data.userEmail }}</td>
+              <td> <img [src]="userHeads.get(data.userHead)" style="width: 50px;height: 50px;" /> </td>
+              <td>{{ data.userIntroduce }}</td>
+              <td>{{ data.userStatus==0?'禁用':'启用' }}</td>
+              <td><a (click)="editData(data,'drawer')">编辑</a></td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </nz-space-item>
+  </nz-space>
+  <!-- 编辑页面 抽屉-->
+  
+  <nz-drawer [nzWidth]="drawerWidth" class="drawer-edit" [nzClosable]="false" [nzVisible]="visibleDrawer"
+    nzPlacement="right" nzTitle="编辑用户信息" [nzFooter]="footerTpl" (nzOnClose)="close()">
+    
+      <ng-container *nzDrawerContent>
+        <form *ngIf="isDrawerEdit" nz-form [formGroup]="validateForm">
+  
+  
+          <nz-form-item aria-disabled="true">
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userCode">用户编号</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input   nz-input formControlName="userCode" id="userCode" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item aria-disabled="true">
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userEmail">用户邮箱号</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的邮箱">
+              <input nz-input formControlName="userEmail" id="userEmail" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userName">昵称</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入正确的用户昵称">
+              <input nz-input formControlName="userName" id="userName" />
+            </nz-form-control>
+          </nz-form-item>
+          <div *ngIf="isAdd">
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>密码</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入密码!">
+                <input nz-input type="password" id="password" formControlName="password"
+                  (ngModelChange)="updateConfirmValidator()" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="checkPassword" nzRequired>确认密码</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+                <input nz-input type="password" formControlName="checkPassword" id="checkPassword" />
+                <ng-template #errorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">
+                    请确认密码
+                  </ng-container>
+                  <ng-container *ngIf="control.hasError('confirm')">
+                    两次密码输入不一致
+                  </ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div *ngIf="!isAdd">
+  
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="resetPassword">是否重置密码</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="选择是否重置用户密码">
+                <nz-radio-group formControlName="resetPassword">
+                  <label nz-radio nzValue="1">是</label>
+                  <label nz-radio nzValue="0">否</label>
+                </nz-radio-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+  
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userStatus">用户状态</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择用户状态">
+              <nz-radio-group formControlName="userStatus">
+                <label nz-radio nzValue="1">启用</label>
+                <label nz-radio nzValue="0">禁用</label>
+              </nz-radio-group>
+  
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userHead">头像</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请上传用户头像">
+  
+              <nz-upload [nzCustomRequest]="customUpload" [nzShowButton]="fileList.length==0" [nzPreview]="handlePreview"
+                [nzAction]="fileUploadPath" nzName="file" [nzHeaders]="setHeaders" [(nzFileList)]="fileList"
+                nzListType="picture-card" [nzBeforeUpload]="beforeUpload" (nzChange)="handleChange($event)">
+                <i class="upload-icon" nz-icon [nzType]="headLoading ? 'loading' : 'plus'"></i>
+                <div class="ant-upload-text">点击上传头像</div>
+                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                  (nzOnCancel)="previewVisible = false; previewImage=undefined">
+                  <ng-template #modalContent>
+                    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                  </ng-template>
+                </nz-modal>
+              </nz-upload>
+  
+            </nz-form-control>
+          </nz-form-item>
+  
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="selectedRoles">角色授权</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择角色">
+  
+              <nz-select nzAllowClear formControlName="selectedRoles" id="selectedRoles" nzPlaceHolder="请选择角色"
+                nzMode="multiple">
+                <nz-option *ngFor="let role of  roleList" [nzValue]="role.id" [nzLabel]="role.roleName">
+                </nz-option>
+              </nz-select>
+  
+            </nz-form-control>
+          </nz-form-item>
+  
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userIntroduce">用户简介</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入用户简介">
+              <nz-textarea-count [nzMaxCharacterCount]="150">
+                <textarea rows="4" formControlName="userIntroduce" nz-input></textarea>
+              </nz-textarea-count>
+  
+            </nz-form-control>
+          </nz-form-item>
+  
+        </form>
+  
+  
+      </ng-container>
+  
+      <ng-template #footerTpl>
+        <div style="float: right">
+          <button nz-button style="margin-right: 8px;" (click)="close()">取消</button>
+          <button nz-button nzType="primary" (click)="submitForm()">提交</button>
+        </div>
+      </ng-template>
+    
+  </nz-drawer>
+   

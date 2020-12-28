@@ -36,21 +36,35 @@ export class RoleComponent extends BaseComponent implements OnInit {
 
 
   beforeDrawerAddButton(){
-    this.validataFormAndTrowError()
+    
   }
 
   initDrawerEditForm(data){
     //TODO 检查菜单的格式
-
+    let menuIds = this.initMenus(data)
+    console.log('初始化菜单已选：',menuIds)
     this.validateForm = this.fb.group({
       id: new FormControl({ value: data.id, disabled: false } ),
       menuNames: new FormControl({ value: data.menuNames, disabled: false } ),
-      menuKeys: new FormControl({ value: data.menuKeys, disabled: false } ),
+      menuKeys: new FormControl({ value: menuIds , disabled: false } ),
       menuStr: new FormControl({ value: data.menuStr, disabled: false } ),
       roleCode: new FormControl({ value: data.roleCode, disabled: false } ,Validators.required),
       roleName: new FormControl({ value: data.roleName , disabled: false } ,Validators.required),
         }
         )
+      
+  }
+  initMenus(data: any) {
+    let array=data.menuStr?data.menuStr.split(","):[]
+    let index;
+     for (  index = 0 ; index < array.length; index++) {
+      const element = array[index];
+      array[index] = Number(element)
+      
+    }
+    return array
+
+
   }
   
 
@@ -86,8 +100,8 @@ export class RoleComponent extends BaseComponent implements OnInit {
         flag=true;
       });
       if(flag){
-        names = names.substr(0,names.length-1);
-        idStr = idStr.substr(0,idStr.length-1);
+        names = names.substr(1);
+        idStr = idStr.substr(1);
       }
      
       this.validateForm.get('menuNames').setValue(names)

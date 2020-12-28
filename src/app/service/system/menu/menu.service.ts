@@ -44,8 +44,8 @@ export class MenuService {
     return this.http.postResquest(MenuApiPath.SAVE_MENU_PATH,param)
   }
 
-  getMenuListNoButton(fieldMapping):Observable<MyResponse<TreeNode[]>>{
-    return this.http.getResquest(MenuApiPath.MENU_TREE_PATH).pipe(map(item=>{
+  getMenuListByUserNoButton(fieldMapping):Observable<MyResponse<TreeNode[]>>{
+    return this.http.getResquest(MenuApiPath.MENU_TREEBY_USER_PATH).pipe(map(item=>{
         if(item.code=='200'){
             return MyResponse.ok<TreeNode[]>(this.mappingData(item.data,fieldMapping,false))
         }
@@ -62,6 +62,7 @@ export class MenuService {
   mappingData(data: any[],fieldMapping,needButton:boolean): TreeNode[] {
     let res = [];
       if(ObjectUtils.isNotEmpty(data)&&data.length>0){
+        MenuUtils.cacheUserButtonMap('/',data)
         data=MenuUtils.removeNotShowItem(data,needButton)
         data.forEach(item=>{
            this.mapping(item,res,fieldMapping,needButton);
@@ -73,7 +74,9 @@ export class MenuService {
     let d = new TreeNode()
     d.children=null
     let sub = item['subList']
+    MenuUtils.cacheUserButtonMap(item.menuUrl,sub)
     sub=MenuUtils.removeNotShowItem(sub,needButton)
+   
     ObjectUtils.mapObject(d,item, fieldMapping);
     res.push(d)
     if(ObjectUtils.isNotEmpty(sub)&&sub.length>0){

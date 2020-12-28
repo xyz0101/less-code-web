@@ -4,8 +4,9 @@ import { CodeGenerateComponent } from './components/code-generate/code-generate.
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LoginComponent } from './components/system/login/login.component';
 import { MenuComponent } from './components/system/menu/menu.component';
+import { NoauthComponent } from './components/system/noauth/noauth.component';
 import { RoleComponent } from './components/system/role/role.component';
-import { UsersComponent } from './components/system/user/users/users.component';
+import { UsersComponent } from './components/system/users/users.component';
 import { AuthGuard } from './guard/AuthGuard';
 
 const routes: Routes = [
@@ -17,7 +18,8 @@ const routes: Routes = [
     path: 'nav', component: NavBarComponent,
     // 导航条子模块
     children: [
-      {
+      { path: 'noauth', component: NoauthComponent },
+      { 
         path: 'system', children: [
           // 用户模块
           { path: 'user', component: UsersComponent },
