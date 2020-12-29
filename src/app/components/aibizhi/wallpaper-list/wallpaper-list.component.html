@@ -1,47 +1,54 @@
 
- <nz-spin [nzSpinning]="loading">
-<nz-tabset (nzSelectChange) = "onSelectTable($event)">
-  <nz-tab nzTitle="网络壁纸">
+ <nz-spin  [nzSpinning]="loading">
+  <nz-tabset (nzSelectChange) = "onSelectTable($event)">
+    <nz-tab nzTitle="网络壁纸">
+       
+    </nz-tab>
+    <nz-tab nzTitle="桌面壁纸">
      
-  </nz-tab>
-  <nz-tab nzTitle="桌面壁纸">
-   
-  </nz-tab>
-  
-</nz-tabset>
-    <!-- 壁纸分类  -->
-    <div *ngIf="showImgList" style="text-align: center;" >
-        <div style="margin-left: 5%; " class="gutter-example">
-          <div  nz-row [nzGutter]="[hGutter, vGutter]">
-            <div nz-col class="gutter-row" [nzSpan]="24 / imgList.length" *ngFor="let data of imgList">
-              <div class="grid-config">
-                  <nz-card nzHoverable  #card style="width:300px;"  >
-                    <nz-space [nzSize]='24' nzDirection='vertical' style="width:250px;"  >
-                    <nz-space-item>
-                      <img
-                      (click)="showImage(data)"
-                      nz-image
-                      width="250"
-                      height="250"
-                      [src]="data.preview"
-                      alt=""
-                    />           
-                    </nz-space-item>
-                    <nz-space-item>
-                      <nz-tag style="margin-top: 10px;"  *ngFor="let tag of data.tag;let i =index"  [nzColor]="colors[i]">{{tag}}</nz-tag>
-                        
+    </nz-tab>
+    
+  </nz-tabset>
+      <!-- 壁纸   -->
+     
+      <div   style="text-align: center;" >
+          <div   id="box"  style="margin-left: 5%; width: 95%;  " (scrollChange)="onScrollChange($event)"   >
+            <div    nz-row [nzGutter]="[hGutter, vGutter]" >
+              <div nz-col class="gutter-row" [nzSpan]="24 / imgList.length" *ngFor="let data of imgList">
+                <div class="grid-config">
+                    <nz-card nzHoverable  #card style="width:300px;"  >
+                      <nz-space [nzSize]='24' nzDirection='vertical' style="width:250px;"  >
+                      <nz-space-item>
+                        <img
+                        (click)="showImage(data)"
+                        nz-image
+                        width="250"
+                        height="250"
+                        [src]="data.preview"
+                        alt=""
+                      />           
+                      </nz-space-item>
+                      <nz-space-item>
+                        <nz-tag style="margin-top: 10px;"  *ngFor="let tag of data.tag;let i =index"  [nzColor]="colors[i]">{{tag}}</nz-tag>
+                          
+                         
+                      </nz-space-item>
+                       </nz-space>
+                    
                        
-                    </nz-space-item>
-                     </nz-space>
-                  
-                     
-                      
-                      </nz-card>
-                  
+                        
+                        </nz-card>
+                    
+                </div>
               </div>
+              
             </div>
             
           </div>
-        </div>
-       </div>
-      </nz-spin>
+
+         </div>
+        </nz-spin>
+       
+
+
+

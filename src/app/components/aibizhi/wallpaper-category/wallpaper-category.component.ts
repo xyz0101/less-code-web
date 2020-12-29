@@ -21,9 +21,12 @@ export class WallpaperCategoryComponent implements OnInit {
   constructor(private aibizhiService: AibizhiService, private nzImageService: NzImageService,private router:RouteUtils) { this.showImgList = false;}
   categories = Category[0];
   ngOnInit(): void {
-    // this.router.getRouteParams().subscribe(item=>{
-      this.loadCategory()
-    // })
+    this.router.getRouteParams().subscribe(item=>{
+      if(!item.category){
+        this.loadCategory()
+
+      }
+    })
     
   }
   loadCategory() {

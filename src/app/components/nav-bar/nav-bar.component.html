@@ -43,7 +43,7 @@
     </ul>
 
   </nz-sider>
-  <nz-layout nzTheme="light">
+  <nz-layout nzTheme="light" >
     <nz-header >
 
       <div  class="app-header light"> 
@@ -60,14 +60,15 @@
 
       
     </nz-header>
-    <nz-content>
-      <div class="inner-content">
+    <nz-content >
+      <div  class="inner-content" >
         <nz-breadcrumb [nzAutoGenerate]="'true'" [nzRouteLabel]="'customBreadcrumb'">
            
         </nz-breadcrumb>
         <nz-divider></nz-divider>
+        <nz-back-top ></nz-back-top>
 
-        <router-outlet></router-outlet>
+        <router-outlet ></router-outlet>
       </div>
     </nz-content>
   </nz-layout>

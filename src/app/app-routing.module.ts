@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { WallpaperCategoryComponent } from './components/aibizhi/wallpaper-category/wallpaper-category.component';
 import { WallpaperListComponent } from './components/aibizhi/wallpaper-list/wallpaper-list.component';
+import { WallpaperComponent } from './components/aibizhi/wallpaper/wallpaper.component';
 import { CodeGenerateComponent } from './components/code-generate/code-generate.component';
 import { FilesComponent } from './components/files/files.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
@@ -55,15 +56,15 @@ const routes: Routes = [
 
       },
       {
-        path: 'wpManage', data: {
+        path: 'wpManage', component:WallpaperComponent, data: {
           customBreadcrumb: '壁纸管理'
         },children:[
           {
-            path: 'category', component: WallpaperCategoryComponent, data: {
+            path: 'category', component: WallpaperCategoryComponent , data: {
               customBreadcrumb: '壁纸分类'
             },children:[
               {
-                path: 'wallpaper', component: WallpaperListComponent, data: {
+                path: 'wallpaper', component: WallpaperListComponent , data: {
                   customBreadcrumb: '壁纸列表'
                 }
               }

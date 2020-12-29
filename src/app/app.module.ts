@@ -58,6 +58,9 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { WallpaperCategoryComponent } from './components/aibizhi/wallpaper-category/wallpaper-category.component';
 import { WallpaperListComponent } from './components/aibizhi/wallpaper-list/wallpaper-list.component';
 import { RouteUtils } from './util/RouteUtils';
+import { WallpaperComponent } from './components/aibizhi/wallpaper/wallpaper.component';
+import { NzBackTopModule } from 'ng-zorro-antd/back-top';
+import { ScrollDirective } from './service/scroll/scroll.directive';
 
 
 
@@ -79,12 +82,13 @@ registerLocaleData(zh);
     RoleComponent,
     ChooseMenuComponent,
     ChooseIconComponent,
-
+    ScrollDirective,
     FilesComponent,
     NoauthComponent,
     DocViewComponent,
     WallpaperCategoryComponent,
     WallpaperListComponent,
+    WallpaperComponent,
 
   ],
   imports: [
@@ -120,10 +124,11 @@ registerLocaleData(zh);
     NzTagModule,
     NzResultModule,
     NzBreadCrumbModule,
-    NzDividerModule
+    NzDividerModule,
+    NzBackTopModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, RouteUtils,
-    NzNotificationService,AuthGuard,NzMessageService ,NzImageService ],
+    NzNotificationService,AuthGuard,NzMessageService ,NzImageService ,ScrollDirective],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

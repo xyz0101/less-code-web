@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { NzImageService } from 'ng-zorro-antd/image';
 import { NzMarks } from 'ng-zorro-antd/slider';
-import { AibizhiService, Category, Wallpaper } from 'src/app/service/files/aibizhi/aibizhi.service';
+import { AibizhiService, Wallpaper } from 'src/app/service/files/aibizhi/aibizhi.service';
 import { RouteUtils } from 'src/app/util/RouteUtils';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-wallpaper-list',
@@ -26,13 +26,20 @@ export class WallpaperListComponent implements OnInit {
   'purple'
 ]
 loading = false;
-showImgList = false;
+ 
+subscribeScoll: any;
+  columnTop: string;
+  
 constructor(private aibizhiService: AibizhiService, private nzImageService: NzImageService,private route:RouteUtils) { }
 category 
 imgList = Wallpaper[0];
 pageIndex = 0;
   ngOnInit(): void {
-    
+    this.subscribeScoll = fromEvent(window, 'scroll')
+    // .debounceTime(50) // 防抖
+   .subscribe((event) => {
+   this.onWindowScroll(event);
+   }); 
     this.route.getRouteParams().subscribe(item=>{
         let category=item.category
         this.category = category;
@@ -42,11 +49,13 @@ pageIndex = 0;
         this.loadWallpaper(category,skip)
     })
   }
-
+  ngOnDestroy() {
+    this.subscribeScoll.unsubscribe();
+  }
   loadWallpaper(code, skip) {
      this.loading=true;
     console.log('加载图片')
-    this.showImgList = true;
+  
     if(this.tabIndex==0){
       this.aibizhiService.getWebImageList(code, skip).subscribe(item => {
         this.imgList = item.data
@@ -62,7 +71,7 @@ pageIndex = 0;
     }
     
   }
-
+  scrollTop=0
 
   hGutter = 16;
   vGutter = 16;
@@ -126,5 +135,25 @@ pageIndex = 0;
       this.tabIndex = data.index
       this.loadWallpaper(this.category,0)
   }
+  onScrollChange(el: Element) {
+    this.scrollTop = el.scrollTop;
+    console.log("滚动：",this.scrollTop)
+  }
 
+  
+  onWindowScroll(event) {
+    // let top = (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop)  ;
+    // var box = document.getElementById("box")
+    // if(top>=800){
+    //   this.loading=true;
+    //   this.aibizhiService.getWebImageList(this.category, 20).subscribe(item => {
+    //     this.imgList = item.data
+    //     console.log("获取到图片：", this.imgList)
+    //     this.loading=false;
+    //   })
+       
+    // }
+    // console.log( window.getComputedStyle(box).height,top);
+   }
+    
 }
