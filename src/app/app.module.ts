@@ -45,7 +45,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-
+import { NzImageService } from 'ng-zorro-antd/image';
 import { FilesComponent } from './components/files/files.component';
 
 import { UsersComponent } from './components/system/users/users.component';
@@ -112,7 +112,7 @@ registerLocaleData(zh);
     NzResultModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, 
-    NzNotificationService,AuthGuard,NzMessageService],
+    NzNotificationService,AuthGuard,NzMessageService,NzImageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

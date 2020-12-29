@@ -20,7 +20,7 @@ export class CodeGenerateService {
     let name= 'result.zip'
     return this.http.downLoadFilePost(CodeGenerateApiPath.GENERATE_CODE_PATH,data).pipe(map(item=>{
       
-      RequestUtil.downloadFileInLocal(item,name,type)
+      RequestUtil.downloadFileInLocal(item.data,name,type)
       return MyResponse.ok()
     }))
 

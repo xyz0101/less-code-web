@@ -56,7 +56,7 @@ export class RequestUtil{
 
     }
 
-   
+ 
  /**
       * 执行文件下载，不去检查返回结果
       * @param url 请求路径
@@ -66,8 +66,10 @@ export class RequestUtil{
      public   downLoadFile (url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable< any>{
         const option = this.handleOption(param, header);
         option.responseType= 'blob'
+        option.observe= 'response'
         console.log('downLoadFile', url, option);
-        return this.http.get<any>(url, option ).pipe(catchError(this.handleError)
+         
+        return this.http.get<any>(url, option ).pipe(catchError(this.handleError),mergeMap(this.dealDownload),
         );
     
     
@@ -84,8 +86,9 @@ export class RequestUtil{
          header?: Map<string, string>): Observable< any>{
         const option = this.handleOption(param, header);
         option.responseType= 'blob'
+        option.observe= 'response'
         console.log('downLoadFilePost', url, option);
-        return this.http.post<any>(url, body,option ).pipe(catchError(this.handleError)
+        return this.http.post<any>(url, body,option ).pipe(catchError(this.handleError),mergeMap(this.dealDownload),
         );
     
     
@@ -99,7 +102,7 @@ export class RequestUtil{
 public   getResquestNoCheck (url: string, param?: Map<string, any>|GetParams, header?: Map<string, string>): Observable< any>{
     const option = this.handleOption(param, header);
     console.log('getResquestNoCheck', url, option);
-
+    
     return this.http.get<any>(url, option).pipe(catchError(this.handleError)
     );
 
@@ -179,6 +182,27 @@ private dealData<T extends MyResponse<any>|any>(event: any  ): Observable< T> {
 
 
 }
+
+private dealDownload (res:  HttpResponse<any>  ): Observable< any> {
+    console.log('dealDownload请求拦截',);
+    let attach =  res.headers.get("content-disposition");
+    attach=ObjectUtils.isNotEmpty(attach)?attach:"result"
+     let data = MyResponse.ok(res.body)
+     data.extraData={fileName:attach.replace('attachment;filename=',''),responseType: res.headers.get("content-type")}
+
+    return new Observable(observer => observer.next(data)); // 请求成功返回响应
+
+
+}
+
+
+
+
+
+
+
+
+
 private handleError(res: HttpResponse<any>)  {   // 请求失败处理
     console.log('失败事件', res);
     // switch (res.status) {
@@ -231,6 +255,6 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
     }
     a.click();
   }
-
+ 
 
 }

@@ -77,7 +77,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     if (ObjectUtils.isNotEmpty(data.userHead)) {
       this.headLoading = true
       this.fileService.downloadFile(data.userHead).subscribe(item => {
-        this.getBase64(item, callback => {
+        this.getBase64(item.data, callback => {
           this.fileList = [{
             name: 'img.png',
             status: "done",
@@ -163,7 +163,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     console.log('加载头像')
     this.dataList.forEach(item => {
       this.fileService.downloadFile(item.userHead).subscribe(file => {
-        let res = new window.File([file], item.userHead, { type: file.type });
+        let res = new window.File([file.data], item.userHead, { type: file.data.type });
         // this.userHeads=this.userHeads.set(item.userHead,file)
         this.getBase64(res, (img: string) => {
 

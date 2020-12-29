@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate    {
   let hasAccessPermission = false
   let urlStr = localStorage.getItem(LocalStorageConst.USER_URLS_KEY)
   console.log("所有地址：",urlStr)
-  let urls = urlStr.split(",")
+  let urls = ObjectUtils.isNotEmpty(urlStr)? urlStr.split(","):[]
   urls.push("/")
   urls.push("/nav")
   urls.push("/nav/noauth")

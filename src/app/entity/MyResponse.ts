@@ -3,6 +3,7 @@ export class MyResponse<T> {
 
     code: string;
     msg: string;
+    extraData:any
     data: T;
     constructor() { }
     public  static  ok<T>(data?):MyResponse<T>{
