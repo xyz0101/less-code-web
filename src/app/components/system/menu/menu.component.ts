@@ -27,6 +27,7 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
     'menuIcon':'menuIcon',
     'menuOrder':'menuOrder',
     'menuType':'menuType',
+    'isLevel1':'level1Flag',
      'permissions':'permissions',
    }
    /**
@@ -37,11 +38,12 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
 
   MENU_TYPE={
     1:'菜单',
-    2:'按钮'
+    2:'按钮',
+    3:'子模块' 
   }
 
   menuTypeChooseList : {key:number;value:string}[]
-
+  tempFormData
   menuMap = new Map();
 
   public getListData(param: any): Observable<any> {
@@ -82,6 +84,7 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
   }
 
   initDrawerEditForm(data){
+    this.tempFormData = data
     this.initMaxOrder(data.parentId)
     this.initMenuType()
     this.initPermissionList()
@@ -100,7 +103,7 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
       menuCode: new FormControl({ value: data.menuCode, disabled: false }, Validators.required),
       menuName: new FormControl({ value: data.menuName, disabled: false }, Validators.required),
       level: new FormControl({ value: data.level, disabled: false } ),
-    
+      isLevel1: new FormControl({ value: data.level1Flag, disabled: false } ),
       menuOrder: new FormControl({ value: data.menuOrder, disabled: false }, Validators.required),
       menuIcon: new FormControl({ value: data.menuIcon, disabled: false }),
       menuType: new FormControl({ value: data.menuType, disabled: false }, Validators.required),
@@ -131,13 +134,29 @@ export class MenuComponent  extends BaseComponent  implements OnInit {
        this.permissionList = arr;
      })
   }
+
+  onSelectLevel1(){
+    if(   this.validateForm.get("isLevel1").value){
+      this.validateForm.get("parentId").setValue(-1);
+    }else{
+      this.validateForm.get("parentId").setValue(this.tempFormData.parentId);
+    }
+    this.validateForm.get("menuOrder").setValue(this.tempFormData.menuOrder);
+    console.log('一级菜单选择后：',this.validateForm.get("parentId").value)
+    this.initMaxOrder(this.validateForm.get("parentId").value)
+  }
+
   /**
    * 初始化最大序号
    */
   initMaxOrder(parentId: any) {
-    this.menuService.getMaxOrder(parentId).subscribe(order=>{
-        this.maxOrder = this.isAdd?order:order-1;
-    })
+    if(ObjectUtils.isNotEmpty(parentId)){ 
+      this.menuService.getMaxOrder(parentId).subscribe(order=>{
+          this.maxOrder = this.isAdd?order:order-1;
+      })
+    }else{
+      this.maxOrder = 0;
+    }
   }
   initMenuType() {
     let arr = []

@@ -5,6 +5,7 @@ import { LocalStorageConst } from 'src/app/common/constant/LocalStorageConst';
 import { MenuService, TreeNode } from 'src/app/service/system/menu/menu.service';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';
+import { RouteUtils } from 'src/app/util/RouteUtils';
 
 @Component({
   selector: 'app-nav-bar',
@@ -29,44 +30,23 @@ export class NavBarComponent implements OnInit {
   mode = false;
   dark = false;
   
-  constructor(private http:RequestUtil,private menuService:MenuService) { }
+  constructor(private http:RequestUtil,private menuService:MenuService,private router:RouteUtils) { }
   isCollapsed = false;
   menuTree :TreeNode[]
   ngOnInit(): void {
     this.menuService.getMenuListByUserNoButton(this.fieldMapping).subscribe(item=>{
       if(item.code=='200'){
         this.menuTree=item.data
-        this.cacheUserPermission(this.menuTree)
       }
     })
   }
-  cacheUserPermission(menuTree: any[]) {
-    let urls= []
-    menuTree.forEach(item=>{
-        this.loadPermission(item,urls)
-    })
-    let urlStr =''
-    urls.forEach(item=>{urlStr=urlStr+','+item});
-    urlStr =urls.length>0?urlStr.substring(1,urlStr.length):urlStr
-    console.log('缓存用户的url:',urlStr)
-    localStorage.setItem(LocalStorageConst.USER_URLS_KEY,urlStr );
-  }
-  loadPermission(item: any , urls:any[]) {
-     if(ObjectUtils.isNotEmpty(item.routeUrl)){
-      urls.push(item.routeUrl)
-     }
-     if(ObjectUtils.isNotEmpty(item.children)&&item.children.length>0){
-       item.children.forEach(child=>{
-         this.loadPermission(child,urls)
-       })
-     }
-  }
+ 
 
   logOut(){
     this.http.getResquest(LoginApiPath.LOGOUT_PATH).subscribe(res=>{
       if(res.code=='200'){
         RequestUtil.notifySuccess("注销成功")
-        this.http.simpleRoute('/login')
+        this.router.simpleRoute('/login')
       }
     })
   }

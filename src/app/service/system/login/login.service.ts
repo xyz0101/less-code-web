@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LoginApiPath } from 'src/app/api_path/system/LoginApiPath';
 import { RequestUtil } from 'src/app/util/RequestUtil';
+import { RouteUtils } from 'src/app/util/RouteUtils';
 import { SecurityUtils } from 'src/app/util/SecurityUtils';
 
 @Injectable({
@@ -11,7 +12,7 @@ import { SecurityUtils } from 'src/app/util/SecurityUtils';
 })
 export class LoginService {
 
-  constructor(private http: RequestUtil, private notifly: NzNotificationService) { }
+  constructor(private http: RequestUtil,private router:RouteUtils , private notifly: NzNotificationService) { }
   /**
    * 获取公钥
    */
@@ -36,7 +37,7 @@ export class LoginService {
           this.notifly.success("提示信息！","登陆成功！")
             localStorage.setItem("token",item.data)
             localStorage.setItem("token",item.data)
-            this.http.route("/nav/system/user",{})
+            this.router.route("/nav/system/user",{})
         }
       
        })

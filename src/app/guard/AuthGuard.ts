@@ -28,13 +28,18 @@ export class AuthGuard implements CanActivate    {
   }
   let hasAccessPermission = false
   let urlStr = localStorage.getItem(LocalStorageConst.USER_URLS_KEY)
+  let currentURL= state.url;
+  if(currentURL.indexOf("?")>0){
+    currentURL = currentURL.substring(0,currentURL.indexOf("?"))
+  }
+  console.log("当前地址：",currentURL)
   console.log("所有地址：",urlStr)
   let urls = ObjectUtils.isNotEmpty(urlStr)? urlStr.split(","):[]
   urls.push("/")
   urls.push("/nav")
   urls.push("/nav/noauth")
-  if(state.url){
-      hasAccessPermission = urls.indexOf(state.url)>0;
+  if(currentURL){
+      hasAccessPermission = urls.indexOf(currentURL)>0;
      if(!hasAccessPermission){
          this.router.navigate(['/nav/noauth'])
      }

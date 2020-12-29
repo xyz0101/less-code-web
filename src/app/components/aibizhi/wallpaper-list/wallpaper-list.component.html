@@ -1,29 +1,16 @@
- 
-      <!-- 壁纸分类  -->
- <div *ngIf="!showImgList"  style="text-align: center;" >
-  <div style="margin-left: 5%; " class="gutter-example">
-    <div  nz-row [nzGutter]="[hGutter, vGutter]">
-      <div nz-col class="gutter-row" [nzSpan]="24 / categories.length" *ngFor="let data of categories">
-        <div  (click)="loadWallpaper(data.id,1)" class="grid-config">
-            <nz-card nzHoverable  #card style="width:300px;" [nzCover]="coverTemplate">
-                <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.count">
-                </nz-card-meta>
-                <ng-template #coverTemplate>
-                    <img   [src]="data.cover" />
-                </ng-template>
-                </nz-card>
-            
-        </div>
-      </div>
-      
-    </div>
-  </div>
- </div>
 
+ <nz-spin [nzSpinning]="loading">
+<nz-tabset (nzSelectChange) = "onSelectTable($event)">
+  <nz-tab nzTitle="网络壁纸">
      
-
-       <!-- 壁纸分类  -->
-       <div *ngIf="showImgList" style="text-align: center;" >
+  </nz-tab>
+  <nz-tab nzTitle="桌面壁纸">
+   
+  </nz-tab>
+  
+</nz-tabset>
+    <!-- 壁纸分类  -->
+    <div *ngIf="showImgList" style="text-align: center;" >
         <div style="margin-left: 5%; " class="gutter-example">
           <div  nz-row [nzGutter]="[hGutter, vGutter]">
             <div nz-col class="gutter-row" [nzSpan]="24 / imgList.length" *ngFor="let data of imgList">
@@ -57,5 +44,4 @@
           </div>
         </div>
        </div>
-      
-           
+      </nz-spin>

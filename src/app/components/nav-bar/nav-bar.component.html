@@ -62,6 +62,10 @@
     </nz-header>
     <nz-content>
       <div class="inner-content">
+        <nz-breadcrumb [nzAutoGenerate]="'true'" [nzRouteLabel]="'customBreadcrumb'">
+           
+        </nz-breadcrumb>
+        <nz-divider></nz-divider>
 
         <router-outlet></router-outlet>
       </div>

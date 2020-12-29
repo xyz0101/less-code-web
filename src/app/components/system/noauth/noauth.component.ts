@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestUtil } from 'src/app/util/RequestUtil';
+import { RouteUtils } from 'src/app/util/RouteUtils';
 
 @Component({
   selector: 'app-noauth',
@@ -8,12 +9,12 @@ import { RequestUtil } from 'src/app/util/RequestUtil';
 })
 export class NoauthComponent implements OnInit {
 
-  constructor(private http:RequestUtil) { }
+  constructor(private router:RouteUtils) { }
 
   ngOnInit(): void {
   }
 
   backHome(){
-    this.http.simpleRoute("/")
+    this.router.simpleRoute("/")
   }
 }

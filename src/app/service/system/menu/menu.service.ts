@@ -7,6 +7,7 @@ import { MyResponse } from 'src/app/entity/MyResponse';
 import { MenuUtils } from 'src/app/util/MenuUtils';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';
+import { SecurityUtils } from 'src/app/util/SecurityUtils';
 export class TreeNode {
   key;
   level;
@@ -47,6 +48,7 @@ export class MenuService {
   getMenuListByUserNoButton(fieldMapping):Observable<MyResponse<TreeNode[]>>{
     return this.http.getResquest(MenuApiPath.MENU_TREEBY_USER_PATH).pipe(map(item=>{
         if(item.code=='200'){
+           SecurityUtils.cacheUserPermission(item.data)
             return MyResponse.ok<TreeNode[]>(this.mappingData(item.data,fieldMapping,false))
         }
     }))

@@ -224,14 +224,7 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
   }
 
 
-  public route(path,param){
-    this.router.navigate([path],param );
-  }
-
-  public simpleRoute(path){
-    this.router.navigate([path] );
-  }
-
+ 
   public static notifySuccess (msg){
     RequestUtil.notification.success("提示信息",msg);
   }
