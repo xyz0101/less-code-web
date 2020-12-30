@@ -66,7 +66,7 @@ const routes: Routes = [
               {
                 path: 'wallpaper', component: WallpaperListComponent , data: {
                   customBreadcrumb: '壁纸列表'
-                }
+                } , canActivate: [AuthGuard],
               }
             ]
           }

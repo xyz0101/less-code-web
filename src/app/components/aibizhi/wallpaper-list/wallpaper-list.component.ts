@@ -40,13 +40,17 @@ pageIndex = 0;
    .subscribe((event) => {
    this.onWindowScroll(event);
    }); 
+   let temp = -1;
     this.route.getRouteParams().subscribe(item=>{
         let category=item.category
         this.category = category;
         let skip = item.skip?item.skip: this.pageIndex;
-        console.log("加载壁纸：",category,skip)
-        if(category&&skip)
-        this.loadWallpaper(category,skip)
+        console.log("加载壁纸：",category,skip,temp)
+        if(category&&skip&&temp!=skip){
+          this.loadWallpaper(category,skip)
+          temp = skip
+        }
+        
     })
   }
   ngOnDestroy() {
@@ -135,25 +139,50 @@ pageIndex = 0;
       this.tabIndex = data.index
       this.loadWallpaper(this.category,0)
   }
-  onScrollChange(el: Element) {
-    this.scrollTop = el.scrollTop;
-    console.log("滚动：",this.scrollTop)
-  }
+ 
 
-  
+  needLoad = false;
+  loadingNewData = false;
   onWindowScroll(event) {
-    // let top = (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop)  ;
-    // var box = document.getElementById("box")
-    // if(top>=800){
-    //   this.loading=true;
-    //   this.aibizhiService.getWebImageList(this.category, 20).subscribe(item => {
-    //     this.imgList = item.data
-    //     console.log("获取到图片：", this.imgList)
-    //     this.loading=false;
-    //   })
-       
-    // }
-    // console.log( window.getComputedStyle(box).height,top);
+   
+   let temp = this.getTempHeight()
+     
+    if(temp<500&&!this.loadingNewData){
+      this.needLoad = true;
+    }
+
+
+    if(this.needLoad){
+      this.loadingNewData=true;
+      this.loading=true;
+      this.pageIndex+=20
+      this.aibizhiService.getWebImageList(this.category,this.pageIndex ).subscribe(item => {
+        let arr =this.imgList?[...this.imgList]:[];
+        item.data.forEach(item=>{
+          arr.push(item)
+        })
+        this.imgList = arr
+        console.log("滚动获取到图片：", this.imgList.length,item.data)
+        this.loading=false;
+        let t = this.getTempHeight();
+        console.log('加载后',t);
+        if(item.data.length>0){
+          this.loadingNewData = false;
+        }
+      })
+      this.needLoad = false;
+    }
+    console.log(temp,this.needLoad,this.loadingNewData,event,);
    }
+  getTempHeight() :number{
+    let pageH = document.documentElement.clientHeight
+   let head = 300;
+    let top = (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop)  ;
+    let box = document.getElementById("box")
+    let height = window.getComputedStyle(box).height.replace('px','')
+    let temp = Number(height)-top-(pageH-300)
+    console.log(top,height,temp);
+    return temp
+  }
     
 }
