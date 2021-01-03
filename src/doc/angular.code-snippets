@@ -100,7 +100,7 @@
 "  <nz-space-item>",
 "    <div >",
 "<nz-table *ngIf='!isFormEdit' nzShowSizeChanger [nzData]='dataList' [nzFrontPagination]='false' [nzLoading]='loading'",
-"  [nzTotal]='total' [nzPageSize]='pageSize' [nzPageIndex]='pageIndex' (nzQueryParams)=’onTableLoad($$event)'  [nzBordered]='true' >",
+"  [nzTotal]='total' [nzPageSize]='pageSize' [nzPageIndex]='pageIndex' (nzQueryParams)'onTableLoad($$event)'  [nzBordered]='true' >",
 "  <thead>",
 "    <tr>",
 "      <th [(nzChecked)]='checked' [nzIndeterminate]='indeterminate' (nzCheckedChange)='onAllChecked($$event)'></th>",

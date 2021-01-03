@@ -59,7 +59,7 @@ pageIndex = 0;
   loadWallpaper(code, skip) {
      this.loading=true;
     console.log('加载图片')
-  
+    
     if(this.tabIndex==0){
       this.aibizhiService.getWebImageList(code, skip).subscribe(item => {
         this.imgList = item.data
@@ -75,6 +75,9 @@ pageIndex = 0;
     }
     
   }
+
+
+
   scrollTop=0
 
   hGutter = 16;
@@ -127,7 +130,7 @@ pageIndex = 0;
     const images = [
       {
         src: data.wp,
-
+       
       }
     ];
     this.nzImageService.preview(images);
@@ -156,7 +159,10 @@ pageIndex = 0;
       this.loadingNewData=true;
       this.loading=true;
       this.pageIndex+=20
-      this.aibizhiService.getWebImageList(this.category,this.pageIndex ).subscribe(item => {
+      let imgObserv =  this.tabIndex==0?this.aibizhiService.getWebImageList(this.category,this.pageIndex):
+      this.aibizhiService.getImageList(this.category,this.pageIndex);
+
+      imgObserv.subscribe(item => {
         let arr =this.imgList?[...this.imgList]:[];
         item.data.forEach(item=>{
           arr.push(item)
@@ -176,7 +182,6 @@ pageIndex = 0;
    }
   getTempHeight() :number{
     let pageH = document.documentElement.clientHeight
-   let head = 300;
     let top = (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop)  ;
     let box = document.getElementById("box")
     let height = window.getComputedStyle(box).height.replace('px','')

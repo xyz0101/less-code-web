@@ -4,7 +4,6 @@ import { WallpaperCategoryComponent } from './components/aibizhi/wallpaper-categ
 import { WallpaperListComponent } from './components/aibizhi/wallpaper-list/wallpaper-list.component';
 import { WallpaperComponent } from './components/aibizhi/wallpaper/wallpaper.component';
 import { CodeGenerateComponent } from './components/code-generate/code-generate.component';
-import { FilesComponent } from './components/files/files.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LoginComponent } from './components/system/login/login.component';
 import { MenuComponent } from './components/system/menu/menu.component';
@@ -25,7 +24,7 @@ const routes: Routes = [
     path: 'login', component: LoginComponent, data: {
       customBreadcrumb: '登录'
     }
-  },
+  }, 
   {
     path: 'nav', component: NavBarComponent, data: {
       customBreadcrumb: '首页'
@@ -80,6 +79,19 @@ const routes: Routes = [
           } },
         ]
       },
+      //其他工具
+      {
+        path:'some-tools',loadChildren:'./modules/some-tool/some-tool.module#SomeToolModule',data: {
+          customBreadcrumb: '一些工具'
+        }
+      },
+      //文件预览
+      {
+        path:'doc',loadChildren:'./modules/doc/doc.module#DocModule',data: {
+          customBreadcrumb: '文档管理'
+        }
+      },
+
     ]
     //路由守卫，登陆检测
     , canActivate: [AuthGuard],

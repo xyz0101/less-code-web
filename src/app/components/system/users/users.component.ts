@@ -136,7 +136,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
 
 
-  fileUploadPath = FileApiPath.UPLOAD_FILE_PATH
+
   uploadedFileCode = null;
   isAdd = false;
   /**

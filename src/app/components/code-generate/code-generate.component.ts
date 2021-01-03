@@ -20,6 +20,121 @@ import { BaseComponent } from '../BaseComponent';
 export class CodeGenerateComponent extends BaseComponent implements OnInit {
   static TABLE_COL_NAME_PATTERN="^(?!_)[a-zA-Z0-9_]+(?<!_)$"
    
+
+  defaultColums = [{
+    "idFlag":true,
+    "autoIncFlag":true,
+    "nullFlag":false,
+    "name":"id",
+    "length":10,
+    "type":"INT",
+    "decimalLength":0,
+    "defaultValue":null,
+    "encode":"utf8mb4",
+    "sort":"utf8mb4_bin",
+    "comments":"主键",
+    "javaType":"Integer",
+    "javaColName":"id",
+    "readOnly":true
+    },
+    {
+    "idFlag":false,
+    "autoIncFlag":false,
+    "nullFlag":true,
+    "name":"delete_flag",
+    "length":10,
+    "type":"INT",
+    "decimalLength":0,
+    "defaultValue":null,
+    "encode":"utf8mb4",
+    "sort":"utf8mb4_bin",
+    "comments":"删除标识",
+    "javaType":"Integer",
+    "javaColName":"deleteFlag",
+    "readOnly":true
+    },
+    {
+    "idFlag":false,
+    "autoIncFlag":false,
+    "nullFlag":true,
+    "name":"created_by",
+    "length":255,
+    "type":"VARCHAR",
+    "decimalLength":null,
+    "defaultValue":null,
+    "encode":"utf8mb4",
+    "sort":"utf8mb4_bin",
+    "comments":"创建人",
+    "javaType":"String",
+    "javaColName":"createdBy",
+    "readOnly":true
+    },
+    {
+    "idFlag":false,
+    "autoIncFlag":false,
+    "nullFlag":true,
+    "name":"creation_date",
+    "length":null,
+    "type":"DATETIME",
+    "decimalLength":null,
+    "defaultValue":null,
+    "encode":"utf8mb4",
+    "sort":"utf8mb4_bin",
+    "comments":"创建时间",
+    "javaType":"LocalDateTime",
+    "javaColName":"creationDate",
+    "readOnly":true
+    },
+    {
+    "idFlag":false,
+    "autoIncFlag":false,
+    "nullFlag":true,
+    "name":"last_update_date",
+    "length":null,
+    "type":"DATETIME",
+    "decimalLength":null,
+    "defaultValue":null,
+    "encode":"utf8mb4",
+    "sort":"utf8mb4_bin",
+    "comments":"更新时间",
+    "javaType":"LocalDateTime",
+    "javaColName":"lastUpdateDate",
+    "readOnly":true
+    },
+    {
+    "idFlag":false,
+    "autoIncFlag":false,
+    "nullFlag":true,
+    "name":"last_updated_by",
+    "length":255,
+    "type":"VARCHAR",
+    "decimalLength":null,
+    "defaultValue":null,
+    "encode":"utf8mb4",
+    "sort":"utf8mb4_bin",
+    "comments":"更新人",
+    "javaType":"String",
+    "javaColName":"lastUpdatedBy",
+    "readOnly":true
+    },
+    {
+    "idFlag":false,
+    "autoIncFlag":false,
+    "nullFlag":true,
+    "name":"version_number",
+    "length":10,
+    "type":"INT",
+    "decimalLength":0,
+    "defaultValue":"0",
+    "encode":"utf8mb4",
+    "sort":"utf8mb4_bin",
+    "comments":"版本号",
+    "javaType":"Integer",
+    "javaColName":"versionNumber",
+    "readOnly":true
+    }]
+
+
   /**
    * 表字段类型的信息
    *  "DATE": {
@@ -57,7 +172,7 @@ export class CodeGenerateComponent extends BaseComponent implements OnInit {
         [Validators.required 
            ] ),
       packageName: new FormControl({ value:"com.jenkin."
-      , disabled: true }, Validators.required),
+      , disabled: false }, Validators.required),
       entityPackageName: new FormControl({ value: 'com.jenkin.common.entity', disabled: false }, Validators.required),
       author: new FormControl({ value: "jenkin", disabled: false }, Validators.required),
       className: new FormControl({ value: null, disabled: false }, Validators.required),
@@ -80,6 +195,12 @@ export class CodeGenerateComponent extends BaseComponent implements OnInit {
   }
 
   async initFormEditForm(data: any) {
+
+    if(this.isAdd){
+      
+      data.columns=this.defaultColums
+    }
+
     this.validateForm= this.fb.group({
       id: new FormControl({ value: data.id, disabled: false }),
       tableName: new FormControl({ value: data.tableName, disabled: false },

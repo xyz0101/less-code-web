@@ -230,7 +230,7 @@ private handleError(res: HttpResponse<any>)  {   // 请求失败处理
   }
 
   public static notifyError (msg){
-    RequestUtil.notification.success("错误信息",msg);
+    RequestUtil.notification.error("错误信息",msg);
   }
 
  /**

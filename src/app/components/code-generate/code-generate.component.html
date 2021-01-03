@@ -1,7 +1,8 @@
 <nz-space *ngIf="!isFormEdit" [nzSize]="12" nzDirection="vertical" style="width: 100%;">
   <nz-space-item>
     <div>
-      <button *ngIf="hasPermission(this.buttonCodes.codegenerator.addTable)" nz-button (click)="createData('form')">新建表</button>
+      <button *ngIf="hasPermission(this.buttonCodes.codegenerator.addTable)" nz-button
+        (click)="createData('form')">新建表</button>
     </div>
   </nz-space-item>
   <nz-space-item>
@@ -79,9 +80,9 @@
           <td>{{data.defaultValue}}</td>
           <td>{{data.encode}}</td>
           <td>{{ data.sort }}</td>
-          <td>{{ data.idFlag }}</td>
-          <td>{{ data.autoIncFlag }}</td>
-          <td>{{ data.nullFlag }}</td>
+          <td>{{ data.idFlag?'是':'否' }}</td>
+          <td>{{ data.autoIncFlag?'是':'否' }}</td>
+          <td>{{ data.nullFlag?'是':'否' }}</td>
           <td>{{ data.comments }}</td>
 
         </tr>
@@ -121,7 +122,7 @@
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="tableCollation">字符集排序</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请选择正确的字符集排序">
-        <nz-select formControlName="tableCollation" id="tableCollation" >
+        <nz-select formControlName="tableCollation" id="tableCollation">
           <nz-option *ngFor="let o of collationInfoMap[validateForm.value.encode]" [nzValue]="o" [nzLabel]="o">
           </nz-option>
         </nz-select>
@@ -152,8 +153,8 @@
   <nz-space [nzSize]="24" nzDirection="vertical" style="width: 100%;">
     <nz-space-item>
       <!-- width: 80%;margin-left: 10%; -->
-      <nz-table style="" #currentEditTable [nzData]="editTable" nzSize="small"
-        [nzShowPagination]="false" [nzBordered]="true">
+      <nz-table   #currentEditTable [nzData]="editTable" nzSize="small" [nzShowPagination]="true"
+        [nzBordered]="true">
         <thead>
           <tr>
             <th>列名称</th>
@@ -173,93 +174,115 @@
           </tr>
         </thead>
         <tbody style="text-align: center;">
+
           <tr *ngFor="let row of  currentEditTable.data">
-            <!-- 列名称 -->
-            <td>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <ng-template #suffixTemplateInfo >
-              <i nz-icon nz-tooltip  
-                nzTooltipTitle="名称不能为中文，只能有数字字母下划线，不能以下划线开头或结尾"
-                nzType="info-circle"></i></ng-template>
-              
-              <input type="text"    nz-input [(ngModel)]="row.name" placeholder="请输入列名"
-                (change)='onInputTableName( currentEditTable.data,row)' />
-              </nz-input-group>
-             
-            </td>
-           
-            <!-- JAVA列名称 -->
+            <!-- <ng-container *ngIf='row.readOnly'>
+               <td>{{ row.name }}</td>
             <td>{{ row.javaColName }}</td>
-            <!-- 列类型 -->
-            <td>
-              <nz-select [(ngModel)]="row.type" (ngModelChange)='onSelectType( currentEditTable.data,row)'>
-                <nz-option *ngFor="let o of typeInfos" [nzValue]="o" [nzLabel]="o"></nz-option>
-              </nz-select>
-            </td>
-            <!-- JAVA列类型 -->
+            <td>{{ row.type }}</td>
             <td>{{ row.javaType }}</td>
-            <!-- 列长度 -->
-            <td *ngIf="row.mysqlType.defaultLength==null||row.mysqlType.defaultLength==undefined">{{row.length}}</td>
-            <td *ngIf="row.mysqlType.defaultLength>0">
-              <nz-input-number [(ngModel)]="row.length" [nzMin]="1" [nzMax]="row.mysqlType.defaultLength" [nzStep]="1">
-              </nz-input-number>
-            </td>
-            <!-- 列数字长度 -->
-            <td *ngIf="row.mysqlType.needDecimalLength>0">
-              <nz-input-number [(ngModel)]="row.decimalLength" [nzMin]="1" [nzMax]="row.mysqlType.needDecimalLength"
-                [nzStep]="1"></nz-input-number>
-            </td>
-            <td *ngIf="row.mysqlType.needDecimalLength==null||row.mysqlType.needDecimalLength==undefined">
-              {{row.decimalLength}}
-            </td>
-            <!-- 列默认值 -->
-            <td>
-              <input type="text" nz-input [(ngModel)]="row.defaultValue" />
-            </td>
-            <!-- 列字符编码 -->
-            <!-- 列字符编码排序 -->
-            <td *ngIf='row.mysqlType.needEnCode'>
-              <nz-select [(ngModel)]="row.encode" (ngModelChange)='onSelectSort( currentEditTable.data,row)'>
-                <nz-option *ngFor="let o of  encodeList" [nzValue]="o" [nzLabel]="o"></nz-option>
-              </nz-select>
-            </td>
+            <td>{{row.length}}</td>
+            <td>{{row.decimalLength}}</td>
+            <td>{{row.defaultValue}}</td>
+            <td>{{row.encode}}</td>
+            <td>{{ row.sort }}</td>
+            <td>{{ row.idFlag?'是':'否' }}</td>
+            <td>{{ row.autoIncFlag?'是':'否' }}</td>
+            <td>{{ row.nullFlag?'是':'否' }}</td>
+            <td>{{ row.comments }}</td>
+            <td> </td>
+            </ng-container> -->
+            <ng-container *ngIf='!row.readOnly||1==1'>
+          
+              <!-- 列名称 -->
+              <td>
+                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                  <ng-template #suffixTemplateInfo>
+                    <i nz-icon nz-tooltip nzTooltipTitle="名称不能为中文，只能有数字字母下划线，不能以下划线开头或结尾" nzType="info-circle"></i>
+                  </ng-template>
 
-            <td *ngIf='row.mysqlType.needEnCode'>
-              <nz-select [(ngModel)]="row.sort">
-                <nz-option *ngFor="let o of collationInfoMap[row.encode]" [nzValue]="o" [nzLabel]="o">
-                </nz-option>
-              </nz-select>
-            </td>
+                  <input type="text"   nz-input
+                    [(ngModel)]="row.name" placeholder="请输入列名"
+                    (change)='onInputTableName( currentEditTable.data,row)' />
+                </nz-input-group>
 
-            <td *ngIf='!row.mysqlType.needEnCode'>{{row.encode}}</td>
-            <td *ngIf='!row.mysqlType.needEnCode'>{{ row.sort }}</td>
+              </td>
 
-            <!-- 是否主键 -->
-            <td>
-              <label nz-checkbox [(ngModel)]="row.idFlag"
-                (ngModelChange)='onChangeIdFlag( currentEditTable.data,row)'></label>
-            </td>
+              <!-- JAVA列名称 -->
+              <td>{{ row.javaColName }}</td>
+              <!-- 列类型 -->
+              <td>
+                <nz-select [(ngModel)]="row.type" (ngModelChange)='onSelectType( currentEditTable.data,row)'>
+                  <nz-option *ngFor="let o of typeInfos" [nzValue]="o" [nzLabel]="o"></nz-option>
+                </nz-select>
+              </td>
+              <!-- JAVA列类型 -->
+              <td>{{ row.javaType }}</td>
+              <!-- 列长度 -->
+              <td *ngIf="row.mysqlType.defaultLength==null||row.mysqlType.defaultLength==undefined">{{row.length}}</td>
+              <td *ngIf="row.mysqlType.defaultLength>0">
+                <nz-input-number [(ngModel)]="row.length" [nzMin]="1" [nzMax]="row.mysqlType.defaultLength"
+                  [nzStep]="1">
+                </nz-input-number>
+              </td>
+              <!-- 列数字长度 -->
+              <td *ngIf="row.mysqlType.needDecimalLength>0">
+                <nz-input-number [(ngModel)]="row.decimalLength" [nzMin]="1" [nzMax]="row.mysqlType.needDecimalLength"
+                  [nzStep]="1"></nz-input-number>
+              </td>
+              <td *ngIf="row.mysqlType.needDecimalLength==null||row.mysqlType.needDecimalLength==undefined">
+                {{row.decimalLength}}
+              </td>
+              <!-- 列默认值 -->
+              <td>
+                <input type="text" nz-input [(ngModel)]="row.defaultValue" />
+              </td>
+              <!-- 列字符编码 -->
+              <!-- 列字符编码排序 -->
+              <td *ngIf='row.mysqlType.needEnCode'>
+                <nz-select [(ngModel)]="row.encode" (ngModelChange)='onSelectSort( currentEditTable.data,row)'>
+                  <nz-option *ngFor="let o of  encodeList" [nzValue]="o" [nzLabel]="o"></nz-option>
+                </nz-select>
+              </td>
 
-            <td *ngIf='!(row.idFlag&&row.mysqlType.needIncrement)'>{{ row.autoIncFlag?'是':'否' }}</td>
+              <td *ngIf='row.mysqlType.needEnCode'>
+                <nz-select [(ngModel)]="row.sort">
+                  <nz-option *ngFor="let o of collationInfoMap[row.encode]" [nzValue]="o" [nzLabel]="o">
+                  </nz-option>
+                </nz-select>
+              </td>
 
-            <!-- 是否为自动递增 -->
-            <td *ngIf='row.idFlag&&row.mysqlType.needIncrement'> <label nz-checkbox
-                [(ngModel)]="row.autoIncFlag"></label>
-            </td>
-            <!-- 是否为空 -->
-            <td *ngIf='!row.idFlag'> <label nz-checkbox [(ngModel)]="row.nullFlag"></label> </td>
-            <td *ngIf='row.idFlag'> {{row.nullFlag?'是':'否' }} </td>
-            <!-- 备注 -->
-            <td>
+              <td *ngIf='!row.mysqlType.needEnCode'>{{row.encode}}</td>
+              <td *ngIf='!row.mysqlType.needEnCode'>{{ row.sort }}</td>
 
-              <textarea rows="1" [(ngModel)]="row.comments" nz-input></textarea>
+              <!-- 是否主键 -->
+              <td>
+                <label nz-checkbox [(ngModel)]="row.idFlag"
+                  (ngModelChange)='onChangeIdFlag( currentEditTable.data,row)'></label>
+              </td>
 
-            </td>
-            <td style="width: 50px;">
-              <span class="operation">
-                <a (click)='deleteTableRow(row.id)'> 删除</a>
-              </span>
-            </td>
+              <td *ngIf='!(row.idFlag&&row.mysqlType.needIncrement)'>{{ row.autoIncFlag?'是':'否' }}</td>
+
+              <!-- 是否为自动递增 -->
+              <td *ngIf='row.idFlag&&row.mysqlType.needIncrement'> <label nz-checkbox
+                  [(ngModel)]="row.autoIncFlag"></label>
+              </td>
+              <!-- 是否为空 -->
+              <td *ngIf='!row.idFlag'> <label nz-checkbox [(ngModel)]="row.nullFlag"></label> </td>
+              <td *ngIf='row.idFlag'> {{row.nullFlag?'是':'否' }} </td>
+              <!-- 备注 -->
+              <td>
+
+                <textarea rows="1" [(ngModel)]="row.comments" nz-input></textarea>
+
+              </td>
+              <td style="width: 50px;">
+                <span class="operation">
+                  <a (click)='deleteTableRow(row.id)'> 删除</a>
+                </span>
+              </td>
+            </ng-container>
+
           </tr>
         </tbody>
       </nz-table>
@@ -280,17 +303,22 @@
   </nz-space>
 
 </div>
+
  
+
+
+
+
+
 <!-- 编辑页面 对话框-->
 
 <!-- <button nz-button nzType="primary" (click)="showModal()">
     <span>Show Modal</span>
   </button> -->
-  <div   *ngIf="isDialogVisible">
-    <nz-modal  nzWidth="620px"   [(nzVisible)]="isDialogVisible" nzTitle="代码生成配置项" 
-    (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
-    [nzOkLoading]="isDialogOkLoading">
-    <form  nz-form [formGroup]="validateForm">
+<div *ngIf="isDialogVisible">
+  <nz-modal nzWidth="620px" [(nzVisible)]="isDialogVisible" nzTitle="代码生成配置项" (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk()" [nzOkLoading]="isDialogOkLoading">
+    <form nz-form [formGroup]="validateForm">
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="projectModule">项目模块名称</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="项目模块名称不能为空">
@@ -300,47 +328,47 @@
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="basePackageName">基础包路径</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="基础包路径不能为空">
-          <input nz-input formControlName="basePackageName" id="basePackageName" (ngModelChange)="changePackageName()" />
+          <input nz-input formControlName="basePackageName" id="basePackageName"
+            (ngModelChange)="changePackageName()" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="packageName">包名称</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24"  >
-          <input nz-input formControlName="packageName"  id="packageName" />
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input readonly='true' nz-input formControlName="packageName" id="packageName" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="entityPackageName">实体类的基础包名称</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input nz-input formControlName="entityPackageName" id="entityPackageName" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="author">作者</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input nz-input formControlName="author" id="author" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="className">类名称</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input nz-input formControlName="className" id="className" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="classNameLower">类名称，首字母小写</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input nz-input formControlName="classNameLower" id="classNameLower" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="moduleName">模块名称</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input nz-input formControlName="moduleName" id="moduleName" />
         </nz-form-control>
       </nz-form-item>
-     
-      </form>
+
+    </form>
   </nz-modal>
-  </div>
-  
+</div>

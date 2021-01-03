@@ -46,7 +46,6 @@ import * as AllIcons from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzImageService } from 'ng-zorro-antd/image';
-import { FilesComponent } from './components/files/files.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
 import { UsersComponent } from './components/system/users/users.component';
@@ -61,6 +60,8 @@ import { RouteUtils } from './util/RouteUtils';
 import { WallpaperComponent } from './components/aibizhi/wallpaper/wallpaper.component';
 import { NzBackTopModule } from 'ng-zorro-antd/back-top';
 import { ScrollDirective } from './service/scroll/scroll.directive';
+import { SomeToolModule } from './modules/some-tool/some-tool.module';
+import { DocModule } from './modules/doc/doc.module';
 
 
 
@@ -83,7 +84,6 @@ registerLocaleData(zh);
     ChooseMenuComponent,
     ChooseIconComponent,
     ScrollDirective,
-    FilesComponent,
     NoauthComponent,
     DocViewComponent,
     WallpaperCategoryComponent,
@@ -93,6 +93,7 @@ registerLocaleData(zh);
   ],
   imports: [
     NzIconModule.forRoot(iconsArr),
+    SomeToolModule,
     BrowserModule,
     AppRoutingModule,
     IconsProviderModule,
@@ -125,7 +126,8 @@ registerLocaleData(zh);
     NzResultModule,
     NzBreadCrumbModule,
     NzDividerModule,
-    NzBackTopModule
+    NzBackTopModule,
+    DocModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, RouteUtils,
     NzNotificationService,AuthGuard,NzMessageService ,NzImageService ,ScrollDirective],

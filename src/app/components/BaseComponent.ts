@@ -11,6 +11,9 @@ import { RequestUtil } from "../util/RequestUtil";
 import { ButtonCodes } from './ButonCodes';
 
 export abstract class BaseComponent extends ButtonCodes{
+
+    fileUploadPath = FileApiPath.UPLOAD_FILE_PATH
+
     total = 1;
     dataList = [];
     loading = false;
@@ -125,6 +128,7 @@ export abstract class BaseComponent extends ButtonCodes{
         console.log('验证表单',this.validateForm.value)
         console.log(this.validateForm.status)
         if(this.validateForm.status=='INVALID'){
+            RequestUtil.notifyError('表单验证不通过！请检查表单')
         throw new Error('表单验证不通过');
         }
     }

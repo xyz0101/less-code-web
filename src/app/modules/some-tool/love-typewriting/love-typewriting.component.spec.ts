@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FilesComponent } from './files.component';
+import { LoveTypewritingComponent } from './love-typewriting.component';
 
-describe('FilesComponent', () => {
-  let component: FilesComponent;
-  let fixture: ComponentFixture<FilesComponent>;
+describe('LoveTypewritingComponent', () => {
+  let component: LoveTypewritingComponent;
+  let fixture: ComponentFixture<LoveTypewritingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FilesComponent ]
+      declarations: [ LoveTypewritingComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FilesComponent);
+    fixture = TestBed.createComponent(LoveTypewritingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
