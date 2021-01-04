@@ -62,7 +62,7 @@ initDrawerEditForm(data){
         fileCategories: new FormControl({ value: data.fileCategories, disabled: false } ),
         fileSize: new FormControl({ value: data.fileSize, disabled: false } ),
        
-  //TODO 
+   
       }
       )
 
@@ -138,8 +138,8 @@ initDrawerEditForm(data){
   preview(data){
     let suffix = data.fileName.substring(data.fileName.lastIndexOf(".")+1);
     if(suffix=='doc'||suffix=='docx')
-    //TODO 
-    this.router.route("/nav/doc/office",{ })
+    
+    this.router.route("/nav/doc/office",{code:data.fileCode,name:data.fileName })
   }
 
 }
