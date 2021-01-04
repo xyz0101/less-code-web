@@ -135,7 +135,7 @@ initDrawerEditForm(data){
 
   preview(data){
     let suffix = data.fileName.substring(data.fileName.lastIndexOf(".")+1);
-    if(suffix=='doc'||suffix=='docx')
+    // if(suffix=='doc'||suffix=='docx')
     
     this.router.route("/nav/doc/office",{code:data.fileCode,name:data.fileName })
   }

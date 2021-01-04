@@ -39,7 +39,7 @@ export class PreviewComponent implements OnInit {
         let name =   item.name;
         if(ObjectUtils.isNotEmpty(name)&&ObjectUtils.isNotEmpty(item.code)){
           let fileCode =  Base64.encode(item.code) 
-          this.initEditor(name,url, fileCode,"edit","desktop")
+          this.initEditor(name,url, fileCode ,"edit","desktop")
 
         }
     });
