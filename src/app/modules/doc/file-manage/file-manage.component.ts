@@ -94,8 +94,6 @@ initDrawerEditForm(data){
   customUpload = async (item) => {
 
 
-    // let data = await CompressUtils.compressImg(item.file, item.file.type)
-    // console.log(data)
     this.fileType = item.file.type
     this.fileName = item.file.name
     this.fileSize = item.file.size 

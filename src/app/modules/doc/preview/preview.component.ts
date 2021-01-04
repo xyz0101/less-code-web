@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Base64} from 'js-base64/base64'
 import { encode } from 'querystring';
 import { get } from 'scriptjs';
+import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RouteUtils } from 'src/app/util/RouteUtils';
 /**
  * 声明JS中的对象，避免编译不通过
@@ -17,8 +18,8 @@ export class PreviewComponent implements OnInit {
 
   constructor(private router:RouteUtils) { }
 
-  // host = "192.168.3.53"
-  host="10.10.10.63"
+  host = "192.168.3.53"
+  // host="10.10.10.63"
 
 
   ngOnInit(): void {
@@ -31,10 +32,16 @@ export class PreviewComponent implements OnInit {
         // let name = '销售01（按份-勿动.docx';
         //npm install --save js-base64
         let token  = Base64.encode(localStorage.getItem('token'));
-        let url = "http://mall.jenkin.tech:10013/lsc/system/downloadFile?code="+item.code+"&token="+token
+        // let url = "http://mall.jenkin.tech:10013/lsc/system/downloadFile?code="+item.code+"&token="+token
+        let url = "http://192.168.3.48:8050/lsc/system/downloadFile?code="+item.code+"&token="+token
+        // let url = "http://192.168.3.48:8050/lsc/system/downloadFile?code="+item.code
         console.log("文件下载地址:"+url)
-        let name =  item.name;
-        this.initEditor(name,url,new Date().getTime()+'',"edit","desktop")
+        let name =   item.name;
+        if(ObjectUtils.isNotEmpty(name)&&ObjectUtils.isNotEmpty(item.code)){
+          let fileCode =  Base64.encode(item.code) 
+          this.initEditor(name,url, fileCode,"edit","desktop")
+
+        }
     });
     })
     
@@ -84,6 +91,18 @@ export class PreviewComponent implements OnInit {
           mode: mode,
 
         },
+        "services": {
+          "CoAuthoring": {
+              "token": {
+                  "inbox": {
+                      "inBody": true,
+                  },
+                  "outbox": {
+                      "inBody": true
+                  }
+              }
+          }
+      },
         token: token,
 
       });
