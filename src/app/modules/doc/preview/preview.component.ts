@@ -18,8 +18,9 @@ export class PreviewComponent implements OnInit {
 
   constructor(private router:RouteUtils) { }
 
-  host = "192.168.3.53"
+  // host = "192.168.3.53"
   // host="10.10.10.63"
+  host = "127.0.0.1:8001"
 
 
   ngOnInit(): void {
@@ -77,7 +78,8 @@ export class PreviewComponent implements OnInit {
           fileType: docType,
 
           key: docKey,
-
+          // var config = DE.getController('Main').document;
+          hname:'jenkin hahah',
           permissions: {
 
             edit: true
@@ -85,9 +87,11 @@ export class PreviewComponent implements OnInit {
           }
 
         },
-
+        customization:{
+          mytestname:'hahahah',
+        },
         editorConfig: {
-
+        
           mode: mode,
 
         },
