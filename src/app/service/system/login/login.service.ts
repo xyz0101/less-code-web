@@ -27,21 +27,7 @@ export class LoginService {
   */
   login(value) {
  
-     this.getPublicKey().subscribe(item=>{
-        console.log("res",item)
-        let security = SecurityUtils.encrypt(item , value )
-        let map = new Map()
-        map.set("info",security)
-      return this.http.postResquest(LoginApiPath.LOGIN_PATH,null,null,map).subscribe(item=>{
-        if(item.code==200){
-          this.notifly.success("提示信息！","登陆成功！")
-            localStorage.setItem("token",item.data)
-            localStorage.setItem("token",item.data)
-            this.router.route("/nav/system/user",{})
-        }
-      
-       })
-    }) ;
+   
     
 
      
