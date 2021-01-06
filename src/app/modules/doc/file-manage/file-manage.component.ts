@@ -8,7 +8,11 @@ import { Observable } from 'rxjs';
 import { BaseComponent } from 'src/app/components/BaseComponent';
 import { QueryFields } from 'src/app/entity/QueryFields';
 import { LscFileService } from 'src/app/service/files/file/LscFile.service';
+import { TaskService } from 'src/app/service/task/task.service';
+import { RequestUtil } from 'src/app/util/RequestUtil';
 import { RouteUtils } from 'src/app/util/RouteUtils';
+import { FileTypeConst } from '../const/FileTypeConst';
+import { FileTypeUtils } from '../util/FileTypeUtils';
 
 @Component({
   selector: 'app-file-manage',
@@ -16,11 +20,22 @@ import { RouteUtils } from 'src/app/util/RouteUtils';
   styleUrls: ['./file-manage.component.css']
 })
 export class FileManageComponent extends BaseComponent implements OnInit {
+
+
+  showSub = false;
+
+
+
+
+
+
+
+
   public getListData(param: any): Observable<any> {
    return this.fileService.listByPage(param)
   }
   public onDeleteData(ids: any): Observable<any> {
-    throw new Error('Method not implemented.');
+    return this.fileService.deleteInfo(ids);
   }
   public afterLoadData() {
    
@@ -37,6 +52,7 @@ beforeDrawerSubmit(){
   }
 
   constructor(public fb: FormBuilder,
+              private taskService:TaskService,
               public msg: NzMessageService ,
               private router:RouteUtils,
               private request: HttpClient,
@@ -46,12 +62,18 @@ beforeDrawerSubmit(){
     }
 
   ngOnInit(): void {
+    this.taskService.addTask(false,'showSub')
+    FileTypeUtils.initType()
+    this.taskService.getTask('showSub').subscribe(item=>{
+      this.showSub = item
+      console.log('父组件收到消息',item)
+    })
   }
 
   beforeAddButton(){
 
   }
-
+ 
 initDrawerEditForm(data){
   
   this.validateForm = this.fb.group({
@@ -134,10 +156,28 @@ initDrawerEditForm(data){
 
 
   preview(data){
-    let suffix = data.fileName.substring(data.fileName.lastIndexOf(".")+1);
-    // if(suffix=='doc'||suffix=='docx')
+
+   let type =  FileTypeUtils.getFileTypeByName(data.fileName);
+    console.log('文件类型：',data.fileName,type)
+    switch(type){
+      case FileTypeConst.OFFICE_TYPE:
+        this.taskService.addTask(true,'showSub')
+        this.router.route("/nav/doc/filelist/office",{code:data.fileCode,name:data.fileName })
+        break;
+      case FileTypeConst.VEDIO_TYPE:
+        this.taskService.addTask(true,'showSub')
+        this.router.route("/nav/doc/filelist/video",{code:data.fileCode,name:data.fileName })
+        break;
+
+      default:
+        RequestUtil.notifyError("目前暂不支持该格式！")
+        break;
+
+    }
+
     
-    this.router.route("/nav/doc/office",{code:data.fileCode,name:data.fileName })
+     
+    
   }
 
 }

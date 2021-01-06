@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   validateForm!: FormGroup;
   loaging = false
   async submitForm() {
+    this.loaging = true
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
@@ -28,13 +29,15 @@ export class LoginComponent implements OnInit {
       let map = new Map()
       map.set("info",security)
     return this.http.postResquest(LoginApiPath.LOGIN_PATH,null,null,map).subscribe(item=>{
-      this.loaging = true
+    
       if(item.code==200){
         this.notifly.success("提示信息！","登陆成功！")
           localStorage.setItem("token",item.data)
           localStorage.setItem("token",item.data)
           this.router.route("/nav/system/user",{})
           this.loaging = false
+      }else{
+        this.loaging = false
       }
     
      })
