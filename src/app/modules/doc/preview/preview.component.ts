@@ -18,8 +18,8 @@ export class PreviewComponent implements OnInit {
 
   constructor(private router:RouteUtils) { }
 
-  host = "192.168.3.53"
-  // host="10.10.10.63"
+  // host = "192.168.3.53"
+  host="10.10.10.63"
 
 
   ngOnInit(): void {
@@ -32,8 +32,8 @@ export class PreviewComponent implements OnInit {
         // let name = '销售01（按份-勿动.docx';
         //npm install --save js-base64
         let token  = Base64.encode(localStorage.getItem('token'));
-        // let url = "http://mall.jenkin.tech:10013/lsc/system/downloadFile?code="+item.code+"&token="+token
-        let url = "http://192.168.3.48:8050/lsc/system/downloadFile?code="+item.code+"&token="+token
+        let url = "http://mall.jenkin.tech:10013/lsc/system/downloadFile?code="+item.code+"&token="+token
+        // let url = "http://192.168.3.48:8050/lsc/system/downloadFile?code="+item.code+"&token="+token
         // let url = "http://192.168.3.48:8050/lsc/system/downloadFile?code="+item.code
         console.log("文件下载地址:"+url)
         let name =   item.name;
@@ -87,7 +87,9 @@ export class PreviewComponent implements OnInit {
         },
 
         editorConfig: {
-
+          region: "zh-CN",
+          lang: "zh",
+          location: "zh",
           mode: mode,
 
         },
