@@ -23,8 +23,8 @@ export class PreviewComponent implements OnInit ,OnDestroy{
 
   // host = "192.168.3.53"
 //  host="10.10.10.63"
-  host="10.10.10.63"
-  // host = "127.0.0.1:8001"
+  // host="10.10.10.63"
+  host = "127.0.0.1:8001"
   data = [
     {
     "id":null,
@@ -1839,7 +1839,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
     ]
     }
     ]
-
+    editor
   ngOnInit(): void {
     this.taskService.addTask(true,'showSub')
     this.router.getRouteParams().subscribe(item=>{
@@ -1850,8 +1850,8 @@ export class PreviewComponent implements OnInit ,OnDestroy{
         // let name = '销售01（按份-勿动.docx';
         //npm install --save js-base64
         let token  = Base64.encode(localStorage.getItem('token'));
-        let url = "http://mall.jenkin.tech:10013/lsc/system/downloadFile?code="+item.code+"&token="+token
-        // let url = "http://127.0.0.1:8050/lsc/system/downloadFile?code="+item.code+"&token="+token
+        // let url = "http://mall.jenkin.tech:10013/lsc/system/downloadFile?code="+item.code+"&token="+token
+        let url = "http://127.0.0.1:8050/lsc/system/downloadFile?code="+item.code+"&token="+token
         // let url = "http://192.168.3.48:8050/lsc/system/downloadFile?code="+item.code
         console.log("文件下载地址:"+url)
         let name =   item.name;
@@ -1874,7 +1874,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
     //creating object editing
     let pageH = document.documentElement.clientHeight
     let docType = name.substring(name.lastIndexOf(".") + 1).trim().toLowerCase();
-    new DocsAPI.DocEditor("placeholder",
+    this.editor = new DocsAPI.DocEditor("placeholder",
 
       {
 
@@ -1927,6 +1927,18 @@ export class PreviewComponent implements OnInit ,OnDestroy{
         token: token,
 
       });
+     
+      console.log('测试api',this.editor )
+
+      window.addEventListener('message',function(event){
+               
+        console.log("收到" 
+            + event.origin + "的消息：" + event.data )
+      })
+
+   }
+   test(){
+    this.editor.serviceCommand('search:next','合同')
    }
    getDocumentType(ext) {
 
