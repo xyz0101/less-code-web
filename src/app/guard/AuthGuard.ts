@@ -37,6 +37,8 @@ export class AuthGuard implements CanActivate    {
   let urls = ObjectUtils.isNotEmpty(urlStr)? urlStr.split(","):[]
   urls.push("/")
   urls.push("/nav")
+  urls.push("/assest")
+
   urls.push("/nav/noauth")
   if(currentURL){
       hasAccessPermission = urls.indexOf(currentURL)>0;

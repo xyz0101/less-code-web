@@ -1,5 +1,6 @@
 
 
+ 
 <div *ngIf="!showSub"  >
 <nz-space [nzSize]='12' nzDirection='vertical'  style='width: 100%'>
     <nz-space-item>
@@ -27,12 +28,13 @@
                <thead>
                  <tr>
                    <th [(nzChecked)]='checked' [nzIndeterminate]='indeterminate' (nzCheckedChange)='onAllChecked($event)'></th>
-                  <th nzColumnKey='fileCode' [nzSortFn]='true'>文件编号</th>
+                  <!-- <th nzColumnKey='fileCode' [nzSortFn]='true'>文件编号</th> -->
                   <th nzColumnKey='fileName' [nzSortFn]='false'>文件名称</th>
                   <th nzColumnKey='fileType'   [nzSortFn]='false'>文件类型</th>
                   <th nzColumnKey='fileType' [nzSortFn]='false'>文件后缀名</th>
                   <th nzColumnKey='fileCategories' [nzSortFn]='false'>文件分类</th>
                   <th nzColumnKey='fileSize' [nzSortFn]='true'>文件大小</th>
+                  <th nzColumnKey='lastUpdateDate' [nzSortFn]='true'>更新时间</th>
 
                    <!--TODO-->
                    <th>操作</th>
@@ -41,12 +43,14 @@
                <tbody>
                  <tr *ngFor='let data of dataList'>
                  <td [nzChecked]='setOfCheckedId.has(data.id)' (nzCheckedChange)='onItemChecked(data.id, $event)'></td>
-                 <td>{{data.fileCode}}</td>
+                 <!-- <td>{{data.fileCode}}</td> -->
                  <td>{{data.fileName}}</td>
                  <td>{{data.fileType}}</td>
                  <td>{{data.fileName.substring( data.fileName.lastIndexOf('.')+1)}}</td>
                  <td>{{data.fileCategories}}</td>
                  <td>{{data.fileSize}}</td>
+                 <td>{{data.lastUpdateDate}}</td>
+
                  <!-- TODO -->
                    <td>
                        <nz-space [nzSize]='12'>
@@ -70,11 +74,27 @@
     
     <nz-drawer [nzWidth]='drawerWidth' class='drawer-edit' [nzClosable]='false' [nzVisible]='visibleDrawer' nzPlacement='right'
       nzTitle='编辑' [nzFooter]='footerTpl' (nzOnClose)='close()'>
+    
       <ng-container *nzDrawerContent>
-        <form *ngIf='isDrawerEdit' nz-form [formGroup]='validateForm'>
+       
+        <form  *ngIf='isDrawerEdit' nz-form [formGroup]='validateForm'>
             <nz-form-item >
+              
                 <nz-form-label [nzSm]='6' [nzXs]='24'   nzFor='file'>上传文件</nz-form-label>
-                <nz-form-control [nzSm]='14' [nzXs]='24'>
+                <webuploader
+                [options]="{pick: '#picker'}"
+                [loadingTip]="'加载中……'"
+                (onReady)="onReady($event)"
+                >
+                <div class="wu-example">
+                    <div id="thelist" class="uploader-list"></div>
+                    <div class="btns">
+                        <div id="picker">选择文件</div>
+                        <!-- <button id="ctlBtn" class="btn btn-default">开始上传</button> -->
+                    </div>
+                </div>
+            </webuploader>
+                <!-- <nz-form-control [nzSm]='14' [nzXs]='24'>
                     <nz-upload
                     nzType="drag"
                     [(nzFileList)]="fileList"
@@ -87,11 +107,10 @@
                       <i nz-icon nzType="inbox"></i>
                     </p>
                     <p class="ant-upload-text">点击上传文件</p>
-                    <!-- <p class="ant-upload-hint">
-                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
-                    </p> -->
+                     
                   </nz-upload>
-                </nz-form-control>
+                  
+                </nz-form-control> -->
               </nz-form-item>
            
       <nz-form-item >

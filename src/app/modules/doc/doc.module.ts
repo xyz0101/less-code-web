@@ -34,6 +34,8 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { VideoComponent } from './preview/video/video.component';
+import { Options, WebUploaderConfig, WebUploaderModule } from 'ngx-webuploader';
+import { FileApiPath } from 'src/app/api_path/system/FileApiPath';
 
 
 @NgModule({
@@ -72,6 +74,21 @@ import { VideoComponent } from './preview/video/video.component';
     NzBreadCrumbModule,
     NzDividerModule,
     NzBackTopModule,
+    WebUploaderModule.forRoot(<WebUploaderConfig>{
+      // 全局默认Options配置
+      options: <Options>{
+        auto: true,
+        threads :10,
+        chunked: true,// 开起分片上传。
+        chunkSize :1024*1024/5,
+          swf: './assets/webuploader-0.1.5/Uploader.swf',
+          server:  FileApiPath.UPLOAD_FILE_PATH
+      },
+      // webuploader的存储路径
+      path: './assets/webuploader-0.1.5/',
+      // 依赖库
+      dependentLib: './assets/jquery.min.js'
+    })
   ]
 })
 export class DocModule { }
