@@ -1,4 +1,6 @@
 
+
+<div *ngIf="!showSub"  >
 <nz-space [nzSize]='12' nzDirection='vertical'  style='width: 100%'>
     <nz-space-item>
                      
@@ -28,6 +30,7 @@
                   <th nzColumnKey='fileCode' [nzSortFn]='true'>文件编号</th>
                   <th nzColumnKey='fileName' [nzSortFn]='false'>文件名称</th>
                   <th nzColumnKey='fileType' [nzSortFn]='false'>文件类型</th>
+                  <th nzColumnKey='fileType' [nzSortFn]='false'>文件后缀名</th>
                   <th nzColumnKey='fileCategories' [nzSortFn]='false'>文件分类</th>
                   <th nzColumnKey='fileSize' [nzSortFn]='true'>文件大小</th>
 
@@ -41,6 +44,7 @@
                  <td>{{data.fileCode}}</td>
                  <td>{{data.fileName}}</td>
                  <td>{{data.fileType}}</td>
+                 <td>{{data.fileName.substring( data.fileName.lastIndexOf('.')+1)}}</td>
                  <td>{{data.fileCategories}}</td>
                  <td>{{data.fileSize}}</td>
                  <!-- TODO -->
@@ -110,6 +114,13 @@
           <input   nz-input formControlName='fileType' id='fileType' />
         </nz-form-control>
       </nz-form-item>
+       
+          <nz-form-item *ngIf="!isAdd">
+        <nz-form-label [nzSm]='6' [nzXs]='24'  >文件后缀名</nz-form-label>
+        <span style="margin-top: 4px; margin-left: 10px;">  {{validateForm.get('fileName').value.substring( validateForm.get('fileName').value.lastIndexOf('.')+1)}}</span>  
+      </nz-form-item>
+       
+        
 
       <nz-form-item >
         <nz-form-label [nzSm]='6' [nzXs]='24' nzRequired nzFor='fileSize'>文件大小</nz-form-label>
@@ -128,4 +139,8 @@
       </ng-template>
       
     </nz-drawer>
-    
+
+  </div>
+     
+    <router-outlet ></router-outlet>
+  

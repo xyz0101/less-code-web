@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DocRoutingModule } from './doc-routing.module';
-import { PreviewComponent } from './preview/preview.component';
+import { PreviewComponent } from './preview/office/preview.component';
 import { FileManageComponent } from './file-manage/file-manage.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,10 +33,11 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
+import { VideoComponent } from './preview/video/video.component';
 
 
 @NgModule({
-  declarations: [PreviewComponent, FileManageComponent],
+  declarations: [PreviewComponent, FileManageComponent, VideoComponent],
   imports: [
     CommonModule,
     DocRoutingModule,

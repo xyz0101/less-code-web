@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {Base64} from 'js-base64/base64'
-import { encode } from 'querystring';
 import { get } from 'scriptjs';
+import { TaskService } from 'src/app/service/task/task.service';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RouteUtils } from 'src/app/util/RouteUtils';
 /**
@@ -14,9 +14,12 @@ declare var DocsAPI:any;
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.css']
 })
-export class PreviewComponent implements OnInit {
+export class PreviewComponent implements OnInit ,OnDestroy{
 
-  constructor(private router:RouteUtils) { }
+  constructor(private router:RouteUtils,private taskService:TaskService) { }
+  ngOnDestroy(): void {
+    this.taskService.addTask(false,'showSub')
+  }
 
   // host = "192.168.3.53"
 //  host="10.10.10.63"
@@ -1838,7 +1841,7 @@ export class PreviewComponent implements OnInit {
     ]
 
   ngOnInit(): void {
-  
+    this.taskService.addTask(true,'showSub')
     this.router.getRouteParams().subscribe(item=>{
       get("http://"+this.host+"/web-apps/apps/api/documents/api.js", () => {
         //Google Maps library has been loaded...
@@ -1936,4 +1939,8 @@ export class PreviewComponent implements OnInit {
     return null;
 
 };
+
+
+
+
 }
