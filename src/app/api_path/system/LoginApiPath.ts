@@ -19,6 +19,11 @@ export class LoginApiPath{
      * 获取验证码
      */
     public static GET_CHECK_CODE = '';
+    /**
+     * 获取当前登录的用户
+     */
+    public static GET_CURRENT_USER = '/lsc/system/user/getLoginUser'
+
 
 
 }

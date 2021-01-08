@@ -30,7 +30,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+// import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { CodeGenerateComponent } from './components/code-generate/code-generate.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -62,6 +62,9 @@ import { NzBackTopModule } from 'ng-zorro-antd/back-top';
 import { ScrollDirective } from './service/scroll/scroll.directive';
 import { SomeToolModule } from './modules/some-tool/some-tool.module';
 import { DocModule } from './modules/doc/doc.module';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 
 
@@ -100,15 +103,15 @@ registerLocaleData(zh);
     NzLayoutModule,
     NzMenuModule,
     FormsModule,
-    NzFormModule ,
-    NzInputModule ,
+    NzFormModule,
+    NzInputModule,
     NzButtonModule,
     NzCheckboxModule,
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    NzTableModule ,
-    NzDrawerModule ,
+    NzTableModule,
+    NzDrawerModule,
     NzModalModule,
     NzRadioModule,
     NzUploadModule,
@@ -127,10 +130,18 @@ registerLocaleData(zh);
     NzBreadCrumbModule,
     NzDividerModule,
     NzBackTopModule,
+    NzBadgeModule,
+    NzPopoverModule,
     DocModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }, RequestUtil, RouteUtils,
-    NzNotificationService,AuthGuard,NzMessageService ,NzImageService ,ScrollDirective],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, 
+    RequestUtil, 
+    RouteUtils,
+    NzNotificationService, 
+    AuthGuard,
+    NzMessageService, 
+    NzImageService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
       if(item.code==200){
         this.notifly.success("提示信息！","登陆成功！")
           localStorage.setItem("token",item.data)
-          localStorage.setItem("token",item.data)
+           
           this.router.route("/nav/system/user",{})
           this.loaging = false
       }else{

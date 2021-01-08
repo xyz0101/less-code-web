@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {Base64} from 'js-base64/base64'
 import { get } from 'scriptjs';
+import { FileApiPath } from 'src/app/api_path/system/FileApiPath';
 import { TaskService } from 'src/app/service/task/task.service';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RouteUtils } from 'src/app/util/RouteUtils';
@@ -1857,7 +1858,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
         let name =   item.name;
         if(ObjectUtils.isNotEmpty(name)&&ObjectUtils.isNotEmpty(item.code)){
           let fileCode =  Base64.encode(item.code) 
-          this.initEditor(name,url, fileCode ,"edit","desktop")
+          this.initEditor(name,url, fileCode ,"edit","desktop",token,item.id)
 
         }
     });
@@ -1869,8 +1870,8 @@ export class PreviewComponent implements OnInit ,OnDestroy{
    
 
   
-   initEditor(name,url,docKey, mode, type) {
-     let token = localStorage.getItem('token');
+   initEditor(name,url,docKey, mode, type,token,id) {
+   
     //creating object editing
     let pageH = document.documentElement.clientHeight
     let docType = name.substring(name.lastIndexOf(".") + 1).trim().toLowerCase();
@@ -1910,7 +1911,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
           lang: "zh",
           location: "zh",
           mode: mode,
-
+          callbackUrl: "http://127.0.0.1:8050/lsc/system/docx/save?token="+token+"&fileId="+id,
         },
         "services": {
           "CoAuthoring": {

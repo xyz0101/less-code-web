@@ -50,11 +50,41 @@
         <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
           <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
         </span>
+        
+      
         <div  data-v-140f1ee1 class="user-wrapper light">
-          <span  (click)="logOut()" class="action">
-            <i style="z-index: 3; " nz-icon nzType="logout" nzTheme="outline"></i>
-            <span style="z-index: 3; ">&nbsp;退出登录</span>
-          </span>
+
+          <nz-space [nzSize]='12'>
+            <nz-space-item  *ngIf='userinfo' >
+              欢迎您  {{userinfo.userName}}
+            </nz-space-item>
+          <nz-space-item style=' cursor: pointer;'>
+            <nz-avatar *ngIf='!userinfo' [nzShape]="'square'" [nzIcon]="'user'"></nz-avatar>
+            <nz-badge  *ngIf='userinfo'  [nzCount]="5"  >
+              <nz-avatar   nz-popover  [nzPopoverContent]="contentTemplate" [nzSrc]="userinfo.iconSrc" [nzShape]="'square'"></nz-avatar>
+           
+              <ng-template #contentTemplate>
+                <div>
+                  <ul nz-menu nzSelectable>
+                    <li nz-menu-item><i nz-icon nzType="edit" nzTheme="outline"></i>修改个人信息</li>
+                    <li nz-menu-item><i nz-icon nzType="message" nzTheme="outline"></i>查看消息</li>
+                    <li nz-menu-item><i nz-icon nzType="unordered-list" nzTheme="outline"></i>我的任务列表</li>
+                   </ul>
+                   
+                </div>
+              </ng-template>
+            </nz-badge>            
+          </nz-space-item>
+          <nz-space-item>
+            <span  (click)="logOut()" class="action">
+              <i style="z-index: 3; " nz-icon nzType="logout" nzTheme="outline"></i>
+              <span style="z-index: 3; ">&nbsp;退出登录</span>
+            </span>           
+          </nz-space-item>
+           </nz-space>
+
+        
+         
         </div>
       </div>
 

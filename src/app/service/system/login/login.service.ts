@@ -23,14 +23,12 @@ export class LoginService {
     }));
  }
  /**
-  * 登录
+  * 获取当前登录的用户
   */
-  login(value) {
+  getCurrentUser(): Observable<any>{
  
-   
+    return this.http.getResquest(LoginApiPath.GET_CURRENT_USER);
     
-
-     
   }
   /**
    * 登出

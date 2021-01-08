@@ -171,11 +171,11 @@ export class FileManageComponent extends BaseComponent implements OnInit  {
     switch (type) {
       case FileTypeConst.OFFICE_TYPE:
         this.taskService.addTask(true, 'showSub')
-        this.router.route("/nav/doc/filelist/office", { code: data.fileCode, name: data.fileName })
+        this.router.route("/nav/doc/filelist/office", { code: data.fileCode, name: data.fileName,id:data.id })
         break;
       case FileTypeConst.VEDIO_TYPE:
         this.taskService.addTask(true, 'showSub')
-        this.router.route("/nav/doc/filelist/video", { code: data.fileCode, name: data.fileName })
+        this.router.route("/nav/doc/filelist/video", { code: data.fileCode, name: data.fileName,id:data.id })
         break;
 
       default:
