@@ -264,6 +264,8 @@ export abstract class BaseComponent extends ButtonCodes{
     controlArray: Array<{ code: string; name: string }> = [];
     resetForm(): void {
         this.searchValidateForm.reset();
+        this.pageIndex=1
+        this.pageSize=10
         this.listData(1, 10, null, null, null)
     }
     
