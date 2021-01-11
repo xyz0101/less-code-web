@@ -1852,12 +1852,12 @@ export class PreviewComponent implements OnInit ,OnDestroy{
         //npm install --save js-base64
         let token  = Base64.encode(localStorage.getItem('token'));
         // let url = "http://mall.jenkin.tech:10013/lsc/system/downloadFile?code="+item.code+"&token="+token
-        let url = "http://127.0.0.1:8050/lsc/system/downloadFile?code="+item.code+"&token="+token
+        let url = "http://127.0.0.1:8050/lsc/files/file/downloadFile?code="+item.code+"&token="+token
         // let url = "http://192.168.3.48:8050/lsc/system/downloadFile?code="+item.code
         console.log("文件下载地址:"+url)
         let name =   item.name;
         if(ObjectUtils.isNotEmpty(name)&&ObjectUtils.isNotEmpty(item.code)){
-          let fileCode =  Base64.encode(item.code) 
+          let fileCode =  Base64.encode(item.code)+new Date().getTime() 
           this.initEditor(name,url, fileCode ,"edit","desktop",token,item.id)
 
         }
@@ -1911,7 +1911,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
           lang: "zh",
           location: "zh",
           mode: mode,
-          callbackUrl: "http://127.0.0.1:8050/lsc/system/docx/save?token="+token+"&fileId="+id,
+          callbackUrl: "http://127.0.0.1:8050/lsc/files/file/docx/save?token="+token+"&fileId="+id,
         },
         "services": {
           "CoAuthoring": {
