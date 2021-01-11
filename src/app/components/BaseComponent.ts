@@ -13,7 +13,6 @@ import { ButtonCodes } from './ButonCodes';
 export abstract class BaseComponent extends ButtonCodes{
 
     fileUploadPath = FileApiPath.UPLOAD_FILE_PATH
-
     total = 1;
     dataList = [];
     loading = false;
@@ -120,6 +119,8 @@ export abstract class BaseComponent extends ButtonCodes{
         throw new Error('Method not implemented.');
     }
 
+
+  
 
     /**
      * 验证表单，如果不通过会抛异常
@@ -271,18 +272,21 @@ export abstract class BaseComponent extends ButtonCodes{
         this.searchValidateForm = this.fb.group({});
         if(this.queryFields!==undefined&&this.queryFields!==null){
           this.showSearch==true
+          console.log('showSearch')
           this.queryFields.param.forEach((value,key)=>{
             this.controlArray.push({ code: key, name:value });
             this.searchValidateForm.addControl(key, new FormControl());
         })  
+        
         }
     
          
       }
     
       searchData(){
-          console.log(this.searchValidateForm.value)
-          this.listData(1, 10, null, null, this.searchValidateForm.value)
+          this.pageIndex = 1;
+          this.pageSize=10;
+          this.listData(1, 10, 'lastUpdateDate', 'descend', this.searchValidateForm.value)
       }
 
 
@@ -391,7 +395,11 @@ export abstract class BaseComponent extends ButtonCodes{
     onTableLoad(params: NzTableQueryParams){
         console.log(params);
         const { pageSize, pageIndex, sort, filter } = params;
-        const currentSort = sort.find(item => item.value !== null);
+        
+        let currentSort = sort.find(item => item.value !== null);
+        if(!currentSort){
+            currentSort={key:'lastUpdateDate',value:'descend'}
+        }
         const sortField = (currentSort && currentSort.key) || null;
         const sortOrder = (currentSort && currentSort.value) || null;
         this.listData(pageIndex, pageSize, sortField, sortOrder,null );

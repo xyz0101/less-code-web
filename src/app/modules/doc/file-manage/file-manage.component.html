@@ -1,7 +1,93 @@
 
-
  
 <div *ngIf="!showSub"  >
+
+
+
+
+  <nz-modal [(nzVisible)]="showHistoryFlag" nzTitle="历史版本信息" nzWidth='75%'  (nzOnOk)="this.showHistoryFlag=false"  (nzOnCancel)="this.showHistoryFlag=false" >
+    <ng-container *nzModalContent>
+      <nz-table *ngIf='!isFormEdit' nzShowSizeChanger [nzData]='historyList' [nzFrontPagination]='false'  
+                [nzBordered]='true' >
+               <thead>
+                 <tr>
+                   <th [(nzChecked)]='checked' [nzIndeterminate]='indeterminate' (nzCheckedChange)='onAllChecked($event)'></th>
+                  <!-- <th nzColumnKey='fileCode' [nzSortFn]='true'>文件编号</th> -->
+                  <th nzWidth="300px" nzColumnKey='fileName'  >文件名称</th>
+                  <th nzWidth="300px" nzColumnKey='fileType'   >文件类型</th>
+                  <th nzColumnKey='fileType'  >文件后缀名</th>
+                  <th nzColumnKey='fileCategories' >文件分类</th>
+                  <th nzColumnKey='fileSize' >文件大小</th>
+                  <th nzColumnKey='lastUpdateDate'  >更新时间</th>
+                  <th nzColumnKey='fileVersion'  >文件版本号</th>
+                  <th>操作</th>
+                   
+                 </tr>
+               </thead>
+               <tbody>
+                 <tr *ngFor='let data of historyList'>
+                 <td [nzChecked]='setOfCheckedId.has(data.id)' (nzCheckedChange)='onItemChecked(data.id, $event)'></td>
+                 <!-- <td>{{data.fileCode}}</td> -->
+                 <td>{{data.fileName}}</td>
+                 <td>{{data.fileType}}</td>
+                 <td>{{data.fileName.substring( data.fileName.lastIndexOf('.')+1)}}</td>
+                 <td>{{data.fileCategories}}</td>
+                 <td>{{data.fileSize}}</td>
+                 <td>{{data.lastUpdateDate}}</td>
+                 <td>{{data.fileVersion}}</td>
+                 <td>
+                  <nz-space [nzSize]='12'>
+                 
+                  <nz-space-item>
+                   <a (click)="preview(data)" >预览</a>            
+                  </nz-space-item>
+                 
+                   </nz-space>
+               </td>
+                 
+                 </tr>
+               </tbody>
+             </nz-table>
+    </ng-container>
+  </nz-modal>
+
+
+
+<!-- 查询表单 -->
+<nz-space [nzSize]='12'nzDirection='vertical'  style='width: 100%;'>
+  <form *ngIf="showSearch" nz-form [formGroup]='searchValidateForm' class='ant-advanced-search-form'>
+    <nz-space-item > 
+    <div nz-row [nzGutter]='24'>
+      <div nz-col [nzSpan]='4' *ngFor='let control of controlArray' >
+        <nz-form-item>
+          <nz-form-label >{{control.name}}</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder='{{control.name}}' [formControlName]='control.code' [attr.id]='control.code' />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </nz-space-item>
+    <nz-space-item >
+    <div nz-row style='margin-left: 90%;'>
+      <div nz-col [nzSpan]='24' class='search-area'>
+        <nz-space [nzSize]='12'>
+          <nz-space-item >
+        <button nz-button [nzType]='"primary"' (click)='searchData()' >查询</button>
+      </nz-space-item>
+      <nz-space-item >
+        <button nz-button (click)='resetForm()'>重置</button>
+      </nz-space-item>
+        </nz-space>
+      </div>
+    </div>
+  </nz-space-item>
+  </form>
+  <nz-space-item >
+  <div> </div>
+  </nz-space-item>
+  </nz-space>
+
 <nz-space [nzSize]='12' nzDirection='vertical'  style='width: 100%'>
     <nz-space-item>
                      
@@ -24,18 +110,18 @@
                <nz-space-item>
                  <div >
              <nz-table *ngIf='!isFormEdit' nzShowSizeChanger [nzData]='dataList' [nzFrontPagination]='false' [nzLoading]='loading'
-               [nzTotal]='total' [nzPageSize]='pageSize' [nzPageIndex]='pageIndex' (nzQueryParams)='onTableLoad($event)'  [nzBordered]='true' >
+               [nzTotal]='total' [(nzPageSize)]='pageSize' [(nzPageIndex)]='pageIndex' (nzQueryParams)='onTableLoad($event)'  [nzBordered]='true' >
                <thead>
                  <tr>
                    <th [(nzChecked)]='checked' [nzIndeterminate]='indeterminate' (nzCheckedChange)='onAllChecked($event)'></th>
                   <!-- <th nzColumnKey='fileCode' [nzSortFn]='true'>文件编号</th> -->
-                  <th nzColumnKey='fileName' [nzSortFn]='false'>文件名称</th>
-                  <th nzColumnKey='fileType'   [nzSortFn]='false'>文件类型</th>
-                  <th nzColumnKey='fileType' [nzSortFn]='false'>文件后缀名</th>
-                  <th nzColumnKey='fileCategories' [nzSortFn]='false'>文件分类</th>
+                  <th  nzWidth="300px" nzColumnKey='fileName' [nzSortFn]='true'>文件名称</th>
+                  <th nzWidth="300px" nzColumnKey='fileType'   [nzSortFn]='true'>文件类型</th>
+                  <th nzColumnKey='fileType' [nzSortFn]='true'>文件后缀名</th>
+                  <th nzColumnKey='fileCategories' [nzSortFn]='true'>文件分类</th>
                   <th nzColumnKey='fileSize' [nzSortFn]='true'>文件大小</th>
                   <th nzColumnKey='lastUpdateDate' [nzSortFn]='true'>更新时间</th>
-
+                  <th nzColumnKey='fileVersion'  [nzSortFn]='true' >文件版本号</th>
                    <!--TODO-->
                    <th>操作</th>
                  </tr>
@@ -50,7 +136,7 @@
                  <td>{{data.fileCategories}}</td>
                  <td>{{data.fileSize}}</td>
                  <td>{{data.lastUpdateDate}}</td>
-
+                 <td>{{data.fileVersion}}</td>
                  <!-- TODO -->
                    <td>
                        <nz-space [nzSize]='12'>
@@ -60,6 +146,9 @@
                        </nz-space-item>
                        <nz-space-item>
                         <a (click)="preview(data)" >预览</a>            
+                       </nz-space-item>
+                       <nz-space-item *ngIf="data.history!=null&&data.history.length>0">
+                        <a (click)="showHistory(data.history)" >历史版本</a>            
                        </nz-space-item>
                         </nz-space>
                     </td>
@@ -81,7 +170,7 @@
             <nz-form-item >
               
                 <nz-form-label [nzSm]='6' [nzXs]='24'   nzFor='file'>上传文件</nz-form-label>
-                <webuploader
+                <!-- <webuploader
                 [options]="{pick: '#picker'}"
                 [loadingTip]="'加载中……'"
                 (onReady)="onReady($event)"
@@ -90,11 +179,10 @@
                     <div id="thelist" class="uploader-list"></div>
                     <div class="btns">
                         <div id="picker">选择文件</div>
-                        <!-- <button id="ctlBtn" class="btn btn-default">开始上传</button> -->
                     </div>
                 </div>
-            </webuploader>
-                <!-- <nz-form-control [nzSm]='14' [nzXs]='24'>
+            </webuploader> -->
+                <nz-form-control [nzSm]='14' [nzXs]='24'>
                     <nz-upload
                     nzType="drag"
                     [(nzFileList)]="fileList"
@@ -110,7 +198,7 @@
                      
                   </nz-upload>
                   
-                </nz-form-control> -->
+                </nz-form-control>
               </nz-form-item>
            
       <nz-form-item >

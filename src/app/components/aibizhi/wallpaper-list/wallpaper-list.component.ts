@@ -60,7 +60,7 @@ pageIndex = 0;
      this.loading=true;
     console.log('加载图片')
     
-    if(this.tabIndex==0){
+    if(this.tabIndex==1){
       this.aibizhiService.getWebImageList(code, skip).subscribe(item => {
         this.imgList = item.data
         console.log("获取到图片：", this.imgList)

@@ -37,7 +37,7 @@ export class VideoComponent implements OnInit,OnDestroy {
   }
   initOption(param) :any{
     let token  = Base64.encode(localStorage.getItem('token'));
-    let url = "/lsc/system/downloadFile?code="+param.code+"&token="+token
+    let url = "/lsc/files/file/downloadFile?code="+param.code+"&token="+token
     return {
       container: document.getElementById('dplayer'),
       autoplay: false,

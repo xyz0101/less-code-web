@@ -16,6 +16,7 @@ import { FileTypeUtils } from '../util/FileTypeUtils';
 import { WebUploaderComponent, File, FileStatus } from 'ngx-webuploader';
 
 import $ from 'jquery'
+import { ObjectUtils } from 'src/app/util/ObjectUtils';
 @Component({
   selector: 'app-file-manage',
   templateUrl: './file-manage.component.html',
@@ -46,7 +47,8 @@ export class FileManageComponent extends BaseComponent implements OnInit  {
 
   }
   public getSearchFields(): QueryFields {
-    return null;
+    this.showSearch = true;
+    return QueryFields.buildFileds().addField("fileName","文件名称").addField("fileType","文件类型");
   }
   beforeDrawerSubmit() {
     this.validataFormAndTrowError()
@@ -56,7 +58,11 @@ export class FileManageComponent extends BaseComponent implements OnInit  {
     return this.fileService.save(data)
   }
 
-  constructor(public fb: FormBuilder,
+  
+
+  constructor(
+    
+    public fb: FormBuilder,
     private taskService: TaskService,
     public msg: NzMessageService,
     private router: RouteUtils,
@@ -64,6 +70,7 @@ export class FileManageComponent extends BaseComponent implements OnInit  {
     private fileService: LscFileService,
     public modelService: NzModalService) {
     super(fb, modelService)
+   
   }
  uploader;
  
@@ -82,6 +89,23 @@ export class FileManageComponent extends BaseComponent implements OnInit  {
   beforeAddButton() {
    
   }
+
+
+
+  showHistoryFlag = false;
+  historyList = []
+  showHistory(history){
+    if(ObjectUtils.isNotEmpty(history)){
+      this.showHistoryFlag=true;
+      this.historyList = history;
+      console.log('history:',history)
+    }else{
+      this.historyList=[]
+    }
+  }
+
+
+
 
   initDrawerEditForm(data) {
 

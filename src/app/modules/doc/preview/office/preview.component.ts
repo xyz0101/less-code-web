@@ -1874,6 +1874,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
    
     //creating object editing
     let pageH = document.documentElement.clientHeight
+    let h = pageH-(pageH*0.2);
     let docType = name.substring(name.lastIndexOf(".") + 1).trim().toLowerCase();
     this.editor = new DocsAPI.DocEditor("placeholder",
 
@@ -1883,7 +1884,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
 
         width: (type == "desktop" ? "100%" : undefined),
 
-        height: (type == "desktop" ? pageH-(pageH*0.2) : undefined),
+        height: (type == "desktop" ? h : undefined),
 
         documentType: this.getDocumentType(docType),
 
@@ -1898,6 +1899,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
           key: docKey,
           // var config = DE.getController('Main').document;
           myRisk: this.data,
+          riskHeight: (h*0.8)+'px',
           permissions: {
 
             edit: true

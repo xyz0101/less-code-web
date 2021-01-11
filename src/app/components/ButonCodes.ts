@@ -19,7 +19,7 @@ export class ButtonCodes {
     }
 
     hasPermission(code):boolean{
-        console.log(code)
+        // console.log(code)
         return true
     }
 
