@@ -169,7 +169,7 @@ private dealData<T extends MyResponse<any>|any>(event: any  ): Observable< T> {
             // this.notification.create('success','操作成功',event.msg);
             return new Observable(observer => observer.next(event)); // 请求成功返回响应
         }else{
-            if(event.code=='401'){
+            if(event.code=='401'||event.responseCode=='401'){
                 RequestUtil.router.navigate(["/login"],{} );
                 
             }else{

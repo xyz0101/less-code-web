@@ -81,7 +81,7 @@ const routes: Routes = [
       },
       //其他工具
       {
-        path:'some-tools',loadChildren:'./modules/some-tool/some-tool.module#SomeToolModule',data: {
+        path:'tool',loadChildren:'./modules/some-tool/some-tool.module#SomeToolModule',data: {
           customBreadcrumb: '一些工具'
         }
       },

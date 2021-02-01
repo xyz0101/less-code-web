@@ -2,3 +2,12 @@
     <!-- <button (click)='test()' >测试</button> -->
     <div id="placeholder" style="width: 100%;height: 70vh;"></div>
  
+    <nz-modal
+    [(nzVisible)]="isVisible"
+    nzTitle="提示信息"
+    (nzOnCancel)="isVisible=false;isOkLoading=false"
+    (nzOnOk)="handleOk()"
+    [nzOkLoading]="isOkLoading"
+  >
+    <p *nzModalContent>是否需要提交保存所有的修改？</p>
+  </nz-modal>

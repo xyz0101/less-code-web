@@ -65,6 +65,7 @@ import { DocModule } from './modules/doc/doc.module';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 
 
@@ -135,6 +136,8 @@ registerLocaleData(zh);
     DocModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, 
+    {provide:LocationStrategy,
+    useClass:HashLocationStrategy},
     RequestUtil, 
     RouteUtils,
     NzNotificationService, 

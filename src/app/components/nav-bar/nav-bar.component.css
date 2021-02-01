@@ -39,14 +39,14 @@
     padding-left: 24px;
     overflow: hidden;
     line-height: 64px;
-    background-color: #1890ff;
+    background-color: #fffef9;
     transition: all .3s;
   }
   
   .sidebar-logo img {
     display: inline-block;
-    height: 32px;
-    width: 32px;
+    height: 60px;
+    width: 180px;
     vertical-align: middle;
   }
   

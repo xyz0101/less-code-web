@@ -4,6 +4,7 @@ import { get } from 'scriptjs';
 import { FileApiPath } from 'src/app/api_path/system/FileApiPath';
 import { TaskService } from 'src/app/service/task/task.service';
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
+import { RequestUtil } from 'src/app/util/RequestUtil';
 import { RouteUtils } from 'src/app/util/RouteUtils';
 /**
  * 声明JS中的对象，避免编译不通过
@@ -18,14 +19,30 @@ declare var DocsAPI:any;
 export class PreviewComponent implements OnInit ,OnDestroy{
 
   constructor(private router:RouteUtils,private taskService:TaskService) { }
+  isOkLoading = false
+  isVisible=false
+  api = null;
+
+  handleOk(){
+    if(this.api!=null&&this.saveurl!=null){
+      this.isOkLoading = true;
+      this.api.downloadAs()
+    }
+  }
   ngOnDestroy(): void {
+
+    this.isVisible =  true;
+    
     this.taskService.addTask(false,'showSub')
   }
-
+  //保存的回调地址
+  saveurl 
   // host = "192.168.3.53"
 //  host="10.10.10.63"
   // host="10.10.10.63"
+  // host = "127.0.0.1:8888"
   host = "127.0.0.1:8001"
+  backhost = "192.168.30.11"
   data = [
     {
     "id":null,
@@ -1840,7 +1857,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
     ]
     }
     ]
-    editor
+    
   ngOnInit(): void {
     this.taskService.addTask(true,'showSub')
     this.router.getRouteParams().subscribe(item=>{
@@ -1852,14 +1869,14 @@ export class PreviewComponent implements OnInit ,OnDestroy{
         //npm install --save js-base64
         let token  = Base64.encode(localStorage.getItem('token'));
         // let url = "http://mall.jenkin.tech:10013/lsc/system/downloadFile?code="+item.code+"&token="+token
-        let url = "http://127.0.0.1:8050/lsc/files/file/downloadFile?code="+item.code+"&token="+token
+        let fileUrl = "http://"+this.backhost+":8050/lsc/files/file/downloadFile?code="+item.code+"&token="+token
         // let url = "http://192.168.3.48:8050/lsc/system/downloadFile?code="+item.code
-        console.log("文件下载地址:"+url)
+        console.log("文件下载地址:"+fileUrl)
         let name =   item.name;
         if(ObjectUtils.isNotEmpty(name)&&ObjectUtils.isNotEmpty(item.code)){
-          let fileCode =  Base64.encode(item.code)+new Date().getTime() 
-          this.initEditor(name,url, fileCode ,"edit","desktop",token,item.id)
-
+          let fileCode =  Base64.encode(item.code) 
+          this.saveurl = "http://"+this.backhost+":8050/lsc/files/file/docx/save?token="+token+"&fileId="+item.id
+          this.initEditor(name,fileUrl, fileCode ,"edit","desktop",token,item.id)
         }
     });
     })
@@ -1876,7 +1893,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
     let pageH = document.documentElement.clientHeight
     let h = pageH-(pageH*0.2);
     let docType = name.substring(name.lastIndexOf(".") + 1).trim().toLowerCase();
-    this.editor = new DocsAPI.DocEditor("placeholder",
+    this.api = new DocsAPI.DocEditor("placeholder",
 
       {
 
@@ -1913,7 +1930,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
           lang: "zh",
           location: "zh",
           mode: mode,
-          callbackUrl: "http://127.0.0.1:8050/lsc/files/file/docx/save?token="+token+"&fileId="+id,
+          callbackUrl: "http://"+this.backhost+":8050/lsc/files/file/docx/save?token="+token+"&fileId="+id,
         },
         "services": {
           "CoAuthoring": {
@@ -1931,8 +1948,8 @@ export class PreviewComponent implements OnInit ,OnDestroy{
 
       });
      
-      console.log('测试api',this.editor )
-
+      console.log('测试api',this.api )
+      
       window.addEventListener('message',function(event){
                
         console.log("收到" 
@@ -1941,7 +1958,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
 
    }
    test(){
-    this.editor.serviceCommand('search:next','合同')
+    this.api.serviceCommand('search:next','合同')
    }
    getDocumentType(ext) {
 

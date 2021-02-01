@@ -1,11 +1,26 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HistoryComponent } from './history/history.component';
 import { LoveTypewritingComponent } from './love-typewriting/love-typewriting.component';
+import { TaskListComponent } from './task-list/task-list.component';
 
 const routes: Routes = [
   {
+    
     path:'love',component:LoveTypewritingComponent,data: {
       customBreadcrumb: '表白页面'
+    }
+  }
+  ,{
+    
+    path:'history',component:HistoryComponent,data: {
+      customBreadcrumb: '四史刷题'
+    }
+  }
+  ,{
+    
+    path:'taskList',component:TaskListComponent,data: {
+      customBreadcrumb: '任务列表'
     }
   }
 ];

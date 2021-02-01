@@ -233,6 +233,10 @@ export abstract class BaseComponent extends ButtonCodes{
         this.setOfCheckedId = new Set();
         this.setOfCheckedId.add(id);
         console.log("需要删除的ID", this.setOfCheckedId)
+        if(!this.setOfCheckedId||this.setOfCheckedId.size==0){
+            RequestUtil.notifyError('请选择需要删除的数据')
+            return
+        }
         this.modelService.confirm({
             nzTitle: '是否删除所选数据？', nzOkType: 'danger', nzOkText: '是', nzCancelText: '否', nzOkLoading: this.deleteLoading, nzOnOk: () => {
                 let arr = [];
@@ -358,6 +362,10 @@ export abstract class BaseComponent extends ButtonCodes{
      */
     deleteData() {
         console.log("需要删除的ID", this.setOfCheckedId)
+        if(!this.setOfCheckedId||this.setOfCheckedId.size==0){
+            RequestUtil.notifyError('请选择需要删除的数据')
+            return
+        }
         this.modelService.confirm({
             nzTitle: '是否删除所选数据？', nzOkType: 'danger', nzOkText: '是', nzCancelText: '否', nzOkLoading: this.deleteLoading, nzOnOk: () => {
                 let arr = [];
@@ -380,6 +388,10 @@ export abstract class BaseComponent extends ButtonCodes{
      */
     deleteThis(id) {
         console.log("需要删除的ID",id)
+        if(!id){
+            RequestUtil.notifyError('请选择需要删除的数据')
+            return
+        }
         this.modelService.confirm({
             nzTitle: '是否删除当前数据？', nzOkType: 'danger', nzOkText: '是', nzCancelText: '否', nzOkLoading: this.deleteLoading, nzOnOk: () => {
                 let arr = [];
