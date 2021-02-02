@@ -8,6 +8,8 @@ import { MenuService, TreeNode } from 'src/app/service/system/menu/menu.service'
 import { ObjectUtils } from 'src/app/util/ObjectUtils';
 import { RequestUtil } from 'src/app/util/RequestUtil';
 import { RouteUtils } from 'src/app/util/RouteUtils';
+import { webSocket } from 'rxjs/webSocket';
+import { TaskService } from 'src/app/service/task/task.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -28,14 +30,16 @@ export class NavBarComponent implements OnInit {
     'menuType':'menuType',
    }
  
-
+   ws: WebSocket;//定义websocket
   mode = false;
   dark = false;
   userinfo
-  constructor(private http:RequestUtil,private menuService:MenuService,private router:RouteUtils) { }
+  constructor(private http:RequestUtil,private menuService:MenuService,private router:RouteUtils,private message:TaskService) { }
   isCollapsed = false;
   menuTree :TreeNode[]
   ngOnInit(): void {
+    this.message.addTask("N","USER")
+    this.connectWs()
     this.menuService.getMenuListByUserNoButton(this.fieldMapping).subscribe(item=>{
       if(item.code=='200'){
         this.menuTree=item.data
@@ -46,7 +50,8 @@ export class NavBarComponent implements OnInit {
         this.userinfo = item.data;
         let token  = Base64.encode(localStorage.getItem('token'));
         this.userinfo.iconSrc = FileApiPath.DOWNLOAD_FILE_PATH+'?token='+token+'&code='+this.userinfo.userHead
-        localStorage.setItem('userinfo',this.userinfo)
+        localStorage.setItem('userinfo',JSON.stringify(this.userinfo))
+        this.message.addTask("Y","USER")
       }
     })
   }
@@ -60,5 +65,43 @@ export class NavBarComponent implements OnInit {
       }
     })
   }
-
+ //socket连接
+ connectWs() {
+  
+    this.message.getTask("USER").subscribe(item=>{
+      if(item=='Y'){
+        let info =localStorage.getItem('userinfo')
+        let user = JSON.parse(info);
+        console.log('连接websocket')
+        if (this.ws != null) { this.ws.close() };
+        this.ws = new WebSocket("ws://127.0.0.1:8050/lsc/system/ws/"+user.userCode);
+        let that  = this;
+        this.ws.onopen = function (event) {
+                //socket 开启后执行，可以向后端传递信息
+                that.ws.send('sonmething');
+                
+        }
+        this.ws.onmessage = function (event) {
+              console.log('收到消息：',event)
+              let data = JSON.parse(event.data);
+              that.message.addTask(data,data.triggerCode)
+                
+        }
+        this.ws.onerror = function (event) {
+                //socket error信息
+                
+                
+        }
+        this.ws.onclose = function (event) {
+                //socket 关闭后执行
+              
+        }
+      }
+      
+    
+    })
+    
+    
+  
+ }
 }

@@ -130,14 +130,19 @@ return this.http.post<T>(url, body, option).pipe(  catchError(this.handleError)
 private handleOption(param?: Map<string, any>|GetParams, header?: Map<string, string>): any{
    //添加token
     let token = localStorage.getItem("token")
-   
+    let currentUserInfo = localStorage.getItem('currentUserInfo')
+    console.log('四史用户：',currentUserInfo)
+    let authtoken =currentUserInfo!=null?"Bearer "+ JSON.parse(currentUserInfo).token:null;
+    console.log('四史token：',authtoken)
     let headers =null;
     if(token!=undefined&&token!=null){
         headers=new HttpHeaders({"token":token});
     }else{
         headers=new HttpHeaders();
     }
-     
+     if(authtoken!=null){
+        headers=headers.set("authorization", authtoken);
+    }
     var params = new HttpParams();
 
     if (param !== undefined&& param!=null){

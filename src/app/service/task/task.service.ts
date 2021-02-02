@@ -27,6 +27,10 @@ export class TaskService {
  
    getTask(code):Observable<any>{
      let task = this.taskMap.get(code);
+     if(task==null){
+       this.addTask(null,code);
+       task = this.taskMap.get(code);
+     }
      let task$ =  task.asObservable();
      return task$;
    }

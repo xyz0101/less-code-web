@@ -1,1 +1,52 @@
-<p>task-list works!</p>
+
+<!-- 列表 -->
+<nz-space [nzSize]='12'nzDirection='vertical'  style='width: 100%;'>
+    <nz-space-item >
+  <div class='table-operations'>
+    <nz-space [nzSize]='12'>
+      <nz-space-item>
+    <button nz-button (click)='stop()'>停止</button>
+    </nz-space-item>
+    <nz-space-item>
+    </nz-space-item>
+    </nz-space>
+  </div>
+  </nz-space-item>
+    <nz-space-item>
+      <div >
+  <nz-table *ngIf='!isFormEdit' nzShowSizeChanger [(nzData)]='dataList' [nzFrontPagination]='false' [nzLoading]='loading'
+    [nzTotal]='total' nzAlign='center' [nzPageSize]='pageSize' [nzPageIndex]='pageIndex' (nzQueryParams)='onTableLoad($event)' [nzBordered]='true' >
+    <thead >
+      <tr >
+       <th nzColumnKey='taskCode' [nzSortFn]='true'>任务编号</th>
+       <th nzColumnKey='taskUser' [nzSortFn]='false'>执行用户</th>
+       <th nzColumnKey='taskTitle' [nzSortFn]='false'>任务标题</th>
+       <th nzColumnKey='taskStatus' [nzSortFn]='false'>状态</th>
+       <th nzColumnKey='taskStatus' [nzSortFn]='false'>当前积分</th>
+       <th nzColumnKey='taskCost' [nzSortFn]='false'>耗时</th>
+       <th nzColumnKey='taskStartTime' [nzSortFn]='false'>开始时间</th>
+       <th nzColumnKey='taskEndTime' [nzSortFn]='false'>结束时间</th>
+        <!--TODO-->
+      
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor='let data of dataList'>
+      <td>{{data.taskCode}}</td>
+      <td>{{data.taskUser}}</td>
+      <td>{{data.taskTitle}}</td>
+      <td>{{data.taskStatus}}</td>
+      <td>{{data.currentGrade}}</td>
+      <td>{{(data.taskCost/1000)+' 秒'}}</td>
+      <td>{{data.taskStartTime}}</td>
+      <td>{{data.taskEndTime}}</td>
+      <!-- TODO -->
+      </tr>
+    </tbody>
+  </nz-table>
+  </div>
+  </nz-space-item>
+  </nz-space>
+  
+  
+  

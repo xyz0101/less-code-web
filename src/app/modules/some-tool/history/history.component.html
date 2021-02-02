@@ -1,1 +1,72 @@
-<p>history works!</p>
+
+
+ <div style="margin-top: 10%;" nz-row>
+    <div style=" text-align:center" nz-col [nzSpan]="9" >
+        <img *ngIf="!loginSuccess" [src]="qrCodeUrl" />
+
+         <img *ngIf="loginSuccess" src="https://node2d-public.hep.com.cn/avatar-5fb278bff18a2c12929f495f-1605531839324" />
+    </div>
+    <div  nz-col   [nzSpan]="12"  >
+        <nz-space [nzSize]='12' nzDirection='vertical'  style='width: 100%'>
+        <nz-space-item>
+          <button nz-button (click)="init()" nzType="primary">重新获取积分</button>
+         
+            <nz-descriptions nzTitle="当前积分信息(积分信息会有延迟，一般五分钟后可查到最新数据)" nzBordered>
+                <nz-descriptions-item nzTitle="姓名">{{currentGrade.name}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="学校">{{currentGrade.university_name}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="省份">{{currentGrade.province_name}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="学院">
+                    {{currentUser.department}}
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="参与次数" [nzSpan]="2">
+                    {{currentGrade.join_times}}
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="积分" [nzSpan]="2">
+                    {{currentGrade.integral}}
+                    
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="刷新">
+                  <button nz-button (click)="init()" nzType="primary">重新获取积分</button>
+                </nz-descriptions-item>
+                
+            </nz-descriptions>          
+        </nz-space-item>
+        <nz-space-item>
+            <div *ngIf="!showForm">
+                正在自动答题......  <a routerLink="/nav/tool/taskList"> 点击查看进度</a>
+            </div>
+            <form *ngIf="showForm"  nz-form [nzLayout]="'inline'" [formGroup]="taskForm" (ngSubmit)="startRun()">
+                <nz-form-item>
+                  <nz-form-control nzErrorTip="请输入期望积分">
+                    <nz-input-group  >
+                      <input formControlName="exceptGrade" nz-input-number  placeholder="请输入期望积分" />
+                      </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                  <nz-form-control>
+                    <nz-input-group  >
+                      <input readonly='true' formControlName="currentGrade" nz-input-number   placeholder="当前积分" />
+                      </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                  <nz-form-control>
+                    <button nz-button nzType="primary" [disabled]="!taskForm.valid">开始</button>
+                  </nz-form-control>
+                </nz-form-item>
+              </form>          
+        </nz-space-item>
+         </nz-space>
+        
+
+        
+
+    </div>
+    <div  nz-col   [nzSpan]="3"  ></div>
+  
+<div>
+       
+    
+ 
+

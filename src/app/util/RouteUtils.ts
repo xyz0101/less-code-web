@@ -11,6 +11,8 @@ export class RouteUtils{
     }
 
 
+    
+
     public route(path,param){
         this.router.navigate([path],{queryParams:param} );
       }
