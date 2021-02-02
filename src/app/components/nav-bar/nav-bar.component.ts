@@ -61,6 +61,7 @@ export class NavBarComponent implements OnInit {
     this.http.getResquest(LoginApiPath.LOGOUT_PATH).subscribe(res=>{
       if(res.code=='200'){
         RequestUtil.notifySuccess("注销成功")
+        localStorage.removeItem("currentUserInfo")
         this.router.simpleRoute('/login')
       }
     })
