@@ -22,6 +22,7 @@ export class SecurityUtils{
         console.log('缓存用户的url:',urlStr)
         localStorage.setItem(LocalStorageConst.USER_URLS_KEY,urlStr );
       }
+      
       static loadPermission(item: any , urls:any[]) {
          if(ObjectUtils.isNotEmpty(item.menuUrl)){
           urls.push(item.menuUrl)

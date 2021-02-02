@@ -75,7 +75,7 @@ export class NavBarComponent implements OnInit {
         let user = JSON.parse(info);
         console.log('连接websocket')
         if (this.ws != null) { this.ws.close() };
-        this.ws = new WebSocket("ws://127.0.0.1:8050/lsc/system/ws/"+user.userCode);
+        this.ws = new WebSocket("ws://tencent.jenkin.tech:8050/lsc/system/ws/"+user.userCode);
         let that  = this;
         this.ws.onopen = function (event) {
                 //socket 开启后执行，可以向后端传递信息
@@ -90,7 +90,7 @@ export class NavBarComponent implements OnInit {
         }
         this.ws.onerror = function (event) {
                 //socket error信息
-                
+                console.log(event)
                 
         }
         this.ws.onclose = function (event) {

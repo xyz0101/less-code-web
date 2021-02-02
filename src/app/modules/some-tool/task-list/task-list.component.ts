@@ -85,6 +85,9 @@ export class TaskListComponent extends BaseComponent implements OnInit {
         this.dataList.forEach(element=>{
           if(taskCode == element.taskCode){ 
             element.taskStatus=this.statusMap.get(statusIntCode)
+            element.taskCost=val.taskCost
+            element.taskEndTime=val.endTime
+            element.taskStartTime=val.startTime
            }
         })
        }

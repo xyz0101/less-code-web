@@ -38,17 +38,17 @@ const routes: Routes = [
           {
             path: 'user', component: UsersComponent, data: {
               customBreadcrumb: '用户管理'
-            }
+            },canActivate: [AuthGuard]
           },
           {
             path: 'menu', component: MenuComponent, data: {
               customBreadcrumb: '菜单管理'
-            }
+            },canActivate: [AuthGuard]
           },
           {
             path: 'role', component: RoleComponent, data: {
               customBreadcrumb: '角色管理'
-            }
+            },canActivate: [AuthGuard]
           },
           
         ],
@@ -65,36 +65,37 @@ const routes: Routes = [
               {
                 path: 'wallpaper', component: WallpaperListComponent , data: {
                   customBreadcrumb: '壁纸列表'
-                } , canActivate: [AuthGuard],
+                } , canActivate: [AuthGuard]
               }
             ]
           }
-        ]
+        ],canActivate: [AuthGuard]
       },
       //代码生成器 
       {
         path: 'code', children: [
           { path: 'codegenerate', component: CodeGenerateComponent, data: {
             customBreadcrumb: '代码生成器 '
-          } },
+          },canActivate: [AuthGuard]
+         }
         ]
       },
       //其他工具
       {
         path:'tool',loadChildren:'./modules/some-tool/some-tool.module#SomeToolModule',data: {
           customBreadcrumb: '一些工具'
-        }
+        },canActivate: [AuthGuard]
       },
       //文件预览
       {
         path:'doc',loadChildren:'./modules/doc/doc.module#DocModule',data: {
           customBreadcrumb: '文档管理'
-        }
-      },
+        },canActivate: [AuthGuard]
+      }  
 
     ]
     //路由守卫，登陆检测
-    , canActivate: [AuthGuard],
+    , canActivate: [AuthGuard]
   },
 
 ];
