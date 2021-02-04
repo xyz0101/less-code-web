@@ -5,7 +5,15 @@
   <div class='table-operations'>
     <nz-space [nzSize]='12'>
       <nz-space-item>
-    <button nz-button (click)='stop()'>停止</button>
+        <nz-space [nzSize]='12'>
+        <nz-space-item>
+          <button nz-button (click)='stop()'>停止</button>
+        
+        </nz-space-item>
+        <nz-space-item>
+          <nz-alert nzShowIcon nzType="info" nzMessage="点击按钮可以停止当前正在执行的任务"></nz-alert>     
+        </nz-space-item>
+         </nz-space>
     </nz-space-item>
     <nz-space-item>
     </nz-space-item>

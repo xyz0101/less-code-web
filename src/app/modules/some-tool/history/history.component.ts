@@ -26,8 +26,9 @@ export class HistoryComponent implements OnInit ,OnDestroy{
     join_times:null
   }
   currentUserInfo={
-    
+    photo:''
   }
+  loading = true;
   qrCodeUrl
   showForm=true
   ngOnInit(): void {
@@ -42,7 +43,12 @@ export class HistoryComponent implements OnInit ,OnDestroy{
     // 获取token
     // https://ssxx.univs.cn/cgi-bin/authorize/token/?t=1612152761&uid=5fb278bff18a2c12929f495f&avatar=https:%2F%2Fnode2d-public.hep.com.cn%2Favatar-5fb278bff18a2c12929f495f-1605531839324&activity_id=5f71e934bcdbf3a8c3ba5061
   }
+
+
+
   init() {
+    this.loading = true;
+
     this.http.getResquest(HistoryApiPath.GET_USER_TASK_STATUS_PATH).subscribe(item=>{
       if(item.code=='200'&&item.data=='N'){
           this.showForm=true
@@ -103,6 +109,7 @@ export class HistoryComponent implements OnInit ,OnDestroy{
      this.http.getResquest(HistoryApiPath.GET_QRCODE_PATH).subscribe(item=>{
         if(item.data.qrcode!=null){
               this.qrCodeUrl = item.data.qrcode;
+              this.loading = false;
               //开始定时获取登录状态
               this.checkLogin(item.data.random)
         }
@@ -122,6 +129,7 @@ export class HistoryComponent implements OnInit ,OnDestroy{
                 item.data.token = tk.data
                 localStorage.setItem("currentUserInfo",JSON.stringify(item.data))
                 this.currentUserInfo = item.data
+                this.loading = false;
                 clearTimeout(this.timer);
                 this.ngOnInit()
               })

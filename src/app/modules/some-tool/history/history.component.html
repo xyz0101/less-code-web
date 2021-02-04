@@ -2,34 +2,52 @@
 
  <div style="margin-top: 10%;" nz-row>
     <div style=" text-align:center" nz-col [nzSpan]="9" >
-        <img *ngIf="!loginSuccess" [src]="qrCodeUrl" />
-
-         <img *ngIf="loginSuccess" src="https://node2d-public.hep.com.cn/avatar-5fb278bff18a2c12929f495f-1605531839324" />
+      <nz-spin nzTip="Loading..." [nzSpinning]="loading">
+        <img *ngIf="!loginSuccess"  style="width: 430px;height:430px" [src]="qrCodeUrl" />
+        <img *ngIf="loginSuccess"  style="width: 430px;height:430px" [src]="currentUserInfo.photo" />
+      </nz-spin>
+         
     </div>
     <div  nz-col   [nzSpan]="12"  >
         <nz-space [nzSize]='12' nzDirection='vertical'  style='width: 100%'>
         <nz-space-item>
-          <button nz-button (click)="init()" nzType="primary">重新获取积分</button>
+          <nz-space [nzSize]='12' nzDirection='vertical'  style='width: 100%'>
+            <nz-space-item>
+              <button nz-button (click)="init()" nzType="primary">刷新二维码</button>
+
+            </nz-space-item>
+          <nz-space-item>
+            <nz-alert nzShowIcon nzType="warning" nzMessage="本系统不会保存您的任何个人信息，可放心使用"></nz-alert>                
+          </nz-space-item>
+          <nz-space-item>
+            <nz-alert nzShowIcon nzType="info" nzMessage="积分信息会有延迟，一般五分钟后可查到最新数据"></nz-alert>
+               
+          </nz-space-item>
+          <nz-space-item>
+            <nz-descriptions nzTitle="当前积分信息" nzBordered>
+              <nz-descriptions-item nzTitle="姓名">{{currentGrade.name}}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="学校">{{currentGrade.university_name}}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="省份">{{currentGrade.province_name}}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="学院">
+                  {{currentUser.department}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="参与次数" [nzSpan]="2">
+                  {{currentGrade.join_times}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="积分" [nzSpan]="2">
+                  {{currentGrade.integral}}
+                  
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="刷新">
+                <button nz-button (click)="init()" nzType="primary">重新获取积分</button>
+              </nz-descriptions-item>
+              
+          </nz-descriptions>      
+               
+          </nz-space-item>
+           </nz-space>
          
-            <nz-descriptions nzTitle="当前积分信息(积分信息会有延迟，一般五分钟后可查到最新数据)" nzBordered>
-                <nz-descriptions-item nzTitle="姓名">{{currentGrade.name}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="学校">{{currentGrade.university_name}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="省份">{{currentGrade.province_name}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="学院">
-                    {{currentUser.department}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="参与次数" [nzSpan]="2">
-                    {{currentGrade.join_times}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="积分" [nzSpan]="2">
-                    {{currentGrade.integral}}
-                    
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="刷新">
-                  <button nz-button (click)="init()" nzType="primary">重新获取积分</button>
-                </nz-descriptions-item>
                 
-            </nz-descriptions>          
         </nz-space-item>
         <nz-space-item>
             <div *ngIf="!showForm">

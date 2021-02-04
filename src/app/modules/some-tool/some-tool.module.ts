@@ -12,6 +12,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 
 @NgModule({
@@ -24,8 +26,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     NzDescriptionsModule,
     NzFormModule,
     NzSpaceModule,
+    NzAlertModule,
     NzInputModule,
     NzTableModule,
+    NzSpinModule,
     NzButtonModule,
     ReactiveFormsModule
   ]
