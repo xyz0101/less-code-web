@@ -42,7 +42,7 @@ export class PreviewComponent implements OnInit ,OnDestroy{
   // host="10.10.10.63"
   // host = "127.0.0.1:8888"
   host = "127.0.0.1:8001"
-  backhost = "192.168.30.11"
+  backhost = "tencent.jenkin.tech"
   data = [
     {
     "id":null,
