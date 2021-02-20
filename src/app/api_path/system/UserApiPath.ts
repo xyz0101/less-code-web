@@ -3,6 +3,10 @@ export class UserApiPath{
      * 保存用户
      */
     public static SAVE_USER_PATH = '/lsc/system/user/saveUser';
+        /**
+     * 保存用户
+     */
+    public static REGISTER_USER_PATH = '/lsc/system/user/register';
     /**
      * 分页获取用户
      */

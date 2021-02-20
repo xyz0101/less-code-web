@@ -45,6 +45,11 @@ export class UserService {
   saveUser(data) :Observable<any>{
     return this.http.postResquest(UserApiPath.SAVE_USER_PATH,data,null,null) ;
   }
-
+ /**
+   * 注册用户信息
+   */
+  registerUser(data) :Observable<any>{
+    return this.http.postResquest(UserApiPath.REGISTER_USER_PATH,data,null,null) ;
+  }
  
 }

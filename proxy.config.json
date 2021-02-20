@@ -1,8 +1,10 @@
 {
 
   "/lsc":{
-    "target":"http://127.0.0.1:8050",
+    "target":"http://tencent.jenkin.tech:8050",
     "secure":false,
     "changeOrigin": true
   }
+
+   
 }
