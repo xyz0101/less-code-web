@@ -41,7 +41,8 @@ export class PreviewComponent implements OnInit ,OnDestroy{
 //  host="10.10.10.63"
   // host="10.10.10.63"
   // host = "127.0.0.1:8888"
-  host = "127.0.0.1:8001"
+  // host = "127.0.0.1:8001"
+  host ='mall.jenkin.tech:8888'
   backhost = "tencent.jenkin.tech"
   data = [
     {
