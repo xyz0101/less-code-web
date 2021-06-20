@@ -30,6 +30,7 @@
     "ngx-webuploader": "^7.0.1",
     "rxjs": "~6.6.0",
     "scriptjs": "^2.5.9",
+    "showdown": "^1.9.1",
     "tslib": "^2.0.0",
     "uuid": "^8.3.2",
     "webuploader": "^0.1.8",

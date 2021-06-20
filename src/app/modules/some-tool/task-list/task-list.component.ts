@@ -73,6 +73,7 @@ export class TaskListComponent extends BaseComponent implements OnInit {
         })
       }
     })
+
     this.message.getTask('TASK-STATUS').subscribe(item=>{
       
        let msg = item.triggerMsg
