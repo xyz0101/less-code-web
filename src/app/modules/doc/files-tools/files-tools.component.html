@@ -1,0 +1,72 @@
+
+        <form   nz-form [formGroup]='validateForm'  (ngSubmit)="submitForm()">
+            <nz-form-item >
+              
+                <nz-form-label [nzSm]='6' [nzXs]='24'  nzRequired nzFor='file'>上传excel</nz-form-label>
+                 
+                <nz-form-control [nzSm]='14' [nzXs]='24'>
+                    <nz-upload
+                    nzType="drag"
+                    [(nzFileList)]="excelList"
+                    [nzMultiple]="false"
+                    [nzCustomRequest]="customUpload"
+                    [nzAction]="fileUploadPath"
+                    (nzChange)="handleChange($event,'excel')"
+                  >
+                    <p class="ant-upload-drag-icon">
+                      <i nz-icon nzType="inbox"></i>
+                    </p>
+                    <p class="ant-upload-text">点击上传文件</p>
+                     
+                  </nz-upload>
+                  
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item >
+              
+                <nz-form-label [nzSm]='6' [nzXs]='24' nzRequired  nzFor='file'>上传word模板</nz-form-label>
+                 
+                <nz-form-control [nzSm]='14' [nzXs]='24'>
+                    <nz-upload
+                    nzType="drag"
+                    [(nzFileList)]="wordList"
+                    [nzMultiple]="false"
+                    [nzCustomRequest]="customUpload"
+                    [nzAction]="fileUploadPath"
+                    (nzChange)="handleChange($event,'word')"
+                  >
+                    <p class="ant-upload-drag-icon">
+                      <i nz-icon nzType="inbox"></i>
+                    </p>
+                    <p class="ant-upload-text">点击上传文件</p>
+                     
+                  </nz-upload>
+                  
+                </nz-form-control>
+              </nz-form-item>
+
+      <nz-form-item >
+        <nz-form-label [nzSm]='6' [nzXs]='24' nzRequired nzFor='fileNameCol'>生成文件名称的列</nz-form-label>
+        <nz-form-control [nzSm]='14' [nzXs]='24'>
+          <input   nz-input formControlName='fileNameCol' id='fileNameCol' />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item >
+        <nz-form-label [nzSm]='6' [nzXs]='24' nzRequired nzFor='rowStartIndex'>内容起始行</nz-form-label>
+        <nz-form-control [nzSm]='14' [nzXs]='24'>
+            <nz-input-number nzMin=1 nzMax=1000 nz-input formControlName='rowStartIndex' id='rowStartIndex' ></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        
+      </nz-form-item>
+        
+     
+       
+          <!-- TODO -->   
+        </form>
+          <button nz-button [disabled]="submitLoading" style="margin-left: 50%;" (click)="submitForm()" [nzType]="'primary'">提交</button>
+          <button nz-button  [(disabled)]="!downloadCode" style="margin-left:1%;" (click)="downloadResult()"  >下载生成的文件</button>
+
+        

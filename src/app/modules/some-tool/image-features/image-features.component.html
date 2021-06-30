@@ -1,0 +1,22 @@
+
+<div  >
+    <div nz-row [nzGutter]="[hGutter, vGutter]">
+    
+    
+      <div nz-col [nzSpan]="24 / imageFeatures.length" *ngFor="let item of imageFeatures">
+
+        <nz-card style="width:300px;" [nzCover]="coverTemplate" nzHoverable=true (click)="chooseFeature(item.code)" >
+            <nz-card-meta [nzTitle]="item.name" [nzDescription]="item.desc"  ></nz-card-meta>
+          </nz-card>
+          <ng-template #coverTemplate>
+            <img alt="" [src]="item.cover" />
+          </ng-template>
+         
+    </div>
+    </div>
+  </div>
+
+
+
+
+

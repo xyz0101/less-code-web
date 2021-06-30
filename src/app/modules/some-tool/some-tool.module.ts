@@ -14,10 +14,14 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { ImageFeaturesComponent } from './image-features/image-features.component';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { LoveTypewritingComponent } from './love-typewriting/love-typewriting.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 
 @NgModule({
-  declarations: [HistoryComponent, TaskListComponent],
+  declarations: [HistoryComponent, TaskListComponent, ImageFeaturesComponent,LoveTypewritingComponent],
   imports: [
     CommonModule,
     NzGridModule,
@@ -31,7 +35,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzTableModule,
     NzSpinModule,
     NzButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NzCardModule,
+    MarkdownModule.forChild()
   ]
 })
 export class SomeToolModule { }

@@ -36,10 +36,11 @@ import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { VideoComponent } from './preview/video/video.component';
 import { Options, WebUploaderConfig, WebUploaderModule } from 'ngx-webuploader';
 import { FileApiPath } from 'src/app/api_path/system/FileApiPath';
+import { FilesToolsComponent } from './files-tools/files-tools.component';
 
 
 @NgModule({
-  declarations: [PreviewComponent, FileManageComponent, VideoComponent],
+  declarations: [PreviewComponent, FileManageComponent, VideoComponent, FilesToolsComponent],
   imports: [
     CommonModule,
     DocRoutingModule,

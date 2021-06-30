@@ -429,7 +429,9 @@ export abstract class BaseComponent extends ButtonCodes{
         this.loading = true;
         searchData = ObjectUtils.isNotEmpty(this.searchValidateForm)? this.searchValidateForm.value:null
         let param = Qo.builder().setPage(pageIndex).setPageSize(pageSize).setSorts(sortField, sortValue).setData(searchData);
-        this.getListData(param).subscribe(data => {
+        let res = this.getListData(param)
+        if(res==null) return
+        res.subscribe(data => {
             
             this.loading = false;
             if(data.data instanceof Array){
@@ -574,9 +576,13 @@ export abstract class BaseComponent extends ButtonCodes{
                 this.closeEditView(this.editType);
                 this.reload()
               }
+              this.afterSubmitForm(item.data);
               
         })
         
+    }
+    afterSubmitForm(data) {
+        throw new Error("Method not implemented.");
     }
     reload() {
         this.listData(1, this.pageSize, null, null, null)

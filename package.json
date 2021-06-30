@@ -27,6 +27,7 @@
     "js-base64": "^3.6.0",
     "jsencrypt": "^3.0.0-rc.1",
     "ng-zorro-antd": "^11.0.0",
+    "ngx-markdown": "^11.0.0",
     "ngx-webuploader": "^7.0.1",
     "rxjs": "~6.6.0",
     "scriptjs": "^2.5.9",
