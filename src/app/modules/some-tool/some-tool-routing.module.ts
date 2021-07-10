@@ -4,11 +4,11 @@ import { AuthGuard } from 'src/app/guard/AuthGuard';
 import { HistoryComponent } from './history/history.component';
 import { LoveTypewritingComponent } from './love-typewriting/love-typewriting.component';
 import { TaskListComponent } from './task-list/task-list.component';
-
+import { MarkdownModule } from 'ngx-markdown';
 const routes: Routes = [
   {
 
-    path: 'love', component: LoveTypewritingComponent, data: {
+    path: 'co-edit', component: LoveTypewritingComponent, data: {
       customBreadcrumb: '表白页面'
     }, canActivate: [AuthGuard]
   } 
@@ -27,7 +27,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [
+    MarkdownModule.forRoot(),
+    RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
 export class SomeToolRoutingModule { }

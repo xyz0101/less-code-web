@@ -6,11 +6,12 @@ import '@angular/compiler';
   styleUrls: ['./love-typewriting.component.css']
 })
 export class LoveTypewritingComponent implements OnInit {
-
+  markdown
   constructor() { }
 
   ngOnInit(): void {
     console.log('进入：','LoveTypewritingComponent')
+    
   }
-
+    
 }
