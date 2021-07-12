@@ -48,6 +48,7 @@ export class FilesToolsComponent extends BaseComponent implements OnInit {
   }
   afterSubmitForm(data){
     this.downloadCode = data;
+   
     this.submitLoading = false;
   }
   submitLoading =false
