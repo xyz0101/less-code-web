@@ -1,1 +1,10 @@
-<markdown [data]="markdown"></markdown>
+ 
+  <nz-space style="width: 100%;" >
+	<nz-textarea-count style="width: 50%;"   [nzMaxCharacterCount]="10000">
+		<textarea rows="10" [(ngModel)]="markdown" nz-input></textarea>
+	  </nz-textarea-count>
+	  <div  style="width: 50%;"  markdown [(data)]="markdown"></div>
+
+  </nz-space>
+
+ 

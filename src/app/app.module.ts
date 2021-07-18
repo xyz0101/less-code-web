@@ -8,7 +8,7 @@ import { IconsProviderModule } from './icons-provider.module';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
@@ -66,6 +66,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 
 
 
@@ -96,6 +97,7 @@ registerLocaleData(zh);
 
   ],
   imports: [
+   
     NzIconModule.forRoot(iconsArr),
     SomeToolModule,
     BrowserModule,
@@ -133,6 +135,18 @@ registerLocaleData(zh);
     NzBackTopModule,
     NzBadgeModule,
     NzPopoverModule,
+    MarkdownModule.forRoot({ loader: HttpClient ,
+      markedOptions: {
+      provide: MarkedOptions,
+      useValue: {
+        gfm: true,
+        breaks: false,
+        pedantic: false,
+        smartLists: true,
+        smartypants: false,
+      }
+    }
+  }),
     DocModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, 

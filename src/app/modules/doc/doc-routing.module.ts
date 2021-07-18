@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/app/guard/AuthGuard';
 import { FileManageComponent } from './file-manage/file-manage.component';
+import { FilesToolsComponent } from './files-tools/files-tools.component';
 import { PreviewComponent } from './preview/office/preview.component';
 import { VideoComponent } from './preview/video/video.component';
 
@@ -16,15 +17,19 @@ const routes: Routes = [
         path: 'office', component: PreviewComponent, data: {
           customBreadcrumb: '文档详情'
         }//路由守卫，登陆检测
-    , canActivate: [AuthGuard],
+        , canActivate: [AuthGuard],
       },
       {
         path: 'video', component: VideoComponent, data: {
           customBreadcrumb: '视频详情'
         }//路由守卫，登陆检测
-    , canActivate: [AuthGuard],
+        , canActivate: [AuthGuard],
       },
-    ]
+    ], canActivate: [AuthGuard],
+  }, {
+    path: 'filetools', component: FilesToolsComponent, data: {
+      customBreadcrumb: '文档相关工具'
+    }, canActivate: [AuthGuard],
   }
 ];
 
