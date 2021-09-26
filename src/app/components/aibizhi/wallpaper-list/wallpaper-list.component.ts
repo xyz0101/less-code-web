@@ -159,7 +159,7 @@ pageIndex = 0;
       this.loadingNewData=true;
       this.loading=true;
       this.pageIndex+=20
-      let imgObserv =  this.tabIndex==0?this.aibizhiService.getWebImageList(this.category,this.pageIndex):
+      let imgObserv =  this.tabIndex!=0?this.aibizhiService.getWebImageList(this.category,this.pageIndex):
       this.aibizhiService.getImageList(this.category,this.pageIndex);
 
       imgObserv.subscribe(item => {
