@@ -4,6 +4,7 @@ import { NzMarks } from 'ng-zorro-antd/slider';
 import { AibizhiService, Wallpaper } from 'src/app/service/files/aibizhi/aibizhi.service';
 import { RouteUtils } from 'src/app/util/RouteUtils';
 import { fromEvent } from 'rxjs';
+import { RequestUtil } from 'src/app/util/RequestUtil';
 
 @Component({
   selector: 'app-wallpaper-list',
@@ -135,6 +136,14 @@ pageIndex = 0;
     ];
     this.nzImageService.preview(images);
     console.log('点击图片', data)
+  }
+
+  setWallpaper(data){
+      this.aibizhiService.setWallpaper(data).subscribe(item=>{
+        if (item.code=="200") {
+          RequestUtil.notifySuccess("任务已成功下发，等待桌面壁纸更新")
+        }
+      })
   }
 
   onSelectTable(data){

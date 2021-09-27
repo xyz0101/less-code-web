@@ -14,28 +14,33 @@
       <div   style="text-align: center;" >
           <div   id="box"  style="margin-left: 5%; width: 95%;  "     >
             <div    nz-row [nzGutter]="[hGutter, vGutter]" >
-              <div nz-col class="gutter-row" [nzSpan]="24 / imgList.length" *ngFor="let data of imgList">
+              <div nz-col class="gutter-row" [nzSpan]="24 / imgList.length" 
+              *ngFor="let data of imgList">
                 <div class="grid-config">
                     <nz-card nzHoverable  #card style="width:300px;"  >
                       <nz-space [nzSize]='24' nzDirection='vertical' style="width:250px;"  >
-                      <nz-space-item>
+                      <nz-space-item style="height: 200px;">
                         <img
                         (click)="showImage(data)"
                         nz-image
                         width="250"
-                        height="250"
+                        
                         [src]="data.preview"
                         alt=""
                       />           
                       </nz-space-item>
                       <nz-space-item>
                         <nz-tag style="margin-top: 10px;"  *ngFor="let tag of data.tag;let i =index"  [nzColor]="colors[i]">{{tag}}</nz-tag>
-                          
-                         
-                      </nz-space-item>
-                       </nz-space>
-                    
                        
+                      </nz-space-item>
+                     
+                       </nz-space>
+                       <nz-space-item>
+                        <button nz-button nzType="default" (click)="setWallpaper(data)"
+                        nzBlock>设置为桌面壁纸</button>
+
+                      </nz-space-item>
+              
                         
                         </nz-card>
                     

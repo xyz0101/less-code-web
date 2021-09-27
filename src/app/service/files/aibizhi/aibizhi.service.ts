@@ -10,6 +10,14 @@ import { RequestUtil } from 'src/app/util/RequestUtil';
   providedIn: 'root'
 })
 export class AibizhiService {
+  
+  /**
+   * 设置壁纸
+   * @param data 
+   */
+  setWallpaper(data: any):Observable<MyResponse<any>> {
+    return this.http.postResquest(AibizhiAipPath.CHANGE_WALLPAPER_PATH,data) 
+  }
   /**
    * 下载壁纸
    * @param code 
