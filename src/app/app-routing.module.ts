@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { WallpaperCategoryComponent } from './components/aibizhi/wallpaper-category/wallpaper-category.component';
+import { WallpaperConfigComponent } from './components/aibizhi/wallpaper-config/wallpaper-config.component';
 import { WallpaperListComponent } from './components/aibizhi/wallpaper-list/wallpaper-list.component';
 import { WallpaperComponent } from './components/aibizhi/wallpaper/wallpaper.component';
 import { CodeGenerateComponent } from './components/code-generate/code-generate.component';
@@ -68,6 +69,12 @@ const routes: Routes = [
                 } , canActivate: [AuthGuard]
               }
             ]
+          },
+          //壁纸配置
+          {
+              path: 'wallpaperconfig', component: WallpaperConfigComponent , data: {
+              customBreadcrumb: '壁纸配置'
+            }, canActivate: [AuthGuard]
           }
         ],canActivate: [AuthGuard]
       },

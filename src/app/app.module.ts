@@ -67,6 +67,8 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
+import { WallpaperConfigComponent } from './components/aibizhi/wallpaper-config/wallpaper-config.component';
 
 
 
@@ -94,6 +96,7 @@ registerLocaleData(zh);
     WallpaperCategoryComponent,
     WallpaperListComponent,
     WallpaperComponent,
+    WallpaperConfigComponent,
 
   ],
   imports: [
@@ -127,6 +130,7 @@ registerLocaleData(zh);
     NzTreeModule,
     NzSpinModule,
     NzIconModule,
+    NzAffixModule,
     NzTabsModule,
     NzTagModule,
     NzResultModule,

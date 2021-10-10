@@ -1,5 +1,6 @@
 
  <nz-spin  [nzSpinning]="loading">
+  
   <nz-tabset (nzSelectChange) = "onSelectTable($event)">
    
     <nz-tab nzTitle="桌面壁纸">
@@ -8,8 +9,13 @@
     <nz-tab nzTitle="网络壁纸">
        
     </nz-tab>
+    
+    <button   nz-button>
+      <span>120px to affix top</span>
+    </button>
   </nz-tabset>
-      <!-- 壁纸   -->
+
+       <!-- 壁纸   -->
      
       <div   style="text-align: center;" >
           <div   id="box"  style="margin-left: 5%; width: 95%;  "     >

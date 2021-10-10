@@ -1,0 +1,44 @@
+
+<div *ngIf="isFormEdit" style="width: 80%;margin-left: 10%;">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="on">是否启用配置</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="">
+          <label nz-checkbox formControlName="on" id = "on"></label>
+        </nz-form-control>
+      </nz-form-item>
+     
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="strategyCode">壁纸更换策略</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="">
+            <nz-select formControlName="strategyCode" id="strategyCode"  nzPlaceHolder="请选择策略">
+                <nz-option *ngFor="let option of strategyList" [nzLabel]="option.strategyName" [nzValue]="option.strategyCode"></nz-option>
+              </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="categories">壁纸分类</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="">
+            <nz-select formControlName="categories"  nzMode="multiple" nzPlaceHolder="请选择分类">
+                <nz-option *ngFor="let option of categoryList" [nzLabel]="option.name" [nzValue]="option.id"></nz-option>
+              </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="timeGap">间隔时间</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="">
+             <nz-input-number  formControlName="timeGap" ></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="timeUnit">间隔时间单位</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="">
+          <nz-select formControlName="timeUnit" id = "timeUnit"  nzPlaceHolder="请选择间隔时间单位">
+            <nz-option *ngFor="let option of timeUnitList" [nzLabel]="option.label" [nzValue]="option.key"></nz-option>
+            </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <button nz-button style="margin-left: 20%;"   [disabled]="loading"  [nzType]="'primary'">提交</button>
+ </form>
+  </div>

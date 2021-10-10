@@ -108,7 +108,9 @@ export abstract class BaseComponent extends ButtonCodes{
     beforeDrawerSubmit() {
         throw new Error('Method not implemented.');
     }
-
+    afterSubmitForm(data) {
+            throw new Error("Method not implemented.");
+        }
     saveDrawerData(data: any) :Observable<any> {
         throw new Error('Method not implemented.');
     }
@@ -581,9 +583,7 @@ export abstract class BaseComponent extends ButtonCodes{
         })
         
     }
-    afterSubmitForm(data) {
-        throw new Error("Method not implemented.");
-    }
+   
     reload() {
         this.listData(1, this.pageSize, null, null, null)
     }

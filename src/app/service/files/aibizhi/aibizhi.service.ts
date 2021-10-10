@@ -30,7 +30,27 @@ export class AibizhiService {
       RequestUtil.downloadFileInLocal(item.data,item.extraData.fileName,item.extraData.responseType)
     })
   }
+  /**
+   * 获取用户下的壁纸配置
+   * 
+   */
+  getWallpaperConfig():Observable<MyResponse<WallpaperConfigVO>>{
+    return this.http.getResquest(AibizhiAipPath.GET_WALLPAPER_CONFIG_PATH)
+  }
+/**
+   * 获取更换策略
+   * 
+   */
+  getWallpaperStrategy():Observable<MyResponse<Startegy[]>>{
+    return this.http.getResquest(AibizhiAipPath.GET_WALLPAPER_STRATEGY_PATH)
+  }
 
+  /**
+   * 保存壁纸配置
+   */
+  saveWallpaperConfig(config : WallpaperConfigVO):Observable<MyResponse<any>>{
+    return this.http.postResquest(AibizhiAipPath.SAVE_WALLPAPER_CONFIG_PATH,config)
+  }
 
 
 
@@ -132,4 +152,41 @@ export class Wallpaper {
   url: [];
   preview: string;
   store: string;
+}
+
+export class Startegy{
+  /** 
+   * 策略编码
+   */
+  strategyCode :string
+  /**
+   * 策略名称
+   */
+  strategyName: string
+  /**
+   * 用户编码
+   */
+  userCode :string
+  /**
+   * 已选择分类
+   */
+  categories :Array<string>
+  /**
+   * 时间间隔
+   */
+  timeGap: number
+  /**
+   * 时间间隔单位
+   * 0 秒，1 分钟，2小时，3 天
+   */
+  timeUnit: number
+  /**
+   * 是否启用
+   */
+  onFlag: boolean
+}
+
+export class WallpaperConfigVO  {
+  on : boolean
+  data : Startegy
 }
