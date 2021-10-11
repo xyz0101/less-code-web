@@ -75,6 +75,10 @@ export class WallpaperConfigComponent extends BaseComponent implements OnInit  {
   }
   
   initFormEditForm(data : any){
+    if(data==null){
+      data = {}
+      data.data = {}
+    }
     console.log("初始化表单")
     this.validateForm = this.fb.group({
       
