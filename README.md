@@ -1,3 +1,5 @@
+注意设置proxy.config.json文件里面的代理地址为自己的后端服务地址
+
 # LessCode
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.
